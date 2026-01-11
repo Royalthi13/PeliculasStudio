@@ -25,7 +25,7 @@ namespace PeliculasStudio.Vistas
         public UC_Detalle()
         {
             InitializeComponent();
-            Core.Initialize();
+          
 
             libVlc = new LibVLC();
 
@@ -39,15 +39,12 @@ namespace PeliculasStudio.Vistas
         {
             string rutaBase = AppDomain.CurrentDomain.BaseDirectory;
 
-         
-            string rutaVideo = System.IO.Path.Combine(rutaBase, "Assets", "Videos", nombreArchivo);
 
+            string rutaVideo = System.IO.Path.Combine(rutaBase, "Assets", "Videos", nombreArchivo);
             if (File.Exists(rutaVideo))
             {
-                using (var media = new Media(libVlc, new Uri(rutaVideo)))
-                {
-                    mediaPlayer.Play(media);
-                }
+                var media = new Media(libVlc, new Uri(rutaVideo));
+                mediaPlayer.Play(media);
             }
             else
             {
