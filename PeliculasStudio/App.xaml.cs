@@ -1,4 +1,5 @@
 ﻿using LibVLCSharp.Shared;
+using PeliculasStudio.BaseDatos;
 using System.Configuration;
 using System.Data;
 using System.Windows;
@@ -14,8 +15,11 @@ namespace PeliculasStudio
         {
             base.OnStartup(e);
 
-           
+            // Esto nicializa el motor de video (VLC)
             Core.Initialize();
+
+            // y esto inicializa la base de datos y crea los datos iniciales
+            DatabaseServicie.Inicializar();
         }
     }
 
