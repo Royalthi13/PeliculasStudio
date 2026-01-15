@@ -1,15 +1,28 @@
-﻿using SQLite;
+﻿using PeliculasStudio.Modelos;
+using SQLite;
 using System;
-using System.IO;
 using System.Collections.Generic;
-using PeliculasStudio.Modelos;
+using System.IO;
+using System.Text.RegularExpressions;
 namespace PeliculasStudio.BaseDatos
 {
+    /**
+     * Clase DatabaseServicie:
+     * Actúa como la capa de acceso a datos (DAL) de la aplicación.
+     * Se encarga de la gestión del ciclo de vida de la base de datos SQLite, 
+     * incluyendo la inicialización de tablas, la inserción de datos semilla, 
+     * y la ejecución de operaciones CRUD (Crear, Leer, Eliminar) para las 
+     * entidades de Películas y Usuarios.
+     **/
 
     public static class DatabaseServicie
     {
         private static SQLiteConnection db;
-
+        /**
+         * Metodo para Inicializar la aplicacion con la BBDD
+         * BBDD Peliculas: Contendra la clase Pelicula (Titulo,Año,Genero,Resumen,RutaVideo,RutaLogo
+         * BBDD Usuario: Nombre, Contraseña,Rol (Proponer meter gmail, y una ID para cada usuario, asi permitir nombres iguales)
+         * **/
         public static void Inicializar()
         {
             if (db != null) return;
@@ -24,6 +37,10 @@ namespace PeliculasStudio.BaseDatos
 
             IntegrarDatos();
         }
+
+        /**
+         * Metodo que Ingresa los datos Iniciales, para arrancar con algo de chicha
+         * **/
         private static void IntegrarDatos()
         {
             if (db.Table<Usuario>().Count() == 0)
@@ -95,6 +112,131 @@ namespace PeliculasStudio.BaseDatos
         {
             return db;
         }
+
+
+        /**
+         * Metodo de crear Usuario
+         * Funcion del metodo, recoger las variables de la Clase Usuario e introduccirlos en la BBDD Usuario
+         * Recoge: nombre, contraseña y rol
+         ***/
+        public static string CrearUsuario(string nombre, string password, string rol = "Usuario")
+        {
+            try
+            {
+                if (db == null) Inicializar();
+                var usuarioExistente = db.Table<Usuario>()
+                                         .FirstOrDefault(u => u.Nombreusuario.ToLower() == nombre.ToLower());
+
+                if (usuarioExistente != null)
+                {
+                    return "El nombre de usuario ya existe.";
+                }       
+                var nuevoUsuario = new Usuario
+                {
+                    Nombreusuario = nombre,
+                    Contrasenia = password,
+                    Rol = rol
+                };            
+                db.Insert(nuevoUsuario);
+                return 
+                       $"Usuario: {nuevoUsuario.Nombreusuario}\n" +
+                       $"Fecha: {DateTime.Now:dd/MM/yyyy HH:mm}";
+            }
+            catch (Exception ex)
+            {
+                return "Error al guardar: " + ex.Message;
+            }
+        }
+
+        /**
+        * Metodo Registrar Usuario:
+        * Valida los datos de entrada e inserta un nuevo usuario con ID autogenerado.
+        * @param nombre: Nickname del usuario.
+        * @param gmail: Correo electrónico (se valida formato).
+        * @param password: Clave de acceso.
+        * @param rol: "Admin" o "Usuario" (por defecto "Usuario").
+        * @return: Envia un Mensaje de como ha sido.
+        **/
+        /*
+        public static string CrearUsuario(string nombre, string gmail, string password, string rol = "Usuario")
+        {
+            try
+            {
+                if (db == null) Inicializar();
+
+                // 1. Validar formato de Gmail
+                string patronEmail = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+                if (!Regex.IsMatch(gmail, patronEmail))
+                {
+                    return "ERROR: El formato del correo electrónico no es válido.";
+                }
+
+                // 2. Verificar duplicados
+                var existente = db.Table<Usuario>()
+                                  .FirstOrDefault(u => u.Nombreusuario.ToLower() == nombre.ToLower()
+                                                    || u.Gmail.ToLower() == gmail.ToLower());
+
+                if (existente != null)
+                {
+                    return "ERROR: El nombre de usuario o el correo ya están registrados.";
+                }
+
+                // 3. Crear el objeto
+                var nuevoUsuario = new Usuario
+                {
+                    Nombreusuario = nombre,
+                    Gmail = gmail,
+                    Contrasenia = password,
+                    Rol = rol
+                };
+
+              
+                db.Insert(nuevoUsuario);
+
+                // 5. Devolver mensaje estructurado con los datos (usando interpolación de strings $)
+                return 
+                       $"Usuario: {nuevoUsuario.Nombreusuario}\n" +
+                       $"Email: {nuevoUsuario.Gmail}\n" +
+                       $"Fecha: {DateTime.Now:dd/MM/yyyy HH:mm}"+
+                       Gracias por contar con nosotros;
+            }
+            catch (Exception ex)
+            {
+                return "Error en la base de datos: " + ex.Message;
+            }
+        }
+        */
+
+        /**
+         * Metodo Borrar Usuario:
+         * Elimina un registro de la base de datos utilizando su ID.
+         * @param id: El identificador numérico del usuario a eliminar.
+         * @return: "OK" si se eliminó, o un mensaje de error si no se encontró o falló.
+         **/
+        public static string BorrarUsuario(int id)
+        {
+            try
+            {
+                if (db == null) Inicializar();
+
+              
+                var usuario = db.Table<Usuario>().FirstOrDefault(u => u.Id == id);
+
+                if (usuario == null)
+                {
+                    return "El usuario no existe en la base de datos.";
+                }
+
+                db.Delete(usuario);
+
+                return "Cuenta eliminada correctamente. Muchas gracias por haber pertenecido al equipo.";
+            }
+            catch (Exception ex)
+            {
+                return "Error al eliminar: " + ex.Message;
+            }
+        }
+
 
     }
 }

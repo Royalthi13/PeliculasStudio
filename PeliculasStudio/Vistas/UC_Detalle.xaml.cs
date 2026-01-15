@@ -29,7 +29,7 @@ namespace PeliculasStudio.Vistas
 
             libVlc = new LibVLC();
 
-           
+
             mediaPlayer = new LibVLCSharp.Shared.MediaPlayer(libVlc);
 
             VlcPlayer.MediaPlayer = mediaPlayer;
