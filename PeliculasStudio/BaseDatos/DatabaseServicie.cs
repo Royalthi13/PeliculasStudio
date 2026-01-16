@@ -141,6 +141,26 @@ namespace PeliculasStudio.BaseDatos
 
 
 
+        public static Usuario ValidarLogin(string nombre, string password)
+        {
+            try
+            {
+                if (db == null) Inicializar();
+
+               
+                return db.Table<Usuario>().FirstOrDefault(u =>
+                    u.Nombreusuario == nombre &&
+                    u.Contrasenia == password);
+            }
+            catch
+            {
+                return null; 
+            }
+        }
+
+
+
+
         /**
         * Metodo Registrar Usuario:
         * Valida los datos de entrada e inserta un nuevo usuario con ID autogenerado.

@@ -5,8 +5,125 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PeliculasStudio.Vistas"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <TextBlock Text="Hola Mundo"/>
+             d:DesignHeight="450" d:DesignWidth="800"
+             HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+
+    <Grid x:Name="GridPrincipal" Background="#F0F0F0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Barra superior con botón de tema alineado a la derecha -->
+        <Grid Grid.Row="0" Margin="10" Cursor="">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Espacio izquierdo (vacío) -->
+            <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center"/>
+
+            <!-- Botón de tema -->
+            <ToggleButton x:Name="btnTema" Grid.Column="1" Width="36" Height="36" Margin="0"
+                          VerticalAlignment="Top" HorizontalAlignment="Right" Cursor="Hand"
+                          Background="Transparent" BorderBrush="Transparent" ToolTip="Cambiar tema" Click="btnTema_Click">
+                <ToggleButton.Style>
+                    <Style TargetType="ToggleButton">
+                        <Setter Property="FontSize" Value="18"/>
+                        <Setter Property="Foreground" Value="#333"/>
+                        <Setter Property="Content" Value="☀"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Content" Value="☾"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="#007ACC"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ToggleButton.Style>
+            </ToggleButton>
+        </Grid>
+
+        <!-- Contenido principal -->
+        <Border x:Name="BorderCentral" Grid.Row="1" Background="White" CornerRadius="10" Padding="30"
+                VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="40" MaxWidth="480">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Título centrado -->
+                <TextBlock x:Name="txtTitulo" Text="PELÍCULAS STUDIO" FontSize="24" FontWeight="Bold" 
+                           HorizontalAlignment="Center" Margin="0,0,0,20" Foreground="#333"/>
+
+                <!-- Formulario -->
+                <StackPanel Grid.Row="1" VerticalAlignment="Top">
+                    <TextBlock x:Name="lblUsuario" Text="Usuario:" Margin="0,10,0,5" Foreground="#555"/>
+                    <TextBox x:Name="txtUsuario" Height="30" VerticalContentAlignment="Center" Padding="5,0"/>
+
+                    <TextBlock x:Name="lblPass" Text="Contraseña:" Margin="0,15,0,5" Foreground="#555"/>
+                    <PasswordBox x:Name="txtPassword" Height="30" VerticalContentAlignment="Center" Padding="5,0"/>
+
+                    <!-- Botón iniciar sesión -->
+                    <Button x:Name="btnIniciarSesion" Content="Iniciar Sesión" 
+                            Margin="0,25,0,10" Height="35" Cursor="Hand"
+                            Background="#007ACC" Foreground="White" FontWeight="Bold"
+                            RenderTransformOrigin="0.5,0.5" Click="btnIniciarSesion_Click">
+                        <Button.RenderTransform>
+                            <ScaleTransform x:Name="botonScale" ScaleX="1" ScaleY="1" />
+                        </Button.RenderTransform>
+
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" 
+                                                    CornerRadius="5" BorderThickness="0">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Trigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" 
+                                                                     To="1.1" Duration="0:0:0.2"/>
+                                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" 
+                                                                     To="1.1" Duration="0:0:0.2"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.EnterActions>
+                                        <Trigger.ExitActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" 
+                                                                     To="1" Duration="0:0:0.2"/>
+                                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" 
+                                                                     To="1" Duration="0:0:0.2"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.ExitActions>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <Button x:Name="btnIrARegistro" Content="¿No tienes cuenta? Regístrate" 
+                            Background="Transparent" BorderBrush="Transparent" 
+                            Foreground="#007ACC" Cursor="Hand" FontSize="11"
+                            Click="btnIrARegistro_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

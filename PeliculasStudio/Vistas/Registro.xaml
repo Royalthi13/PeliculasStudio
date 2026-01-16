@@ -3,10 +3,171 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PeliculasStudio.Vistas"
         mc:Ignorable="d"
-        Title="Registro" Height="450" Width="800">
-    <Grid>
-        
+        Title="Registro de Usuario" Height="800" Width="1200" 
+        WindowState="Maximized" WindowStyle="SingleBorderWindow">
+
+    <Grid x:Name="GridPrincipal" Background="#F0F0F0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,40,0">
+            <ToggleButton x:Name="btnTema" Width="50" Height="50" Cursor="Hand"
+                          Background="Transparent" BorderBrush="Transparent" Click="btnTema_Click">
+                <ToggleButton.Style>
+                    <Style TargetType="ToggleButton">
+                        <Setter Property="Content" Value="☀"/>
+                        <Setter Property="FontSize" Value="24"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Content" Value="☾"/>
+                                <Setter Property="Foreground" Value="#FFD700"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ToggleButton.Style>
+            </ToggleButton>
+        </StackPanel>
+
+        <Grid Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="500"/>
+                <ColumnDefinition Width="400"/>
+            </Grid.ColumnDefinitions>
+
+            <Border x:Name="BorderFormulario" Grid.Column="0" Background="White" CornerRadius="15" Padding="40" Margin="20">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="30" Opacity="0.15" ShadowDepth="5"/>
+                </Border.Effect>
+                <StackPanel>
+                    <TextBlock x:Name="txtTitulo" Text="CREAR NUEVA CUENTA" FontSize="28" FontWeight="ExtraBold" 
+                               Margin="0,0,0,30" HorizontalAlignment="Center" Foreground="#333"/>
+
+                    <TextBlock x:Name="lblUsuario" Text="Nombre de Usuario" FontWeight="SemiBold" Foreground="#666" Margin="0,10,0,8"/>
+                    <TextBox x:Name="txtUsuario" Height="45" FontSize="16" VerticalContentAlignment="Center" Padding="10,0"
+                             TextChanged="LimpiarBorde_TextChanged"/>
+
+                    <TextBlock x:Name="lblGmail" Text="Correo Electrónico" FontWeight="SemiBold" Foreground="#666" Margin="0,20,0,8"/>
+                    <TextBox x:Name="txtGmail" Height="45" FontSize="16" VerticalContentAlignment="Center" Padding="10,0"
+                             TextChanged="LimpiarBorde_TextChanged"/>
+
+                    <TextBlock x:Name="lblPassword" Text="Contraseña" FontWeight="SemiBold" Foreground="#666" Margin="0,20,0,8"/>
+                    <PasswordBox x:Name="txtPassword" Height="45" FontSize="16" VerticalContentAlignment="Center" Padding="10,0"
+                                 PasswordChanged="txtPassword_PasswordChanged"/>
+                    <TextBlock x:Name="lblRepeatPassword" Text="Repetir Contraseña" FontWeight="SemiBold" Foreground="#666" Margin="0,20,0,8"/>
+                    <PasswordBox x:Name="txtRepeatPassword" 
+             Height="45" FontSize="16" 
+             VerticalContentAlignment="Center" Padding="10,0"
+             PasswordChanged="txtRepeatPassword_PasswordChanged">
+                        <PasswordBox.Style>
+                            <Style TargetType="PasswordBox">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="PasswordBox">
+                                            <Border x:Name="border" 
+                                                Background="{TemplateBinding Background}" 
+                                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                                CornerRadius="8">
+                                                <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsFocused" Value="True">
+                                                    <Setter TargetName="border" Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=BorderBrush}"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </PasswordBox.Style>
+                    </PasswordBox>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,12">
+                        <TextBlock x:Name="iconCoincide" Text="✖" Foreground="#D32F2F" Margin="0,0,15,0" FontWeight="Bold"/>
+                        <TextBlock x:Name="lblCoincide" Text="Las contraseñas no coinciden" Foreground="#D32F2F" FontSize="15"/>
+                    </StackPanel>
+
+                    <Button x:Name="btnRegistrar" Content="REGISTRARSE" Height="55" Margin="0,40,0,15"
+                            Background="#007ACC" Foreground="White" FontSize="18" FontWeight="Bold" Cursor="Hand"
+                            RenderTransformOrigin="0.5,0.5" Click="btnRegistrar_Click">
+                        <Button.RenderTransform>
+                            <ScaleTransform x:Name="registrarScale" ScaleX="1" ScaleY="1" />
+                        </Button.RenderTransform>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Trigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1.05" Duration="0:0:0.2"/>
+                                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1.05" Duration="0:0:0.2"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.EnterActions>
+                                        <Trigger.ExitActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)" To="1" Duration="0:0:0.2"/>
+                                                    <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)" To="1" Duration="0:0:0.2"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.ExitActions>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <Button x:Name="btnVolver" Content="← Volver al inicio de sesión" Background="Transparent" 
+                            BorderBrush="Transparent" Foreground="#007ACC" FontSize="14" Cursor="Hand"
+                            Click="btnVolver_Click"/>
+                </StackPanel>
+            </Border>
+
+            <Border x:Name="BorderRequisitos" Grid.Column="1" Background="#F9F9F9" CornerRadius="15" Padding="35" Margin="20" VerticalAlignment="Stretch">
+                <StackPanel>
+                    <TextBlock x:Name="lblSeguridadTitulo" Text="Seguridad de la cuenta" FontWeight="Bold" FontSize="20" Margin="0,0,0,25" Foreground="#333"/>
+                    <TextBlock x:Name="lblInstruccion" Text="La contraseña debe cumplir:" FontSize="14" Foreground="#777" Margin="0,0,0,20"/>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,12">
+                        <TextBlock x:Name="iconLongitud" Text="✖" Foreground="#D32F2F" Margin="0,0,15,0" FontWeight="Bold"/>
+                        <TextBlock x:Name="lblLongitud" Text="Mínimo 8 caracteres" Foreground="#D32F2F" FontSize="15"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,12">
+                        <TextBlock x:Name="iconMayuscula" Text="✖" Foreground="#D32F2F" Margin="0,0,15,0" FontWeight="Bold"/>
+                        <TextBlock x:Name="lblMayuscula" Text="Al menos una mayúscula" Foreground="#D32F2F" FontSize="15"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,12">
+                        <TextBlock x:Name="iconNumero" Text="✖" Foreground="#D32F2F" Margin="0,0,15,0" FontWeight="Bold"/>
+                        <TextBlock x:Name="lblNumero" Text="Incluir un número (0-9)" Foreground="#D32F2F" FontSize="15"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,12">
+                        <TextBlock x:Name="iconEspecial" Text="✖" Foreground="#D32F2F" Margin="0,0,15,0" FontWeight="Bold"/>
+                        <TextBlock x:Name="lblEspecial" Text="Un carácter especial (@!#$)" Foreground="#D32F2F" FontSize="15"/>
+                    </StackPanel>
+
+                    <Separator x:Name="SepLine" Margin="0,30,0,20" Background="#DDD"/>
+
+                    <TextBlock x:Name="lblNota" TextWrapping="Wrap" FontSize="13" Foreground="#888" LineHeight="20"
+                               Text="Nota: Utilizamos encriptación de grado bancario para proteger tu información personal."/>
+                </StackPanel>
+            </Border>
+        </Grid>
     </Grid>
 </Window>

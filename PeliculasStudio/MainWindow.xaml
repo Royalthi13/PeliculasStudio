@@ -6,9 +6,12 @@
         xmlns:local="clr-namespace:PeliculasStudio"
         xmlns:vistas="clr-namespace:PeliculasStudio.Vistas"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        WindowState="Maximized" 
+        WindowStyle="SingleBorderWindow"
+        Title="MainWindow" Height="600" Width="800">
     <Grid>
-        <ContentControl x:Name="ContenedorPrincipal" />
+        <ContentControl x:Name="ContenedorPrincipal" HorizontalContentAlignment="Stretch" 
+                        VerticalContentAlignment="Stretch" />
        
     </Grid>
 </Window>

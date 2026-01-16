@@ -20,9 +20,10 @@ namespace PeliculasStudio.Vistas
     /// </summary>
     public partial class UC_Inicio : UserControl
     {
-        public UC_Inicio()
+        public UC_Inicio(string nombreUsuario)
         {
             InitializeComponent();
+            txtBienvenida.Text = "Bienvenido, " + nombreUsuario;
         }
     }
 }

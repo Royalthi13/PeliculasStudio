@@ -11,6 +11,8 @@ namespace PeliculasStudio
     /// </summary>
     public partial class App : Application
     {
+        // Esta variable guardará el estado del tema para toda la app
+        public static bool IsDarkMode { get; set; } = false;
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -20,7 +22,10 @@ namespace PeliculasStudio
 
             // y esto inicializa la base de datos y crea los datos iniciales
             DatabaseServicie.Inicializar();
-        }
+          
+
+    }
+      
     }
 
 }
