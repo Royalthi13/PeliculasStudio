@@ -13,16 +13,35 @@ namespace PeliculasStudio.BaseDatos
      * incluyendo la inicialización de tablas, la inserción de datos semilla, 
      * y la ejecución de operaciones CRUD (Crear, Leer, Eliminar) para las 
      * entidades de Películas y Usuarios.
+     * 
      **/
+   
 
     public static class DatabaseServicie
     {
+ 
+        public enum TipoRol
+        {
+            /// <summary>
+            /// Rol estándar: Permite visualizar contenido pero no modificar la base de datos.
+            /// Internamente, SQLite lo guardará como el valor entero 0.
+            /// </summary>
+            Usuario,
+
+            /// <summary>
+            /// Rol con privilegios: Permite añadir, editar y eliminar películas o usuarios.
+            /// Internamente, SQLite lo guardará como el valor entero 1.
+            /// </summary>
+            Admin
+        }
+
         private static SQLiteConnection db;
         /**
          * Metodo para Inicializar la aplicacion con la BBDD
          * BBDD Peliculas: Contendra la clase Pelicula (Titulo,Año,Genero,Resumen,RutaVideo,RutaLogo
          * BBDD Usuario: Nombre, Contraseña,Rol (Proponer meter gmail, y una ID para cada usuario, asi permitir nombres iguales)
          * **/
+
         public static void Inicializar()
         {
             if (db != null) return;
@@ -49,7 +68,7 @@ namespace PeliculasStudio.BaseDatos
                 {
                     Nombreusuario = "admin",
                     Contrasenia = "123",
-                    Rol = "Admin"
+                    Rol = TipoRol.Admin
                 });
             }
 
@@ -103,10 +122,15 @@ namespace PeliculasStudio.BaseDatos
                 };
                 db.InsertAll(iniciales);
             }
+        }
 
-     
-
-    }
+        /**
+         * Metodo GetConexion:
+         * Proporciona acceso a la instancia activa de la conexion SQLite.
+         * Se utiliza para realizar consultas personalizadas o LINQ desde otras clases
+         * garantizando que toda la aplicacion comparta el mismo tunel de datos.
+         * @return: Retorna el objeto SQLiteConnection inicializado.
+         **/
 
         public static SQLiteConnection GetConexion()
         {
@@ -114,39 +138,7 @@ namespace PeliculasStudio.BaseDatos
         }
 
 
-        /**
-         * Metodo de crear Usuario
-         * Funcion del metodo, recoger las variables de la Clase Usuario e introduccirlos en la BBDD Usuario
-         * Recoge: nombre, contraseña y rol
-         ***/
-        public static string CrearUsuario(string nombre, string password, string rol = "Usuario")
-        {
-            try
-            {
-                if (db == null) Inicializar();
-                var usuarioExistente = db.Table<Usuario>()
-                                         .FirstOrDefault(u => u.Nombreusuario.ToLower() == nombre.ToLower());
 
-                if (usuarioExistente != null)
-                {
-                    return "El nombre de usuario ya existe.";
-                }       
-                var nuevoUsuario = new Usuario
-                {
-                    Nombreusuario = nombre,
-                    Contrasenia = password,
-                    Rol = rol
-                };            
-                db.Insert(nuevoUsuario);
-                return 
-                       $"Usuario: {nuevoUsuario.Nombreusuario}\n" +
-                       $"Fecha: {DateTime.Now:dd/MM/yyyy HH:mm}";
-            }
-            catch (Exception ex)
-            {
-                return "Error al guardar: " + ex.Message;
-            }
-        }
 
         /**
         * Metodo Registrar Usuario:
@@ -155,23 +147,23 @@ namespace PeliculasStudio.BaseDatos
         * @param gmail: Correo electrónico (se valida formato).
         * @param password: Clave de acceso.
         * @param rol: "Admin" o "Usuario" (por defecto "Usuario").
-        * @return: Envia un Mensaje de como ha sido.
+        * @return: Envia un Mensaje de como ha sido, si no lo deseas pue' no lo muestres.
         **/
-        /*
-        public static string CrearUsuario(string nombre, string gmail, string password, string rol = "Usuario")
+
+        public static string CrearUsuario(string nombre, string gmail, string password, TipoRol rol = TipoRol.Usuario)
         {
             try
             {
                 if (db == null) Inicializar();
 
-                // 1. Validar formato de Gmail
+                // 1. Validar formato de Email
                 string patronEmail = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
                 if (!Regex.IsMatch(gmail, patronEmail))
                 {
                     return "ERROR: El formato del correo electrónico no es válido.";
                 }
 
-                // 2. Verificar duplicados
+                // 2. Comprobar si ya existe (Case Insensitive)
                 var existente = db.Table<Usuario>()
                                   .FirstOrDefault(u => u.Nombreusuario.ToLower() == nombre.ToLower()
                                                     || u.Gmail.ToLower() == gmail.ToLower());
@@ -181,45 +173,46 @@ namespace PeliculasStudio.BaseDatos
                     return "ERROR: El nombre de usuario o el correo ya están registrados.";
                 }
 
-                // 3. Crear el objeto
+                // 3. Crear el objeto con el Enum
                 var nuevoUsuario = new Usuario
                 {
                     Nombreusuario = nombre,
                     Gmail = gmail,
-                    Contrasenia = password,
+                    Contrasenia = password, // Recuerda en el futuro usar Hashing por seguridad
                     Rol = rol
                 };
 
-              
+                // 4. Insertar en SQLite
                 db.Insert(nuevoUsuario);
 
-                // 5. Devolver mensaje estructurado con los datos (usando interpolación de strings $)
-                return 
-                       $"Usuario: {nuevoUsuario.Nombreusuario}\n" +
+                return $"USUARIO REGISTRADO CON ÉXITO\n" +
+                       $"---------------------------\n" +
+                       $"Nombre: {nuevoUsuario.Nombreusuario}\n" +
                        $"Email: {nuevoUsuario.Gmail}\n" +
-                       $"Fecha: {DateTime.Now:dd/MM/yyyy HH:mm}"+
-                       Gracias por contar con nosotros;
+                       $"Rol: {nuevoUsuario.Rol}\n" +
+                       $"Fecha: {DateTime.Now:dd/MM/yyyy HH:mm}\n" +
+                       $"---------------------------\n" +
+                       $"Gracias por contar con nosotros.";
             }
             catch (Exception ex)
             {
                 return "Error en la base de datos: " + ex.Message;
             }
         }
-        */
+
 
         /**
          * Metodo Borrar Usuario:
          * Elimina un registro de la base de datos utilizando su ID.
          * @param id: El identificador numérico del usuario a eliminar.
-         * @return: "OK" si se eliminó, o un mensaje de error si no se encontró o falló.
+         * @return: string de: si se eliminó, o un mensaje de error si no se encontró o falló.
          **/
         public static string BorrarUsuario(int id)
         {
             try
             {
                 if (db == null) Inicializar();
-
-              
+                
                 var usuario = db.Table<Usuario>().FirstOrDefault(u => u.Id == id);
 
                 if (usuario == null)
@@ -234,6 +227,101 @@ namespace PeliculasStudio.BaseDatos
             catch (Exception ex)
             {
                 return "Error al eliminar: " + ex.Message;
+            }
+        }
+
+        /**
+         * Metodo Añadir Pelicula (Solo Admin):
+         * Verifica que el usuario tenga rol de "Admin" antes de insertar.
+         * @param rolUsuario: El rol de quien ejecuta la accion.
+         * @return: Mensaje de exito o error de permisos.
+         **/
+
+        public static string AniadirPelicula(TipoRol rolUsuario, string titulo, int anio, string genero, string resumen, string trailer, string portada)
+        {
+            try
+            {
+             
+                if (rolUsuario != TipoRol.Admin)
+                {
+                    return "ACCESO DENEGADO: No tienes permisos para añadir películas.";
+                }
+
+                if (db == null) Inicializar();
+
+            
+                if (string.IsNullOrWhiteSpace(titulo) || anio < 1888)
+                {
+                    return "ERROR: Datos de la película inválidos (Título vacío o año incorrecto).";
+                }
+
+               
+                var existente = db.Table<Pelicula>()
+                                  .FirstOrDefault(p => p.Titulo.ToLower() == titulo.ToLower() && p.Anio == anio);
+
+                if (existente != null)
+                {
+                    return $"ERROR: La película '{titulo}' ({anio}) ya existe en la base de datos.";
+                }
+
+               
+                var nuevaPelicula = new Pelicula
+                {
+                    Titulo = titulo,
+                    Anio = anio,
+                    Genero = genero,
+                    Resumen = resumen,
+                    TrailerPath = trailer,
+                    PortadaPath = portada
+                };
+
+              
+                db.Insert(nuevaPelicula);
+
+                return $"ÉXITO: La película '{titulo}' ha sido añadida correctamente por el Administrador.";
+            }
+            catch (Exception ex)
+            {
+                return "Error crítico en la base de datos: " + ex.Message;
+            }
+        }
+        /**
+         * Metodo Borrar Pelicula:
+         * Elimina una película de la base de datos por su ID.
+         * Requiere permisos de Administrador.
+         * @param rolUsuario: El rol de quien intenta borrar.
+         * @param idPelicula: El ID único de la película.
+         * @return: Mensaje con el resultado de la operación.
+         **/
+        public static string BorrarPelicula(TipoRol rolUsuario, int idPelicula)
+        {
+            try
+            {
+                
+                if (rolUsuario != TipoRol.Admin)
+                {
+                    return "ACCESO DENEGADO: Solo los administradores pueden eliminar contenido.";
+                }
+
+                if (db == null) Inicializar();
+
+               
+                var pelicula = db.Table<Pelicula>().FirstOrDefault(p => p.Id == idPelicula);
+
+                if (pelicula == null)
+                {
+                    return "ERROR: La película no existe en la base de datos.";
+                }
+
+          
+                string tituloBorrado = pelicula.Titulo;
+                db.Delete(pelicula);
+
+                return $"ÉXITO: La película '{tituloBorrado}' ha sido eliminada del catálogo.";
+            }
+            catch (Exception ex)
+            {
+                return "Error al intentar eliminar la película: " + ex.Message;
             }
         }
 
