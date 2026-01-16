@@ -24,8 +24,7 @@ namespace PeliculasStudio.Vistas
         {
             InitializeComponent();
 
-            // Al cargar el control, verificamos si el modo oscuro ya estaba activo
-            // Usamos Loaded para asegurarnos de que el XAML esté listo
+ 
             this.Loaded += (s, e) => {
                 if (App.IsDarkMode)
                 {
@@ -34,6 +33,14 @@ namespace PeliculasStudio.Vistas
                 }
             };
         }
+        /**
+        * Metodo Iniciar Sesion Click:
+        * Valida las credenciales contra la base de datos y gestiona el acceso al sistema.
+        * 1. Si los datos son correctos: Instancia la MainWindow, carga el UC_Inicio con el nombre del usuario y cierra el Login.
+        * 2. Si son incorrectos: Resalta los campos en rojo y muestra un mensaje de error.
+        * @param sender: El botón de inicio de sesión.
+        * @param e: Argumentos del evento de click.
+        **/
         private void btnIniciarSesion_Click(object sender, RoutedEventArgs e)
         {
             string nombre = txtUsuario.Text.Trim();
@@ -43,25 +50,17 @@ namespace PeliculasStudio.Vistas
 
             if (usuarioEncontrado != null)
             {
-                // 1. Creamos la ventana principal
+               
                 MainWindow ventanaPrincipal = new MainWindow();
 
-                // 2. Creamos el control de inicio con el nombre del usuario
                 UC_Inicio inicio = new UC_Inicio(usuarioEncontrado.Nombreusuario);
-
-                // 3. Metemos el UC_Inicio dentro del contenido de la MainWindow
-                // Asumo que tu MainWindow tiene un Grid llamado "GridPrincipal" o similar
                 ventanaPrincipal.Content = inicio;
-
                 ventanaPrincipal.Show();
-
-                // 4. Cerramos el login
                 Window.GetWindow(this).Close();
             }
             else
             {
                 // --- ERROR ---
-                // Pintamos los bordes de rojo
                 txtUsuario.BorderBrush = Brushes.Red;
                 txtUsuario.BorderThickness = new Thickness(2);
 
@@ -71,10 +70,18 @@ namespace PeliculasStudio.Vistas
                 MessageBox.Show("Usuario o contraseña incorrectos.", "Error de acceso", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
+        /**
+        * Metodo Ir A Registro Click:
+        * Gestiona la transición desde la pantalla de Login hacia la pantalla de Registro.
+        * 1. Sincroniza el estado del tema actual para que la nueva ventana se abra con el mismo color.
+        * 2. Instancia y muestra la ventana de Registro.
+        * 3. Localiza y cierra la ventana de Login actual para optimizar el uso de memoria.
+        * @param sender: El botón o enlace que solicita ir al registro.
+        * @param e: Argumentos del evento de click.
+        **/
         private void btnIrARegistro_Click(object sender, RoutedEventArgs e)
         {
-            // Antes de abrir la ventana de registro, nos aseguramos de que el estado sea el actual
+            
             App.IsDarkMode = btnTema.IsChecked ?? false;
 
             Registro ventanaRegistro = new Registro();
@@ -87,6 +94,13 @@ namespace PeliculasStudio.Vistas
             }
         }
 
+        /**
+        * Metodo Tema Click (Login):
+        * Gestiona el cambio de apariencia de la ventana de inicio de sesión.
+        * Sincroniza el estado del botón con la configuración global de la aplicación.
+        * @param sender: El ToggleButton (interruptor) de cambio de tema.
+        * @param e: Argumentos del evento de click.
+        **/
         private void btnTema_Click(object sender, RoutedEventArgs e)
         {
             var boton = sender as System.Windows.Controls.Primitives.ToggleButton;
@@ -94,11 +108,15 @@ namespace PeliculasStudio.Vistas
 
             // ACTUALIZAMOS LA VARIABLE GLOBAL
             App.IsDarkMode = modoOscuro;
-
             CambiarInterfazTema(modoOscuro);
         }
 
-        // He extraído la lógica a un método para poder llamarlo desde el constructor o el click
+        /**
+        * Metodo Cambiar Interfaz Tema:
+        * Centraliza la lógica de estilos visuales para la pantalla de Login.
+        * Ajusta colores de fondo, etiquetas y cajas de texto de forma simultánea.
+        * @param modoOscuro: Booleano que determina si se aplica el tema noche (true) o día (false).
+        **/
         private void CambiarInterfazTema(bool modoOscuro)
         {
             if (GridPrincipal == null || BorderCentral == null) return;

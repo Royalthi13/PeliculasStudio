@@ -20,9 +20,7 @@ namespace PeliculasStudio.Vistas
     {
         public Registro()
         {
-            InitializeComponent();
-
-           
+            InitializeComponent();        
             if (App.IsDarkMode)
             {
                 btnTema.IsChecked = true;
@@ -34,25 +32,27 @@ namespace PeliculasStudio.Vistas
                 AplicarTemaClaro();
             }
         }
-
+        /**
+        * Metodo Registrar Click:
+        * Gestiona el flujo completo de registro de un nuevo usuario.
+        * 1. Recolecta y limpia los datos de la interfaz (Trim y ToLower).
+        * 2. Valida visualmente campos vacíos pintando bordes de rojo.
+        * 3. Verifica la robustez de la contraseña y la coincidencia entre campos.
+        * 4. Intenta persistir el usuario en la base de datos y maneja la respuesta.
+        * @param sender: El botón de registro que lanza el evento.
+        * @param e: Argumentos del evento de click.
+        **/
         private void btnRegistrar_Click(object sender, RoutedEventArgs e)
         {
-            // 1. RECOGIDA DE DATOS
             string nombre = txtUsuario.Text.Trim();
             string correo = txtGmail.Text.Trim().ToLower();
             string pass = txtPassword.Password;
             string passRepeat = txtRepeatPassword.Password;
-
-            // 2. COLORES SEGÚN EL TEMA
             SolidColorBrush colorError = Brushes.Red;
             SolidColorBrush colorNormal = App.IsDarkMode ?
                 new SolidColorBrush((Color)ColorConverter.ConvertFromString("#555555")) :
                 new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ABAdB3"));
-
-            // 3. VALIDACIÓN DE CAMPOS VACÍOS (Pintar bordes)
             bool hayCamposVacios = false;
-
-            // Usuario
             if (string.IsNullOrWhiteSpace(nombre))
             {
                 txtUsuario.BorderBrush = colorError;
@@ -64,8 +64,6 @@ namespace PeliculasStudio.Vistas
                 txtUsuario.BorderBrush = colorNormal;
                 txtUsuario.BorderThickness = new Thickness(1);
             }
-
-            // Gmail
             if (string.IsNullOrWhiteSpace(correo))
             {
                 txtGmail.BorderBrush = colorError;
@@ -77,8 +75,6 @@ namespace PeliculasStudio.Vistas
                 txtGmail.BorderBrush = colorNormal;
                 txtGmail.BorderThickness = new Thickness(1);
             }
-
-            // Password
             if (string.IsNullOrWhiteSpace(pass))
             {
                 txtPassword.BorderBrush = colorError;
@@ -90,29 +86,21 @@ namespace PeliculasStudio.Vistas
                 txtPassword.BorderBrush = colorNormal;
                 txtPassword.BorderThickness = new Thickness(1);
             }
-
-            // Si falta algo, paramos aquí
             if (hayCamposVacios)
             {
                 MessageBox.Show("Por favor, rellena los campos en rojo.");
                 return;
             }
-
-            // 4. VALIDACIÓN DE SEGURIDAD (La función que hicimos antes)
             if (!ValidarSeguridadPassword(pass))
             {
                 MessageBox.Show("La contraseña no es segura.");
                 return;
             }
-
-            // 5. VALIDACIÓN DE COINCIDENCIA
             if (pass != passRepeat)
             {
                 MessageBox.Show("Las contraseñas no coinciden.");
                 return;
-            }
-
-            // 6. LLAMADA A LA BBDD (Solo llegamos aquí si TODO está bien)
+            }           
             string resultado = DatabaseServicie.CrearUsuario(nombre, correo, pass);
 
             if (resultado.StartsWith("ERROR"))
@@ -125,7 +113,13 @@ namespace PeliculasStudio.Vistas
                 btnVolver_Click(null, null);
             }
         }
-
+        /**
+        * Metodo Validar Seguridad Password:
+        * Realiza una comprobación lógica de los criterios de seguridad requeridos.
+        * @param password: La cadena de texto con la contraseña a evaluar.
+        * @returns: Devuelve true solo si cumple simultáneamente con longitud mínima, 
+        * mayúscula, número y carácter especial; de lo contrario, devuelve false.
+        **/
         private bool ValidarSeguridadPassword(string password)
         {
             if (string.IsNullOrEmpty(password)) return false;
@@ -141,7 +135,13 @@ namespace PeliculasStudio.Vistas
 
 
         //-------------------------------------------------------------------------------
-
+        /**
+        * Metodo Limpiar Borde TextChanged:
+        * Restaura el diseño original del control cuando el usuario empieza a escribir.
+        * Se utiliza para eliminar el resaltado de error (borde rojo) de forma dinámica.
+        * @param sender: El control que disparó el evento (TextBox o PasswordBox).
+        * @param e: Argumentos del evento de cambio de texto.
+        **/
         private void LimpiarBorde_TextChanged(object sender, TextChangedEventArgs e)
         {
             var control = sender as Control;
@@ -154,6 +154,13 @@ namespace PeliculasStudio.Vistas
                 control.BorderThickness = new Thickness(1);
             }
         }
+        /**
+        * Metodo Repeat Password Changed:
+        * Compara en tiempo real la contraseña principal con la repetición.
+        * Actualiza dinámicamente el color del borde, el icono y el texto de ayuda.
+        * @param sender: El control PasswordBox de repetir contraseña.
+        * @param e: Argumentos del evento de cambio de contraseña.
+        **/
         private void txtRepeatPassword_PasswordChanged(object sender, RoutedEventArgs e)
         {
             string pass = txtPassword.Password;
@@ -164,7 +171,7 @@ namespace PeliculasStudio.Vistas
                 new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF4C4C")) :
                 new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D32F2F"));
 
-            // Caso: Está vacío
+            
             if (string.IsNullOrEmpty(repeatPass))
             {
                 txtRepeatPassword.BorderBrush = App.IsDarkMode ?
@@ -173,7 +180,7 @@ namespace PeliculasStudio.Vistas
 
                 txtRepeatPassword.BorderThickness = new Thickness(1);
                 iconCoincide.Text = "✖";
-                lblCoincide.Text = "Las contraseñas no coinciden"; // Texto por defecto
+                lblCoincide.Text = "Las contraseñas no coinciden"; 
                 iconCoincide.Foreground = rojo;
                 lblCoincide.Foreground = rojo;
                 return;
@@ -187,7 +194,7 @@ namespace PeliculasStudio.Vistas
                 txtRepeatPassword.BorderThickness = new Thickness(2.5);
 
                 iconCoincide.Text = "✔";
-                lblCoincide.Text = "Las contraseñas coinciden"; // <--- CAMBIO AQUÍ
+                lblCoincide.Text = "Las contraseñas coinciden"; 
                 iconCoincide.Foreground = verde;
                 lblCoincide.Foreground = verde;
             }
@@ -198,39 +205,44 @@ namespace PeliculasStudio.Vistas
                 txtRepeatPassword.BorderThickness = new Thickness(2.5);
 
                 iconCoincide.Text = "✖";
-                lblCoincide.Text = "Las contraseñas no coinciden"; // <--- CAMBIO AQUÍ
+                lblCoincide.Text = "Las contraseñas no coinciden";
                 iconCoincide.Foreground = rojo;
                 lblCoincide.Foreground = rojo;
             }
         }
+        /**
+        * Metodo Password Changed:
+        * Evalúa en tiempo real la robustez de la contraseña mientras el usuario escribe.
+        * Comprueba longitud, mayúsculas, números y caracteres especiales.
+        * @param sender: El control PasswordBox de la contraseña principal.
+        * @param e: Argumentos del evento de cambio de contraseña.
+        **/
         private void txtPassword_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            string pass = txtPassword.Password;
-
-            // Definimos los colores dinámicos según el tema actual
-            // Si es modo oscuro usamos un rojo más brillante (#FF4C4C), si es claro el que ya tenías (#D32F2F)
+            string pass = txtPassword.Password;       
             SolidColorBrush colorRojo = App.IsDarkMode ?
                 new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF4C4C")) :
                 new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D32F2F"));
 
-            SolidColorBrush colorVerde = Brushes.Green;
-
-            // 1. Validar Longitud (Mínimo 8)
-            ActualizarEstadoRequisito(pass.Length >= 8, iconLongitud, lblLongitud, colorRojo, colorVerde);
-
-            // 2. Validar Mayúscula
-            ActualizarEstadoRequisito(pass.Any(char.IsUpper), iconMayuscula, lblMayuscula, colorRojo, colorVerde);
-
-            // 3. Validar Número
+            SolidColorBrush colorVerde = Brushes.Green;          
+            ActualizarEstadoRequisito(pass.Length >= 8, iconLongitud, lblLongitud, colorRojo, colorVerde);         
+            ActualizarEstadoRequisito(pass.Any(char.IsUpper), iconMayuscula, lblMayuscula, colorRojo, colorVerde);        
             ActualizarEstadoRequisito(pass.Any(char.IsDigit), iconNumero, lblNumero, colorRojo, colorVerde);
-
-            // 4. Validar Carácter Especial
             bool tieneEspecial = pass.Any(ch => !char.IsLetterOrDigit(ch));
             ActualizarEstadoRequisito(tieneEspecial, iconEspecial, lblEspecial, colorRojo, colorVerde);
             txtRepeatPassword_PasswordChanged(null, null);
         }
 
-        // Método auxiliar para evitar repetir código
+        /**
+          * Metodo Actualizar Estado Requisito:
+          * Cambia la apariencia visual de un requisito de validación (longitud, mayúsculas, etc.).
+          * Actualiza el icono y el color del texto dependiendo de si se cumple o no la condición.
+          * @param cumple: Booleano que indica si el requisito de seguridad se ha alcanzado.
+          * @param icono: El TextBlock que contiene el símbolo (✔ o ✖).
+          * @param texto: El TextBlock que contiene la descripción del requisito.
+          * @param rojo: Color para indicar que el requisito falta.
+          * @param verde: Color para indicar que el requisito está completado.
+          **/
         private void ActualizarEstadoRequisito(bool cumple, TextBlock icono, TextBlock texto, Brush rojo, Brush verde)
         {
             if (cumple)
@@ -247,6 +259,13 @@ namespace PeliculasStudio.Vistas
             }
         }
 
+        /**
+        * Metodo Volver Click:
+        * Gestiona el retorno a la pantalla principal desde la ventana de registro.
+        * Crea una nueva instancia de MainWindow y cierra la ventana actual para liberar recursos.
+        * @param sender: El botón "Volver" que dispara el evento.
+        * @param e: Argumentos del evento de click.
+        **/
         private void btnVolver_Click(object sender, RoutedEventArgs e)
         {
         
@@ -255,16 +274,27 @@ namespace PeliculasStudio.Vistas
 
             this.Close();
         }
-
+        /**
+        * Metodo Tema Click:
+        * Gestiona el cambio dinámico entre el modo claro y el modo oscuro.
+        * Actualiza la propiedad global de la aplicación y dispara los cambios visuales.
+        * @param sender: El ToggleButton que activa o desactiva el modo oscuro.
+        * @param e: Argumentos del evento de click.
+        **/
         private void btnTema_Click(object sender, RoutedEventArgs e)
         {
-            // 3. ACTUALIZAMOS LA VARIABLE GLOBAL
+           
             App.IsDarkMode = btnTema.IsChecked ?? false;
 
             if (App.IsDarkMode) AplicarTemaOscuro();
             else AplicarTemaClaro();
         }
-
+        /**
+        * Metodo Aplicar Tema Oscuro:
+        * Modifica los recursos visuales de la interfaz para adaptarse al modo noche.
+        * Cambia los fondos de los contenedores y establece los colores de fuente a tonos claros 
+        * para garantizar un alto contraste y descanso visual.
+        **/
         private void AplicarTemaOscuro()
         {
             GridPrincipal.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E1E1E"));
@@ -281,7 +311,12 @@ namespace PeliculasStudio.Vistas
             lblNota.Foreground = Brushes.LightGray;
           
         }
-
+        /**
+        * Metodo Aplicar Tema Claro:
+        * Restablece la paleta de colores original de la interfaz (Modo Día).
+        * Configura fondos claros y suaves junto con tipografías en grises oscuros
+        * para mantener la estética estándar y una legibilidad óptima.
+        **/
         private void AplicarTemaClaro()
         {
             GridPrincipal.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F0F0F0"));

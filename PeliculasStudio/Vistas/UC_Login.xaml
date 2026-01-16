@@ -72,7 +72,8 @@
                     <Button x:Name="btnIniciarSesion" Content="Iniciar Sesión" 
                             Margin="0,25,0,10" Height="35" Cursor="Hand"
                             Background="#007ACC" Foreground="White" FontWeight="Bold"
-                            RenderTransformOrigin="0.5,0.5" Click="btnIniciarSesion_Click">
+                            RenderTransformOrigin="0.5,0.5" 
+                            IsDefault="True" Click="btnIniciarSesion_Click">
                         <Button.RenderTransform>
                             <ScaleTransform x:Name="botonScale" ScaleX="1" ScaleY="1" />
                         </Button.RenderTransform>

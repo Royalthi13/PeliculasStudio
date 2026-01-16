@@ -140,14 +140,18 @@ namespace PeliculasStudio.BaseDatos
 
 
 
-
+        /**
+            * Metodo Validar Login:
+            * Verifica las credenciales del usuario consultando la base de datos.
+            * @param nombre: Nickname o nombre de usuario único.
+            * @param password: Clave de acceso proporcionada en el login.
+            * @returns: Devuelve el objeto Usuario si los datos coinciden, o null si el usuario no existe o la contraseña es incorrecta.
+            **/
         public static Usuario ValidarLogin(string nombre, string password)
         {
             try
             {
-                if (db == null) Inicializar();
-
-               
+                if (db == null) Inicializar();          
                 return db.Table<Usuario>().FirstOrDefault(u =>
                     u.Nombreusuario == nombre &&
                     u.Contrasenia == password);
@@ -177,14 +181,14 @@ namespace PeliculasStudio.BaseDatos
             {
                 if (db == null) Inicializar();
 
-                // 1. Validar formato de Email
+               
                 string patronEmail = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
                 if (!Regex.IsMatch(gmail, patronEmail))
                 {
                     return "ERROR: El formato del correo electrónico no es válido.";
                 }
 
-                // 2. Comprobar si ya existe (Case Insensitive)
+              
                 var existente = db.Table<Usuario>()
                                   .FirstOrDefault(u => u.Nombreusuario.ToLower() == nombre.ToLower()
                                                     || u.Gmail.ToLower() == gmail.ToLower());
@@ -194,7 +198,7 @@ namespace PeliculasStudio.BaseDatos
                     return "ERROR: El nombre de usuario o el correo ya están registrados.";
                 }
 
-                // 3. Crear el objeto con el Enum
+
                 var nuevoUsuario = new Usuario
                 {
                     Nombreusuario = nombre,
@@ -203,7 +207,7 @@ namespace PeliculasStudio.BaseDatos
                     Rol = rol
                 };
 
-                // 4. Insertar en SQLite
+              
                 db.Insert(nuevoUsuario);
 
                 return $"USUARIO REGISTRADO CON ÉXITO\n" +
