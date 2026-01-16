@@ -8,7 +8,27 @@
              d:DesignHeight="450" d:DesignWidth="800"
              HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 
-    <Grid x:Name="GridPrincipal" Background="#F0F0F0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <Grid x:Name="GridPrincipal"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid.Resources>
+            <Storyboard x:Key="AnimacionFondo" RepeatBehavior="Forever">
+                <PointAnimation Storyboard.TargetName="FocoLuz" 
+                        Storyboard.TargetProperty="Center"
+                        From="0.2,0.2" To="0.8,0.7" 
+                        Duration="0:0:12" 
+                        AutoReverse="True">
+                    <PointAnimation.EasingFunction>
+                        <QuadraticEase EasingMode="EaseInOut"/>
+                    </PointAnimation.EasingFunction>
+                </PointAnimation>
+            </Storyboard>
+        </Grid.Resources>
+
+        <Grid.Background>
+            <RadialGradientBrush x:Name="FocoLuz" Center="0.5,0.4" RadiusX="1.8" RadiusY="1.8">
+                <GradientStop Color="White" Offset="0"/>
+                <GradientStop Color="#C8DCEF" Offset="1"/>
+            </RadialGradientBrush>
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -25,55 +45,115 @@
             <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center"/>
 
             <!-- Botón de tema -->
-            <ToggleButton x:Name="btnTema" Grid.Column="1" Width="36" Height="36" Margin="0"
-                          VerticalAlignment="Top" HorizontalAlignment="Right" Cursor="Hand"
-                          Background="Transparent" BorderBrush="Transparent" ToolTip="Cambiar tema" Click="btnTema_Click">
-                <ToggleButton.Style>
-                    <Style TargetType="ToggleButton">
-                        <Setter Property="FontSize" Value="18"/>
-                        <Setter Property="Foreground" Value="#333"/>
-                        <Setter Property="Content" Value="☀"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter Property="Content" Value="☾"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Foreground" Value="#007ACC"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </ToggleButton.Style>
-            </ToggleButton>
+            <Grid Grid.Row="0" Margin="20,10,20,0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+
+               
+       
+                    <ToggleButton x:Name="btnTema" Width="100" Height="45" Cursor="Hand" 
+              HorizontalAlignment="Right" VerticalAlignment="Top"
+              Margin="0,10,20,0" Click="btnTema_Click">
+                        <ToggleButton.Style>
+                            <Style TargetType="ToggleButton">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="#005A9E"/>
+                                <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ToggleButton">
+                                            <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="1.5" 
+                                CornerRadius="22">
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                    <TextBlock x:Name="txtLabel" Text="TEMA" FontSize="11" FontWeight="ExtraBold" 
+                                           VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                                    <TextBlock x:Name="txtIcon" Text="☀" FontSize="20" VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </Border>
+
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsPressed" Value="True">
+                                                    <Setter TargetName="border" Property="Background" Value="#15007ACC"/>
+                                                    <Setter Property="RenderTransform">
+                                                        <Setter.Value>
+                                                            <ScaleTransform ScaleX="0.92" ScaleY="0.92"/>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Trigger>
+
+                                                <Trigger Property="IsChecked" Value="True">
+                                                    <Setter TargetName="txtIcon" Property="Text" Value="☾"/>
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                    <Setter TargetName="border" Property="BorderBrush" Value="#60FFFFFF"/>
+                                                </Trigger>
+
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="border" Property="Background" Value="#10007ACC"/>
+                                                    <Setter TargetName="border" Property="BorderBrush" Value="#007ACC"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ToggleButton.Style>
+                    </ToggleButton>
+                </StackPanel>
+            </Grid>
         </Grid>
 
         <!-- Contenido principal -->
-        <Border x:Name="BorderCentral" Grid.Row="1" Background="White" CornerRadius="10" Padding="30"
-                VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="40" MaxWidth="480">
+        <Border x:Name="BorderCentral" Grid.Row="1" Background="White" CornerRadius="20" Padding="40"
+        VerticalAlignment="Center" HorizontalAlignment="Center" Margin="40" MaxWidth="450">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="40" ShadowDepth="0" Opacity="0.3" Color="Black"/>
+            </Border.Effect>
 
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
+                
+                <StackPanel Margin="0,0,0,30">
+                    <TextBlock x:Name="txtTitulo" 
+                               Text="PELÍCULAS STUDIO" 
+                               FontSize="28" 
+                               FontWeight="ExtraBold" 
+                               HorizontalAlignment="Center" 
+                               Foreground="#005A9E">
+                        <TextBlock.LayoutTransform>
+                            <ScaleTransform ScaleX="1.2" />
+                        </TextBlock.LayoutTransform>
+                        <TextBlock.Effect>
+                            <DropShadowEffect x:Name="shadowTitulo" BlurRadius="15" Color="#B0E0E6" ShadowDepth="0" Opacity="0.8"/>
+                        </TextBlock.Effect>
+                    </TextBlock>
 
-                <!-- Título centrado -->
-                <TextBlock x:Name="txtTitulo" Text="PELÍCULAS STUDIO" FontSize="24" FontWeight="Bold" 
-                           HorizontalAlignment="Center" Margin="0,0,0,20" Foreground="#333"/>
+                    <Rectangle Height="2" Width="80" Fill="#007ACC" Margin="0,12,0,0" HorizontalAlignment="Center">
+                        <Rectangle.Effect>
+                            <BlurEffect Radius="2"/>
+                        </Rectangle.Effect>
+                    </Rectangle>
+                </StackPanel>
 
-                <!-- Formulario -->
-                <StackPanel Grid.Row="1" VerticalAlignment="Top">
-                    <TextBlock x:Name="lblUsuario" Text="Usuario:" Margin="0,10,0,5" Foreground="#555"/>
-                    <TextBox x:Name="txtUsuario" Height="30" VerticalContentAlignment="Center" Padding="5,0"/>
+                <StackPanel Grid.Row="1">
+                    <TextBlock x:Name="lblUsuario" Text="Usuario" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,8" Foreground="#444"/>
+                    <TextBox x:Name="txtUsuario" Height="35" VerticalContentAlignment="Center" Padding="10,0" 
+                     BorderBrush="#DDD" BorderThickness="0,0,0,2" Background="#F9F9F9"/>
 
-                    <TextBlock x:Name="lblPass" Text="Contraseña:" Margin="0,15,0,5" Foreground="#555"/>
-                    <PasswordBox x:Name="txtPassword" Height="30" VerticalContentAlignment="Center" Padding="5,0"/>
+                    <TextBlock x:Name="lblPass" Text="Contraseña" FontSize="14" FontWeight="SemiBold" Margin="0,20,0,8" Foreground="#444"/>
+                    <PasswordBox x:Name="txtPassword" Height="35" VerticalContentAlignment="Center" Padding="10,0" 
+                         BorderBrush="#DDD" BorderThickness="0,0,0,2" Background="#F9F9F9"/>
 
-                    <!-- Botón iniciar sesión -->
-                    <Button x:Name="btnIniciarSesion" Content="Iniciar Sesión" 
-                            Margin="0,25,0,10" Height="35" Cursor="Hand"
-                            Background="#007ACC" Foreground="White" FontWeight="Bold"
-                            RenderTransformOrigin="0.5,0.5" 
-                            IsDefault="True" Click="btnIniciarSesion_Click">
+                    <Button x:Name="btnIniciarSesion" Content="Iniciar Sesion" 
+                    Margin="0,35,0,15" Height="45" Cursor="Hand"
+                    Background="#007ACC" Foreground="White" FontWeight="Bold" FontSize="14"
+                    RenderTransformOrigin="0.5,0.5" IsDefault="True" Click="btnIniciarSesion_Click">
+
                         <Button.RenderTransform>
                             <ScaleTransform x:Name="botonScale" ScaleX="1" ScaleY="1" />
                         </Button.RenderTransform>
@@ -83,33 +163,28 @@
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="Button">
-                                            <Border Background="{TemplateBinding Background}" 
-                                                    CornerRadius="5" BorderThickness="0">
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="22" BorderThickness="0">
                                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                             </Border>
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
-
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#005A9E"/>
                                         <Trigger.EnterActions>
                                             <BeginStoryboard>
                                                 <Storyboard>
-                                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" 
-                                                                     To="1.1" Duration="0:0:0.2"/>
-                                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" 
-                                                                     To="1.1" Duration="0:0:0.2"/>
+                                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" To="1.05" Duration="0:0:0.1"/>
+                                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" To="1.05" Duration="0:0:0.1"/>
                                                 </Storyboard>
                                             </BeginStoryboard>
                                         </Trigger.EnterActions>
                                         <Trigger.ExitActions>
                                             <BeginStoryboard>
                                                 <Storyboard>
-                                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" 
-                                                                     To="1" Duration="0:0:0.2"/>
-                                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" 
-                                                                     To="1" Duration="0:0:0.2"/>
+                                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" To="1" Duration="0:0:0.1"/>
+                                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" To="1" Duration="0:0:0.1"/>
                                                 </Storyboard>
                                             </BeginStoryboard>
                                         </Trigger.ExitActions>
@@ -119,10 +194,10 @@
                         </Button.Style>
                     </Button>
 
-                    <Button x:Name="btnIrARegistro" Content="¿No tienes cuenta? Regístrate" 
-                            Background="Transparent" BorderBrush="Transparent" 
-                            Foreground="#007ACC" Cursor="Hand" FontSize="11"
-                            Click="btnIrARegistro_Click"/>
+                    <Button x:Name="btnIrARegistro" Content="Crear una cuenta nueva" 
+                    Background="Transparent" BorderBrush="Transparent" 
+                    Foreground="#007ACC" Cursor="Hand" FontSize="12" FontWeight="Medium"
+                    Click="btnIrARegistro_Click"/>
                 </StackPanel>
             </Grid>
         </Border>

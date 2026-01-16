@@ -14,18 +14,53 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,40,0">
-            <ToggleButton x:Name="btnTema" Width="50" Height="50" Cursor="Hand"
-                          Background="Transparent" BorderBrush="Transparent" Click="btnTema_Click">
+            <ToggleButton x:Name="btnTema" Width="100" Height="50" Cursor="Hand" 
+              HorizontalAlignment="Right" VerticalAlignment="Top"
+              Click="btnTema_Click">
                 <ToggleButton.Style>
                     <Style TargetType="ToggleButton">
-                        <Setter Property="Content" Value="☀"/>
-                        <Setter Property="FontSize" Value="24"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter Property="Content" Value="☾"/>
-                                <Setter Property="Foreground" Value="#FFD700"/>
-                            </Trigger>
-                        </Style.Triggers>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="#005A9E"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ToggleButton">
+                                    <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="1" 
+                                CornerRadius="25">
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <TextBlock x:Name="txtLabel" Text="TEMA" FontSize="12" FontWeight="Bold" 
+                                           VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                            <TextBlock x:Name="txtIcon" Text="☀" FontSize="22" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#10007ACC"/>
+                                            <Setter Property="RenderTransform">
+                                                <Setter.Value>
+                                                    <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+
+                                        <Trigger Property="IsChecked" Value="True">
+                                            <Setter TargetName="txtIcon" Property="Text" Value="☾"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                            <Setter TargetName="border" Property="BorderBrush" Value="#40FFFFFF"/>
+                                        </Trigger>
+
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="#15007ACC"/>
+                                            <Setter TargetName="border" Property="BorderBrush" Value="#007ACC"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
                     </Style>
                 </ToggleButton.Style>
             </ToggleButton>

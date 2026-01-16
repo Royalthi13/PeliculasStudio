@@ -11,6 +11,8 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -32,6 +34,8 @@ namespace PeliculasStudio.Vistas
                     CambiarInterfazTema(true);
                 }
             };
+            Storyboard anim = (Storyboard)this.GridPrincipal.Resources["AnimacionFondo"];
+            anim.Begin();
         }
         /**
         * Metodo Iniciar Sesion Click:
@@ -105,7 +109,8 @@ namespace PeliculasStudio.Vistas
         {
             var boton = sender as System.Windows.Controls.Primitives.ToggleButton;
             bool modoOscuro = boton.IsChecked ?? false;
-
+            Storyboard anim = (Storyboard)this.GridPrincipal.Resources["AnimacionFondo"];
+            anim.Begin();
             // ACTUALIZAMOS LA VARIABLE GLOBAL
             App.IsDarkMode = modoOscuro;
             CambiarInterfazTema(modoOscuro);
@@ -115,19 +120,46 @@ namespace PeliculasStudio.Vistas
         * Metodo Cambiar Interfaz Tema:
         * Centraliza la lógica de estilos visuales para la pantalla de Login.
         * Ajusta colores de fondo, etiquetas y cajas de texto de forma simultánea.
+        * Mantiene la animación del degradado actualizando sus colores.
         * @param modoOscuro: Booleano que determina si se aplica el tema noche (true) o día (false).
         **/
+        /**
+ * Metodo Cambiar Interfaz Tema:
+ * Restablece el Modo Oscuro clásico (Negro/Gris) asegurando que 
+ * la animación del foco de luz siga funcionando sobre el fondo oscuro.
+ **/
         private void CambiarInterfazTema(bool modoOscuro)
         {
             if (GridPrincipal == null || BorderCentral == null) return;
 
+            var fondoDegradado = GridPrincipal.Background as RadialGradientBrush;
+
             if (modoOscuro)
             {
-                // --- MODO OSCURO ---
-                GridPrincipal.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E1E1E"));
-                BorderCentral.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2D2D2D"));
+                // --- MODO OSCURO CLÁSICO (Gris muy oscuro / Negro) ---
+                if (fondoDegradado != null)
+                {
+                    // Centro gris oscuro y bordes negros para que el foco resalte al moverse
+                    fondoDegradado.GradientStops[0].Color = (Color)ColorConverter.ConvertFromString("#2D2D2D");
+                    fondoDegradado.GradientStops[1].Color = (Color)ColorConverter.ConvertFromString("#121212");
 
+                    fondoDegradado.RadiusX = 1.2;
+                    fondoDegradado.RadiusY = 1.2;
+                }
+
+                // Fondo del panel en gris grafito sólido
+                BorderCentral.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E1E1E"));
+
+                // Titulo Blanco con el resplandor original
                 txtTitulo.Foreground = Brushes.White;
+                if (txtTitulo.Effect is DropShadowEffect shadow)
+                {
+                    shadow.Color = (Color)ColorConverter.ConvertFromString("#B0E0E6");
+                    shadow.BlurRadius = 15;
+                    shadow.Opacity = 0.8;
+                }
+
+                // Colores de texto y cajas del modo oscuro original
                 lblUsuario.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#CCCCCC"));
                 lblPass.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#CCCCCC"));
 
@@ -137,17 +169,33 @@ namespace PeliculasStudio.Vistas
             }
             else
             {
-                // --- MODO CLARO ---
-                GridPrincipal.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F0F0F0"));
-                BorderCentral.Background = Brushes.White;
+            
+                    // --- MODO CLARO LLAMATIVO (Blanco/Azul) ---
+                    if (fondoDegradado != null)
+                    {
+                        fondoDegradado.GradientStops[0].Color = Colors.White;
+                        fondoDegradado.GradientStops[1].Color = (Color)ColorConverter.ConvertFromString("#C8DCEF"); // Azul claro
+                        fondoDegradado.RadiusX = 1.8; // Foco más abierto
+                        fondoDegradado.RadiusY = 1.8;
+                    }
 
-                txtTitulo.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#333333"));
-                lblUsuario.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#555555"));
-                lblPass.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#555555"));
+                    BorderCentral.Background = Brushes.White;
+                    txtTitulo.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#005A9E"));
 
-                txtUsuario.Background = Brushes.White;
-                txtUsuario.Foreground = Brushes.Black;
-                txtUsuario.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ABAdB3"));
+                    // Ajuste de resplandor para modo claro (más sutil)
+                    if (txtTitulo.Effect is DropShadowEffect shadow)
+                    {
+                        shadow.Color = (Color)ColorConverter.ConvertFromString("#B0E0E6");
+                        shadow.Opacity = 0.4;
+                        shadow.BlurRadius = 8;
+                    }
+
+                    lblUsuario.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#444444"));
+                    lblPass.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#444444"));
+                    txtUsuario.Background = Brushes.White;
+                    txtUsuario.Foreground = Brushes.Black;
+                    txtUsuario.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#007ACC"));
+                
             }
         }
     }
