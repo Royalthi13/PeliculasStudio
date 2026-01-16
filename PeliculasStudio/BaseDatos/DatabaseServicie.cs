@@ -68,6 +68,7 @@ namespace PeliculasStudio.BaseDatos
                 {
                     Nombreusuario = "admin",
                     Contrasenia = "123",
+                    Gmail = "admin@peliculasstudio.com",
                     Rol = TipoRol.Admin
                 });
             }
