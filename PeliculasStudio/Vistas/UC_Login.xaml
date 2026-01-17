@@ -24,9 +24,8 @@
         </Grid.Resources>
 
         <Grid.Background>
-            <RadialGradientBrush Center="0.5,0.4" RadiusX="1.8" RadiusY="1.8">
+            <RadialGradientBrush x:Name="FocoLuz" Center="0.5,0.4" RadiusX="1.8" RadiusY="1.8">
                 <GradientStop Color="{DynamicResource ColorFocoCentro}" Offset="0"/>
-
                 <GradientStop Color="{DynamicResource ColorBasePantalla}" Offset="1"/>
             </RadialGradientBrush>
         </Grid.Background>
@@ -123,17 +122,23 @@
 
                 <StackPanel Margin="0,0,0,30">
                     <TextBlock x:Name="txtTitulo" 
-                       Text="PELÍCULAS STUDIO" 
-                       FontSize="28" 
-                       FontWeight="ExtraBold" 
-                       HorizontalAlignment="Center" 
-                       Foreground="{DynamicResource BrushAccionResaltado}">
+           Text="PELÍCULAS STUDIO" 
+           FontSize="28" 
+           FontWeight="ExtraBold" 
+           HorizontalAlignment="Center" 
+           Foreground="{DynamicResource BrushAccionResaltado}">
+
+                        <TextBlock.Effect>
+                            <DropShadowEffect BlurRadius="15" 
+                          Color="{DynamicResource ColorCentroDegradado}" 
+                          ShadowDepth="0" 
+                          Opacity="0.8"/>
+                        </TextBlock.Effect>
+
                         <TextBlock.LayoutTransform>
                             <ScaleTransform ScaleX="1.2" />
                         </TextBlock.LayoutTransform>
-                        <TextBlock.Effect>
-                            <DropShadowEffect x:Name="shadowTitulo" BlurRadius="15" Color="#B0E0E6" ShadowDepth="0" Opacity="0.8"/>
-                        </TextBlock.Effect>
+
                     </TextBlock>
 
                     <Rectangle Height="2" Width="80" 

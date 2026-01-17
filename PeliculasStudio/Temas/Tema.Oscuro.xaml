@@ -6,6 +6,8 @@
     <Color x:Key="ColorGrisOscuro">#1E1E1E</Color>
     <Color x:Key="ColorGrisMedio">#3F3F46</Color>
 
+    <Color x:Key="ColorCentroDegradado">#1A1A1A</Color>
+
     <SolidColorBrush x:Key="BrushPantalla" Color="{StaticResource ColorBasePantalla}"/>
     <SolidColorBrush x:Key="BrushFormulario" Color="{StaticResource ColorGrisOscuro}"/>
     <SolidColorBrush x:Key="BrushInput" Color="{StaticResource ColorGrisMedio}"/>
@@ -22,4 +24,4 @@
     <SolidColorBrush x:Key="BrushMensajeError" Color="#FF4C4C"/>
     <SolidColorBrush x:Key="BrushMensajeExito" Color="#00FF00"/>
 
-    </ResourceDictionary>
+</ResourceDictionary>

@@ -3,7 +3,10 @@
 
     <Color x:Key="ColorBasePantalla">#C8DCEF</Color>
     <Color x:Key="ColorFocoCentro">#FFFFFF</Color>
-    <SolidColorBrush x:Key="BrushPantalla" Color="#F0F0F0"/>
+
+    <Color x:Key="ColorCentroDegradado">#FFFFFF</Color>
+
+    <SolidColorBrush x:Key="BrushPantalla" Color="{StaticResource ColorBasePantalla}"/>
     <SolidColorBrush x:Key="BrushFormulario" Color="#FFFFFF"/>
     <SolidColorBrush x:Key="BrushInput" Color="#F9F9F9"/>
     <SolidColorBrush x:Key="BrushPanelRequisitos" Color="#F9F9F9"/>

@@ -66,28 +66,31 @@ namespace PeliculasStudio.Vistas
             string nombre = txtUsuario.Text.Trim();
             string pass = txtPassword.Password;
 
-            
+           
+            var brushError = (Brush)Application.Current.FindResource("BrushMensajeError");
+            var brushNormal = (Brush)Application.Current.FindResource("BrushBordeControl");
+
             var usuarioEncontrado = DatabaseServicie.Login(nombre, pass);
 
             if (usuarioEncontrado != null)
             {
                 MainWindow ventanaPrincipal = new MainWindow();
 
-           
+                
                 UC_Inicio inicio = new UC_Inicio(usuarioEncontrado.Nombreusuario);
                 ventanaPrincipal.Content = inicio;
                 ventanaPrincipal.Show();
 
-           
-                Window.GetWindow(this).Close();
+               
+                Window.GetWindow(this)?.Close();
             }
             else
             {
          
-                txtUsuario.BorderBrush = Brushes.Red;
+                txtUsuario.BorderBrush = brushError;
                 txtUsuario.BorderThickness = new Thickness(2);
 
-                txtPassword.BorderBrush = Brushes.Red;
+                txtPassword.BorderBrush = brushError;
                 txtPassword.BorderThickness = new Thickness(2);
 
                 MessageBox.Show("Usuario o contraseña incorrectos.", "Error de acceso", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -132,25 +135,25 @@ namespace PeliculasStudio.Vistas
             bool modoOscuro = boton.IsChecked ?? false;
             App.IsDarkMode = modoOscuro;
 
-            // 1. Cambiamos el tema primero
+            
             CambiarInterfazTema(modoOscuro);
 
-            // 2. Intentamos lanzar la animación de forma segura
+          
             try
             {
-                // Buscamos el recurso. Si usamos FindResource es más seguro que el casting directo
+                
                 var anim = GridPrincipal.Resources["AnimacionFondo"] as Storyboard;
 
                 if (anim != null)
                 {
-                    // Detenemos cualquier ejecución previa para evitar solapamientos
+                    
                     anim.Stop();
                     anim.Begin();
                 }
             }
             catch (Exception ex)
             {
-                // Si falla la animación, que al menos el tema cambie
+           
                 System.Diagnostics.Debug.WriteLine("La animación no pudo iniciar: " + ex.Message);
             }
         }

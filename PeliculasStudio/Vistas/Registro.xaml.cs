@@ -239,19 +239,23 @@ namespace PeliculasStudio.Vistas
         * @param sender: El control PasswordBox de la contraseña principal.
         * @param e: Argumentos del evento de cambio de contraseña.
         **/
+    
         private void txtPassword_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            string pass = txtPassword.Password;       
-            SolidColorBrush colorRojo = App.IsDarkMode ?
-                new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF4C4C")) :
-                new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D32F2F"));
+            string pass = txtPassword.Password;
 
-            SolidColorBrush colorVerde = Brushes.Green;          
-            ActualizarEstadoRequisito(pass.Length >= 8, iconLongitud, lblLongitud, colorRojo, colorVerde);         
-            ActualizarEstadoRequisito(pass.Any(char.IsUpper), iconMayuscula, lblMayuscula, colorRojo, colorVerde);        
-            ActualizarEstadoRequisito(pass.Any(char.IsDigit), iconNumero, lblNumero, colorRojo, colorVerde);
+            
+            var brushError = (Brush)Application.Current.FindResource("BrushMensajeError");
+            var brushExito = (Brush)Application.Current.FindResource("BrushMensajeExito");
+
+          
+            ActualizarEstadoRequisito(pass.Length >= 8, iconLongitud, lblLongitud, brushError, brushExito);
+            ActualizarEstadoRequisito(pass.Any(char.IsUpper), iconMayuscula, lblMayuscula, brushError, brushExito);
+            ActualizarEstadoRequisito(pass.Any(char.IsDigit), iconNumero, lblNumero, brushError, brushExito);
+
             bool tieneEspecial = pass.Any(ch => !char.IsLetterOrDigit(ch));
-            ActualizarEstadoRequisito(tieneEspecial, iconEspecial, lblEspecial, colorRojo, colorVerde);
+            ActualizarEstadoRequisito(tieneEspecial, iconEspecial, lblEspecial, brushError, brushExito);
+
             txtRepeatPassword_PasswordChanged(null, null);
         }
 
