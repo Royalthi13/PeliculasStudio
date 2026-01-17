@@ -1,44 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UseWPF>true</UseWPF>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UseWPF>true</UseWPF>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Assets\Videos\Blade Runner 2049.mp4" />
-    <None Remove="Assets\Videos\El Diario de Noa.mp4" />
-    <None Remove="Assets\Videos\Expediente-Warren-El-ultimo-rito.mp4" />
-    <None Remove="Assets\Videos\La Odisea.mp4" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Include="Assets\**\*.*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Content Include="Assets\Videos\Blade Runner 2049.mp4">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Videos\El Diario de Noa.mp4">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Videos\Expediente-Warren-El-ultimo-rito.mp4">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Videos\La Odisea.mp4">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Assets\Imagenes\" />
-    <Folder Include="Modelos\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="LibVLCSharp.WPF" Version="3.9.5" />
-    <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
-    <PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.21" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="LibVLCSharp.WPF" Version="3.9.5" />
+		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+		<PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.21" />
+	</ItemGroup>
 
 </Project>
