@@ -67,8 +67,17 @@ namespace PeliculasStudio.Vistas
             var main = Application.Current.MainWindow as MainWindow;
             if (usuarioEncontrado != null)
             {
-
-                main?.Navegar(new UC_Inicio(usuarioEncontrado.Nombreusuario));
+            
+                if (usuarioEncontrado.Rol == TipoRol.Admin)
+                {
+                    // Si es ADMIN, lo mandamos a la vista de administración
+                    main?.Navegar(new UC_PanelAdmin(usuarioEncontrado.Nombreusuario));
+                }
+                else
+                {
+                    // Si es USUARIO normal, lo mandamos al inicio normal
+                    main?.Navegar(new UC_Inicio(usuarioEncontrado.Nombreusuario));
+                }
             }
             else
             {
