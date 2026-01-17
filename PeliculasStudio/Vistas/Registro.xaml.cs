@@ -71,7 +71,6 @@ namespace PeliculasStudio.Vistas
                 string pass = txtPassword.Password;
                 string passRepeat = txtRepeatPassword.Password;
 
-               
                 var brushError = (Brush)Application.Current.FindResource("BrushMensajeError");
                 var brushNormal = (Brush)Application.Current.FindResource("BrushBordeControl");
 
@@ -79,7 +78,7 @@ namespace PeliculasStudio.Vistas
                 txtUsuario.BorderBrush = txtGmail.BorderBrush = txtPassword.BorderBrush = txtRepeatPassword.BorderBrush = brushNormal;
                 txtUsuario.BorderThickness = txtGmail.BorderThickness = txtPassword.BorderThickness = txtRepeatPassword.BorderThickness = new Thickness(1);
 
-              
+               
                 if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(correo) || string.IsNullOrWhiteSpace(pass))
                 {
                     if (string.IsNullOrWhiteSpace(nombre)) txtUsuario.BorderBrush = brushError;
@@ -90,6 +89,7 @@ namespace PeliculasStudio.Vistas
                     return;
                 }
 
+               
                 if (nombre.Length < 5 || !System.Text.RegularExpressions.Regex.IsMatch(nombre, @"^[a-zA-Z0-9_]+$"))
                 {
                     txtUsuario.BorderBrush = brushError;
@@ -98,7 +98,7 @@ namespace PeliculasStudio.Vistas
                     return;
                 }
 
-         
+               
                 if (!ValidarSeguridadPassword(pass))
                 {
                     txtPassword.BorderBrush = brushError;
@@ -106,6 +106,7 @@ namespace PeliculasStudio.Vistas
                     return;
                 }
 
+          
                 if (pass != passRepeat)
                 {
                     txtRepeatPassword.BorderBrush = brushError;
@@ -113,20 +114,39 @@ namespace PeliculasStudio.Vistas
                     return;
                 }
 
-               
                 string resultado = DatabaseServicie.CrearUsuario(nombre, correo, pass);
 
                 if (resultado.StartsWith("ERROR"))
                 {
-                    if (resultado.Contains("correo")) txtGmail.BorderBrush = brushError;
-                    else if (resultado.Contains("registrados")) { txtUsuario.BorderBrush = brushError; txtGmail.BorderBrush = brushError; }
+                    string resMin = resultado.ToLower();
+
+                    // Detección exclusiva basada en los nuevos mensajes de la BD
+                    bool tieneUsuario = resMin.Contains("usuario");
+                    bool tieneCorreo = resMin.Contains("correo") || resMin.Contains("gmail") || resMin.Contains("email");
+
+                    if (tieneUsuario && !tieneCorreo)
+                    {
+                        txtUsuario.BorderBrush = brushError;
+                        txtUsuario.BorderThickness = new Thickness(2);
+                    }
+                    else if (tieneCorreo && !tieneUsuario)
+                    {
+                        txtGmail.BorderBrush = brushError;
+                        txtGmail.BorderThickness = new Thickness(2);
+                    }
+                    else
+                    {
+                        // Si por alguna razón fallan ambos o es otro error
+                        txtUsuario.BorderBrush = txtGmail.BorderBrush = brushError;
+                        txtUsuario.BorderThickness = txtGmail.BorderThickness = new Thickness(2);
+                    }
 
                     MessageBox.Show(resultado, "Error de registro", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 else
                 {
                     MessageBox.Show(resultado, "¡Bienvenido!", MessageBoxButton.OK, MessageBoxImage.Information);
-                    btnVolver_Click(null, null); 
+                    btnVolver_Click(null, null);
                 }
             }
             catch (Exception ex)

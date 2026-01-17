@@ -102,29 +102,37 @@ namespace PeliculasStudio.BaseDatos
             {
                 if (db == null) Inicializar();
 
-                // 1. Validar formato de email
+               
                 string patronEmail = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
                 if (!Regex.IsMatch(gmail, patronEmail))
                 {
                     return "ERROR: El formato del correo electrónico no es válido.";
                 }
 
-                // 2. Comprobar si ya existe (Case Insensitive) - INTEGRADO DE MAIN
-                Usuario? existente = db!.Table<Usuario>()
-                                  .FirstOrDefault(u => u.Nombreusuario.ToLower() == nombre.ToLower()
-                                                    || u.Gmail.ToLower() == gmail.ToLower());
+               
+                var usuarioRepetido = db!.Table<Usuario>()
+                                        .FirstOrDefault(u => u.Nombreusuario.ToLower() == nombre.ToLower());
 
-                if (existente != null)
+                if (usuarioRepetido != null)
                 {
-                    return "ERROR: El nombre de usuario o el correo ya están registrados.";
+                    return "ERROR: El nombre de usuario ya está registrado.";
                 }
 
-                // 3. Crear nuevo usuario con el Cifrado de tu compañero
+          
+                var emailRepetido = db!.Table<Usuario>()
+                                      .FirstOrDefault(u => u.Gmail.ToLower() == gmail.ToLower());
+
+                if (emailRepetido != null)
+                {
+                    return "ERROR: El correo electrónico ya está registrado.";
+                }
+
+            
                 var nuevoUsuario = new Usuario
                 {
                     Nombreusuario = nombre,
                     Gmail = gmail,
-                    Contrasenia = Cifrado.HashPassword(password), // Cifrado integrado
+                    Contrasenia = Cifrado.HashPassword(password),
                     Rol = rol
                 };
 

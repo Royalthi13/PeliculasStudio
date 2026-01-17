@@ -1,5 +1,5 @@
 ﻿using SQLite;
-using static PeliculasStudio.BaseDatos.DatabaseServicie;
+
 
 namespace PeliculasStudio.Modelos
 
