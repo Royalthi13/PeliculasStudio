@@ -18,7 +18,7 @@ using System.Windows.Shapes;
 namespace PeliculasStudio.Vistas
 {
 
-    public partial class Registro : Window
+    public partial class Registro : UserControl
     {
         public Registro()
         {
@@ -302,11 +302,9 @@ namespace PeliculasStudio.Vistas
         **/
         private void btnVolver_Click(object sender, RoutedEventArgs e)
         {
-        
-            MainWindow principal = new MainWindow();
-            principal.Show();
 
-            this.Close();
+            var main = Application.Current.MainWindow as MainWindow;
+            main?.Navegar(new UC_Login());
         }
 
 

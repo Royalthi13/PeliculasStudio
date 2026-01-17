@@ -64,17 +64,11 @@ namespace PeliculasStudio.Vistas
 
             var usuarioEncontrado = DatabaseServicie.Login(nombre, pass);
 
+            var main = Application.Current.MainWindow as MainWindow;
             if (usuarioEncontrado != null)
             {
-                MainWindow ventanaPrincipal = new MainWindow();
 
-                
-                UC_Inicio inicio = new UC_Inicio(usuarioEncontrado.Nombreusuario);
-                ventanaPrincipal.Content = inicio;
-                ventanaPrincipal.Show();
-
-               
-                Window.GetWindow(this)?.Close();
+                main?.Navegar(new UC_Inicio(usuarioEncontrado.Nombreusuario));
             }
             else
             {
@@ -99,17 +93,10 @@ namespace PeliculasStudio.Vistas
         **/
         private void btnIrARegistro_Click(object sender, RoutedEventArgs e)
         {
-            
-            App.IsDarkMode = btnTema.IsChecked ?? false;
 
-            Registro ventanaRegistro = new Registro();
-            ventanaRegistro.Show();
+            var main = Application.Current.MainWindow as MainWindow;
 
-            Window ventanaActual = Window.GetWindow(this);
-            if (ventanaActual != null)
-            {
-                ventanaActual.Close();
-            }
+            main?.Navegar(new Registro());
         }
 
         /**
