@@ -1,5 +1,6 @@
 ﻿using PeliculasStudio.BaseDatos;
 using PeliculasStudio.Modelos;
+using PeliculasStudio.Utilidades;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -32,19 +33,10 @@ namespace PeliculasStudio.Vistas
             {
                 try
                 {
-                
-                    if (App.IsDarkMode)
-                    {
-                        btnTema.IsChecked = true;
-                        CambiarInterfazTema(true);
-                    }
 
-              
-                    if (GridPrincipal?.Resources != null && GridPrincipal.Resources.Contains("AnimacionFondo"))
-                    {
-                        Storyboard anim = (Storyboard)GridPrincipal.Resources["AnimacionFondo"];
-                        anim.Begin();
-                    }
+                    btnTema.IsChecked = App.IsDarkMode;
+
+                    GestordeTemas.AplicarTema(App.IsDarkMode);
                 }
                 catch (Exception ex)
                 {
@@ -129,16 +121,11 @@ namespace PeliculasStudio.Vistas
         **/
         private void btnTema_Click(object sender, RoutedEventArgs e)
         {
-            var boton = sender as System.Windows.Controls.Primitives.ToggleButton;
-            if (boton == null) return;
+            App.IsDarkMode = btnTema.IsChecked ?? false;
 
-            bool modoOscuro = boton.IsChecked ?? false;
-            App.IsDarkMode = modoOscuro;
 
-            
-            CambiarInterfazTema(modoOscuro);
+            GestordeTemas.AplicarTema(App.IsDarkMode);
 
-          
             try
             {
                 
@@ -156,34 +143,5 @@ namespace PeliculasStudio.Vistas
             }
         }
 
-        /**
-          * Metodo CambiarInterfazTema:
-          * Gestiona la apariencia global de la aplicación mediante la conmutación de diccionarios de recursos.
-          * * 1. Desvincula el tema visual anterior del árbol de recursos de la aplicación.
-          * 2. Carga dinámicamente el diccionario XAML correspondiente (Claro u Oscuro).
-          * 3. Notifica al motor de WPF para que actualice automáticamente todos los controles 
-          * vinculados mediante 'DynamicResource'.
-          * * Este enfoque elimina el acoplamiento entre la lógica de C# y los valores hexadecimales de diseño.
-          * * @param modoOscuro: Determina si se carga 'Tema.Oscuro.xaml' (true) o 'Tema.Claro.xaml' (false).
-          **/
-
-        private void CambiarInterfazTema(bool modoOscuro)
-        {         
-            Application.Current.Resources.MergedDictionaries.Clear();        
-            ResourceDictionary nuevoTema = new ResourceDictionary();         
-            string ruta = modoOscuro ? "Temas/Tema.Oscuro.xaml" : "Temas/Tema.Claro.xaml";
-
-            try
-            {
-                nuevoTema.Source = new Uri(ruta, UriKind.Relative);
-                Application.Current.Resources.MergedDictionaries.Add(nuevoTema);
-            }
-            catch (Exception ex)
-            {
-               
-                Debug.WriteLine("Error cargando tema: " + ex.Message);
-            }
-
-        }
     }
 }

@@ -24,4 +24,44 @@
     <SolidColorBrush x:Key="BrushMensajeError" Color="#FF4C4C"/>
     <SolidColorBrush x:Key="BrushMensajeExito" Color="#00FF00"/>
 
+    <Style x:Key="EstiloBordeAnimado" TargetType="Border">
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="CornerRadius" Value="20"/>
+        <Setter Property="Background" Value="{DynamicResource BrushFormulario}"/>
+
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <SolidColorBrush Color="#00E5FF"/>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.8" Color="#00E5FF"/>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <EventTrigger RoutedEvent="Loaded">
+                <BeginStoryboard>
+                    <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                        <ColorAnimation Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                        To="#6C63FF" Duration="0:0:4">
+                            <ColorAnimation.EasingFunction>
+                                <SineEase EasingMode="EaseInOut"/>
+                            </ColorAnimation.EasingFunction>
+                        </ColorAnimation>
+
+                        <ColorAnimation Storyboard.TargetProperty="(Border.Effect).(DropShadowEffect.Color)"
+                                        To="#6C63FF" Duration="0:0:4">
+                            <ColorAnimation.EasingFunction>
+                                <SineEase EasingMode="EaseInOut"/>
+                            </ColorAnimation.EasingFunction>
+                        </ColorAnimation>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Style.Triggers>
+    </Style>
+
 </ResourceDictionary>

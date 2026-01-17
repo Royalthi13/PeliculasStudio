@@ -22,4 +22,15 @@
     <SolidColorBrush x:Key="BrushMensajeError" Color="#D32F2F"/>
     <SolidColorBrush x:Key="BrushMensajeExito" Color="Green"/>
 
+    <Style x:Key="EstiloBordeAnimado" TargetType="Border">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="CornerRadius" Value="20"/>
+        <Setter Property="Background" Value="{DynamicResource BrushFormulario}"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect BlurRadius="40" ShadowDepth="0" Opacity="0.3" Color="Black"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

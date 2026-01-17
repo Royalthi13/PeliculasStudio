@@ -1,4 +1,5 @@
 ﻿using PeliculasStudio.BaseDatos;
+using PeliculasStudio.Utilidades;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,21 +28,8 @@ namespace PeliculasStudio.Vistas
             {
                 try
                 {
-                    if (App.IsDarkMode)
-                    {
-                        btnTema.IsChecked = true;
-                        CambiarInterfazTema(true);
-                    }
-
-                   
-                    if (GridPrincipal != null)
-                    {
-                        Storyboard? anim = GridPrincipal.Resources["AnimacionFondo"] as Storyboard;
-                        if (anim != null)
-                        {
-                            anim.Begin();
-                        }
-                    }
+                    btnTema.IsChecked = App.IsDarkMode;
+                    GestordeTemas.AplicarTema(App.IsDarkMode);
                 }
                 catch (Exception ex)
                 {
@@ -333,28 +321,10 @@ namespace PeliculasStudio.Vistas
         private void btnTema_Click(object sender, RoutedEventArgs e)
         {
             App.IsDarkMode = btnTema.IsChecked ?? false;
-            CambiarInterfazTema(App.IsDarkMode);
+          
+            GestordeTemas.AplicarTema(App.IsDarkMode);
         }
-        private void CambiarInterfazTema(bool modoOscuro)
-        {
-         
-            Application.Current.Resources.MergedDictionaries.Clear();
-
-            ResourceDictionary nuevoTema = new ResourceDictionary();
-
-            
-            string ruta = modoOscuro ? "Temas/Tema.Oscuro.xaml" : "Temas/Tema.Claro.xaml";
-
-            try
-            {
-                nuevoTema.Source = new Uri(ruta, UriKind.Relative);
-                Application.Current.Resources.MergedDictionaries.Add(nuevoTema);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Error crítico en Registro: Diccionario no encontrado. " + ex.Message);
-            }
-        }
+       
     }
 }
 

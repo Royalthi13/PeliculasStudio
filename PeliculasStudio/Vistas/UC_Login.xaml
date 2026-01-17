@@ -107,13 +107,10 @@
 
         <!-- Contenido principal -->
         <Border x:Name="BorderCentral" Grid.Row="1" 
-        Background="{DynamicResource BrushFormulario}" 
-        CornerRadius="20" Padding="40"
-        VerticalAlignment="Center" HorizontalAlignment="Center" Margin="40" MaxWidth="450">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="40" ShadowDepth="0" Opacity="0.3" Color="Black"/>
-            </Border.Effect>
-
+        Style="{DynamicResource EstiloBordeAnimado}"
+        Padding="40" 
+        VerticalAlignment="Center" HorizontalAlignment="Center" 
+        Margin="40" MaxWidth="450">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>

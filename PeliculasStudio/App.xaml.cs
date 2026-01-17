@@ -1,5 +1,6 @@
 ﻿using LibVLCSharp.Shared;
 using PeliculasStudio.BaseDatos;
+using PeliculasStudio.Utilidades;
 using System.Configuration;
 using System.Data;
 using System.Windows;
@@ -22,9 +23,12 @@ namespace PeliculasStudio
 
             // y esto inicializa la base de datos y crea los datos iniciales
             DatabaseServicie.Inicializar();
-          
 
-    }
+
+            GestordeTemas.AplicarTema(IsDarkMode);
+
+
+        }
       
     }
 
