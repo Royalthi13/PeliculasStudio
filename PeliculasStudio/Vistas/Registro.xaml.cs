@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
@@ -20,20 +21,37 @@ namespace PeliculasStudio.Vistas
     {
         public Registro()
         {
-            InitializeComponent();        
-            if (App.IsDarkMode)
+            InitializeComponent();
+
+            this.Loaded += (s, e) =>
             {
-                btnTema.IsChecked = true;
-                AplicarTemaOscuro();
-            }
-            else
-            {
-                btnTema.IsChecked = false;
-                AplicarTemaClaro();
-            }
+                try
+                {
+                    if (App.IsDarkMode)
+                    {
+                        btnTema.IsChecked = true;
+                        CambiarInterfazTema(true);
+                    }
+
+                   
+                    if (GridPrincipal != null)
+                    {
+                        Storyboard? anim = GridPrincipal.Resources["AnimacionFondo"] as Storyboard;
+                        if (anim != null)
+                        {
+                            anim.Begin();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                
+                    System.Diagnostics.Debug.WriteLine("Error en Loaded de Registro: " + ex.Message);
+                }
+            };
         }
         /**
-        * Metodo Registrar Click:
+        * Metodo Registrar Click: Usuario minimo 5 letras sin digitos rarosos
         * Gestiona el flujo completo de registro de un nuevo usuario.
         * 1. Recolecta y limpia los datos de la interfaz (Trim y ToLower).
         * 2. Valida visualmente campos vacíos pintando bordes de rojo.
@@ -44,82 +62,80 @@ namespace PeliculasStudio.Vistas
         **/
         private void btnRegistrar_Click(object sender, RoutedEventArgs e)
         {
-         
-            string nombre = txtUsuario.Text.Trim();
-            string correo = txtGmail.Text.Trim().ToLower();
-            string pass = txtPassword.Password;
-            string passRepeat = txtRepeatPassword.Password;
+            btnRegistrar.IsEnabled = false;
 
-            SolidColorBrush colorError = Brushes.Red;
-            SolidColorBrush colorNormal = App.IsDarkMode ?
-                new SolidColorBrush((Color)ColorConverter.ConvertFromString("#555555")) :
-                new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ABAdB3"));
-
-            txtUsuario.BorderBrush = colorNormal; txtUsuario.BorderThickness = new Thickness(1);
-            txtGmail.BorderBrush = colorNormal; txtGmail.BorderThickness = new Thickness(1);
-            txtPassword.BorderBrush = colorError; txtPassword.BorderThickness = new Thickness(1);
-            txtRepeatPassword.BorderBrush = colorNormal; txtRepeatPassword.BorderThickness = new Thickness(1);
-
-
-            bool hayCamposVacios = false;
-            if (string.IsNullOrWhiteSpace(nombre)) { txtUsuario.BorderBrush = colorError; txtUsuario.BorderThickness = new Thickness(2); hayCamposVacios = true; }
-            if (string.IsNullOrWhiteSpace(correo)) { txtGmail.BorderBrush = colorError; txtGmail.BorderThickness = new Thickness(2); hayCamposVacios = true; }
-            if (string.IsNullOrWhiteSpace(pass)) { txtPassword.BorderBrush = colorError; txtPassword.BorderThickness = new Thickness(2); hayCamposVacios = true; }
-
-            if (nombre.Length < 5)
+            try
             {
-                txtUsuario.BorderBrush = colorError;
-                txtUsuario.BorderThickness = new Thickness(2);
-                MessageBox.Show("El nombre de usuario debe tener al menos 5 caracteres.", "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-            if (hayCamposVacios)
-            {
-                MessageBox.Show("Por favor, rellena los campos obligatorios.");
-                return;
-            }
-            if (!ValidarSeguridadPassword(pass))
-            {
-                txtPassword.BorderBrush = colorError;
-                txtPassword.BorderThickness = new Thickness(2);
-                MessageBox.Show("La contraseña no cumple los requisitos de seguridad.");
-                return;
-            }
+                string nombre = txtUsuario.Text.Trim();
+                string correo = txtGmail.Text.Trim().ToLower();
+                string pass = txtPassword.Password;
+                string passRepeat = txtRepeatPassword.Password;
 
-            if (pass != passRepeat)
-            {
-                txtRepeatPassword.BorderBrush = colorError;
-                txtRepeatPassword.BorderThickness = new Thickness(2);
-                MessageBox.Show("Las contraseñas no coinciden.");
-                return;
-            }
+               
+                var brushError = (Brush)Application.Current.FindResource("BrushMensajeError");
+                var brushNormal = (Brush)Application.Current.FindResource("BrushBordeControl");
 
-       
-            string resultado = DatabaseServicie.CrearUsuario(nombre, correo, pass);
+               
+                txtUsuario.BorderBrush = txtGmail.BorderBrush = txtPassword.BorderBrush = txtRepeatPassword.BorderBrush = brushNormal;
+                txtUsuario.BorderThickness = txtGmail.BorderThickness = txtPassword.BorderThickness = txtRepeatPassword.BorderThickness = new Thickness(1);
 
-            if (resultado.StartsWith("ERROR"))
-            {
-          
-                if (resultado.Contains("correo electrónico no es válido"))
+              
+                if (string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(correo) || string.IsNullOrWhiteSpace(pass))
                 {
-                    txtGmail.BorderBrush = colorError;
-                    txtGmail.BorderThickness = new Thickness(2);
+                    if (string.IsNullOrWhiteSpace(nombre)) txtUsuario.BorderBrush = brushError;
+                    if (string.IsNullOrWhiteSpace(correo)) txtGmail.BorderBrush = brushError;
+                    if (string.IsNullOrWhiteSpace(pass)) txtPassword.BorderBrush = brushError;
+
+                    MessageBox.Show("Por favor, rellena los campos obligatorios.", "Campos vacíos", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
                 }
-                else if (resultado.Contains("nombre de usuario") && resultado.Contains("ya están registrados"))
+
+                if (nombre.Length < 5 || !System.Text.RegularExpressions.Regex.IsMatch(nombre, @"^[a-zA-Z0-9_]+$"))
                 {
-             
-                    txtUsuario.BorderBrush = colorError;
+                    txtUsuario.BorderBrush = brushError;
                     txtUsuario.BorderThickness = new Thickness(2);
-                    txtGmail.BorderBrush = colorError;
-                    txtGmail.BorderThickness = new Thickness(2);
+                    MessageBox.Show("El nombre de usuario debe tener al menos 5 caracteres y no contener símbolos.", "Usuario no válido", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
                 }
 
-                MessageBox.Show(resultado, "Error de registro", MessageBoxButton.OK, MessageBoxImage.Error);
+         
+                if (!ValidarSeguridadPassword(pass))
+                {
+                    txtPassword.BorderBrush = brushError;
+                    MessageBox.Show("La contraseña no cumple los requisitos de seguridad.");
+                    return;
+                }
+
+                if (pass != passRepeat)
+                {
+                    txtRepeatPassword.BorderBrush = brushError;
+                    MessageBox.Show("Las contraseñas no coinciden.");
+                    return;
+                }
+
+               
+                string resultado = DatabaseServicie.CrearUsuario(nombre, correo, pass);
+
+                if (resultado.StartsWith("ERROR"))
+                {
+                    if (resultado.Contains("correo")) txtGmail.BorderBrush = brushError;
+                    else if (resultado.Contains("registrados")) { txtUsuario.BorderBrush = brushError; txtGmail.BorderBrush = brushError; }
+
+                    MessageBox.Show(resultado, "Error de registro", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    MessageBox.Show(resultado, "¡Bienvenido!", MessageBoxButton.OK, MessageBoxImage.Information);
+                    btnVolver_Click(null, null); 
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show(resultado, "¡Bienvenido!", MessageBoxButton.OK, MessageBoxImage.Information);
-                btnVolver_Click(null, null);
+                MessageBox.Show("Ocurrió un error inesperado: " + ex.Message);
+            }
+            finally
+            {
+                btnRegistrar.IsEnabled = true;
             }
         }
         /**
@@ -156,10 +172,8 @@ namespace PeliculasStudio.Vistas
             var control = sender as Control;
             if (control != null)
             {
-                // Al escribir, devolvemos el borde al color normal del tema
-                control.BorderBrush = App.IsDarkMode ?
-                    new SolidColorBrush((Color)ColorConverter.ConvertFromString("#555555")) :
-                    new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ABAdB3"));
+                control.BorderBrush = (Brush)Application.Current.FindResource("BrushBordeControl");
+
                 control.BorderThickness = new Thickness(1);
             }
         }
@@ -175,23 +189,22 @@ namespace PeliculasStudio.Vistas
             string pass = txtPassword.Password;
             string repeatPass = txtRepeatPassword.Password;
 
-            SolidColorBrush verde = Brushes.Green;
-            SolidColorBrush rojo = App.IsDarkMode ?
-                new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF4C4C")) :
-                new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D32F2F"));
+            // Extraemos los pinceles directamente del diccionario activo
+            // Esto garantiza que el rojo/verde sea el exacto que definiste para cada tema
+            var brushExito = (Brush)Application.Current.FindResource("BrushMensajeExito");
+            var brushError = (Brush)Application.Current.FindResource("BrushMensajeError");
+            var brushBordeNormal = (Brush)Application.Current.FindResource("BrushBordeControl");
 
-            
+            // Caso: Campo vacío
             if (string.IsNullOrEmpty(repeatPass))
             {
-                txtRepeatPassword.BorderBrush = App.IsDarkMode ?
-                    new SolidColorBrush((Color)ColorConverter.ConvertFromString("#555555")) :
-                    new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ABAdB3"));
-
+                txtRepeatPassword.BorderBrush = brushBordeNormal;
                 txtRepeatPassword.BorderThickness = new Thickness(1);
+
                 iconCoincide.Text = "✖";
-                lblCoincide.Text = "Las contraseñas no coinciden"; 
-                iconCoincide.Foreground = rojo;
-                lblCoincide.Foreground = rojo;
+                lblCoincide.Text = "Las contraseñas no coinciden";
+                iconCoincide.Foreground = brushError;
+                lblCoincide.Foreground = brushError;
                 return;
             }
 
@@ -199,24 +212,24 @@ namespace PeliculasStudio.Vistas
             if (pass == repeatPass)
             {
                 // --- COINCIDEN ---
-                txtRepeatPassword.BorderBrush = verde;
-                txtRepeatPassword.BorderThickness = new Thickness(2.5);
+                txtRepeatPassword.BorderBrush = brushExito;
+                txtRepeatPassword.BorderThickness = new Thickness(2);
 
                 iconCoincide.Text = "✔";
-                lblCoincide.Text = "Las contraseñas coinciden"; 
-                iconCoincide.Foreground = verde;
-                lblCoincide.Foreground = verde;
+                lblCoincide.Text = "Las contraseñas coinciden";
+                iconCoincide.Foreground = brushExito;
+                lblCoincide.Foreground = brushExito;
             }
             else
             {
                 // --- NO COINCIDEN ---
-                txtRepeatPassword.BorderBrush = Brushes.Red;
-                txtRepeatPassword.BorderThickness = new Thickness(2.5);
+                txtRepeatPassword.BorderBrush = brushError;
+                txtRepeatPassword.BorderThickness = new Thickness(2);
 
                 iconCoincide.Text = "✖";
                 lblCoincide.Text = "Las contraseñas no coinciden";
-                iconCoincide.Foreground = rojo;
-                lblCoincide.Foreground = rojo;
+                iconCoincide.Foreground = brushError;
+                lblCoincide.Foreground = brushError;
             }
         }
         /**
@@ -283,64 +296,40 @@ namespace PeliculasStudio.Vistas
 
             this.Close();
         }
+
+
         /**
-        * Metodo Tema Click:
-        * Gestiona el cambio dinámico entre el modo claro y el modo oscuro.
-        * Actualiza la propiedad global de la aplicación y dispara los cambios visuales.
-        * @param sender: El ToggleButton que activa o desactiva el modo oscuro.
-        * @param e: Argumentos del evento de click.
-        **/
+         * Metodo CambiarInterfazTema:
+         * Gestiona la apariencia global de la ventana de Registro mediante la conmutación de diccionarios de recursos.
+         * 1. Desvincula el tema visual anterior del árbol de recursos de la aplicación.
+         * 2. Carga dinámicamente el diccionario XAML correspondiente (Claro u Oscuro).
+         * 3. Notifica al motor de WPF para actualizar los controles vinculados mediante 'DynamicResource'.
+         * @param modoOscuro: Determina si se carga 'Tema.Oscuro.xaml' (true) o 'Tema.Claro.xaml' (false).
+         **/
         private void btnTema_Click(object sender, RoutedEventArgs e)
         {
-           
             App.IsDarkMode = btnTema.IsChecked ?? false;
-
-            if (App.IsDarkMode) AplicarTemaOscuro();
-            else AplicarTemaClaro();
+            CambiarInterfazTema(App.IsDarkMode);
         }
-        /**
-        * Metodo Aplicar Tema Oscuro:
-        * Modifica los recursos visuales de la interfaz para adaptarse al modo noche.
-        * Cambia los fondos de los contenedores y establece los colores de fuente a tonos claros 
-        * para garantizar un alto contraste y descanso visual.
-        **/
-        private void AplicarTemaOscuro()
+        private void CambiarInterfazTema(bool modoOscuro)
         {
-            GridPrincipal.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E1E1E"));
-            BorderFormulario.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2D2D2D"));
-            BorderRequisitos.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#252526"));
+         
+            Application.Current.Resources.MergedDictionaries.Clear();
 
-            // Ponemos todos los textos en Blanco Puro
-            txtTitulo.Foreground = Brushes.White;
-            lblUsuario.Foreground = Brushes.White;
-            lblGmail.Foreground = Brushes.White;
-            lblPassword.Foreground = Brushes.White;
-            lblSeguridadTitulo.Foreground = Brushes.White;
-            lblInstruccion.Foreground = Brushes.LightGray;
-            lblNota.Foreground = Brushes.LightGray;
-          
-        }
-        /**
-        * Metodo Aplicar Tema Claro:
-        * Restablece la paleta de colores original de la interfaz (Modo Día).
-        * Configura fondos claros y suaves junto con tipografías en grises oscuros
-        * para mantener la estética estándar y una legibilidad óptima.
-        **/
-        private void AplicarTemaClaro()
-        {
-            GridPrincipal.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F0F0F0"));
-            BorderFormulario.Background = Brushes.White;
-            BorderRequisitos.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F9F9F9"));
+            ResourceDictionary nuevoTema = new ResourceDictionary();
 
-            // Volvemos a los grises oscuros
-            txtTitulo.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#333333"));
-            lblUsuario.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#666666"));
-            lblGmail.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#666666"));
-            lblPassword.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#666666"));
-            lblSeguridadTitulo.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#333333"));
-            lblInstruccion.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#777777"));
-            lblNota.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#888888"));
-          
+            
+            string ruta = modoOscuro ? "Temas/Tema.Oscuro.xaml" : "Temas/Tema.Claro.xaml";
+
+            try
+            {
+                nuevoTema.Source = new Uri(ruta, UriKind.Relative);
+                Application.Current.Resources.MergedDictionaries.Add(nuevoTema);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error crítico en Registro: Diccionario no encontrado. " + ex.Message);
+            }
         }
     }
 }

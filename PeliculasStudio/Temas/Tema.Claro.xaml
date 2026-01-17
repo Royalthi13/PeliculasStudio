@@ -1,0 +1,22 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Color x:Key="ColorBasePantalla">#C8DCEF</Color>
+    <Color x:Key="ColorFocoCentro">#FFFFFF</Color>
+    <SolidColorBrush x:Key="BrushPantalla" Color="#F0F0F0"/>
+    <SolidColorBrush x:Key="BrushFormulario" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="BrushInput" Color="#F9F9F9"/>
+    <SolidColorBrush x:Key="BrushPanelRequisitos" Color="#F9F9F9"/>
+
+    <SolidColorBrush x:Key="BrushTextoPrincipal" Color="#333333"/>
+    <SolidColorBrush x:Key="BrushTextoSecundario" Color="#666666"/>
+    <SolidColorBrush x:Key="BrushTextoAyuda" Color="#888888"/>
+
+    <SolidColorBrush x:Key="BrushBordeControl" Color="#ABAdB3"/>
+    <SolidColorBrush x:Key="BrushSeparador" Color="#DDDDDD"/>
+    <SolidColorBrush x:Key="BrushAccionResaltado" Color="#007ACC"/>
+
+    <SolidColorBrush x:Key="BrushMensajeError" Color="#D32F2F"/>
+    <SolidColorBrush x:Key="BrushMensajeExito" Color="Green"/>
+
+</ResourceDictionary>

@@ -24,9 +24,10 @@
         </Grid.Resources>
 
         <Grid.Background>
-            <RadialGradientBrush x:Name="FocoLuz" Center="0.5,0.4" RadiusX="1.8" RadiusY="1.8">
-                <GradientStop Color="White" Offset="0"/>
-                <GradientStop Color="#C8DCEF" Offset="1"/>
+            <RadialGradientBrush Center="0.5,0.4" RadiusX="1.8" RadiusY="1.8">
+                <GradientStop Color="{DynamicResource ColorFocoCentro}" Offset="0"/>
+
+                <GradientStop Color="{DynamicResource ColorBasePantalla}" Offset="1"/>
             </RadialGradientBrush>
         </Grid.Background>
         <Grid.RowDefinitions>
@@ -48,8 +49,8 @@
             <Grid Grid.Row="0" Margin="20,10,20,0">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
 
-               
-       
+
+
                     <ToggleButton x:Name="btnTema" Width="100" Height="45" Cursor="Hand" 
               HorizontalAlignment="Right" VerticalAlignment="Top"
               Margin="0,10,20,0" Click="btnTema_Click">
@@ -57,7 +58,7 @@
                             <Style TargetType="ToggleButton">
                                 <Setter Property="Background" Value="Transparent"/>
                                 <Setter Property="BorderBrush" Value="Transparent"/>
-                                <Setter Property="Foreground" Value="#005A9E"/>
+                                <Setter Property="Foreground" Value="{DynamicResource BrushAccionResaltado}"/>
                                 <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
                                 <Setter Property="Template">
                                     <Setter.Value>
@@ -76,7 +77,7 @@
 
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsPressed" Value="True">
-                                                    <Setter TargetName="border" Property="Background" Value="#15007ACC"/>
+                                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource BrushSeparador}"/>
                                                     <Setter Property="RenderTransform">
                                                         <Setter.Value>
                                                             <ScaleTransform ScaleX="0.92" ScaleY="0.92"/>
@@ -86,13 +87,13 @@
 
                                                 <Trigger Property="IsChecked" Value="True">
                                                     <Setter TargetName="txtIcon" Property="Text" Value="☾"/>
-                                                    <Setter Property="Foreground" Value="White"/>
-                                                    <Setter TargetName="border" Property="BorderBrush" Value="#60FFFFFF"/>
+                                                    <Setter Property="Foreground" Value="{DynamicResource BrushTextoPrincipal}"/>
+                                                    <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource BrushBordeControl}"/>
                                                 </Trigger>
 
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="border" Property="Background" Value="#10007ACC"/>
-                                                    <Setter TargetName="border" Property="BorderBrush" Value="#007ACC"/>
+                                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource BrushInput}"/>
+                                                    <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource BrushAccionResaltado}"/>
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
@@ -106,7 +107,9 @@
         </Grid>
 
         <!-- Contenido principal -->
-        <Border x:Name="BorderCentral" Grid.Row="1" Background="White" CornerRadius="20" Padding="40"
+        <Border x:Name="BorderCentral" Grid.Row="1" 
+        Background="{DynamicResource BrushFormulario}" 
+        CornerRadius="20" Padding="40"
         VerticalAlignment="Center" HorizontalAlignment="Center" Margin="40" MaxWidth="450">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="40" ShadowDepth="0" Opacity="0.3" Color="Black"/>
@@ -117,14 +120,14 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                
+
                 <StackPanel Margin="0,0,0,30">
                     <TextBlock x:Name="txtTitulo" 
-                               Text="PELÍCULAS STUDIO" 
-                               FontSize="28" 
-                               FontWeight="ExtraBold" 
-                               HorizontalAlignment="Center" 
-                               Foreground="#005A9E">
+                       Text="PELÍCULAS STUDIO" 
+                       FontSize="28" 
+                       FontWeight="ExtraBold" 
+                       HorizontalAlignment="Center" 
+                       Foreground="{DynamicResource BrushAccionResaltado}">
                         <TextBlock.LayoutTransform>
                             <ScaleTransform ScaleX="1.2" />
                         </TextBlock.LayoutTransform>
@@ -133,7 +136,9 @@
                         </TextBlock.Effect>
                     </TextBlock>
 
-                    <Rectangle Height="2" Width="80" Fill="#007ACC" Margin="0,12,0,0" HorizontalAlignment="Center">
+                    <Rectangle Height="2" Width="80" 
+                       Fill="{DynamicResource BrushAccionResaltado}" 
+                       Margin="0,12,0,0" HorizontalAlignment="Center">
                         <Rectangle.Effect>
                             <BlurEffect Radius="2"/>
                         </Rectangle.Effect>
@@ -141,17 +146,24 @@
                 </StackPanel>
 
                 <StackPanel Grid.Row="1">
-                    <TextBlock x:Name="lblUsuario" Text="Usuario" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,8" Foreground="#444"/>
+                    <TextBlock x:Name="lblUsuario" Text="Usuario" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,8" 
+                       Foreground="{DynamicResource BrushTextoSecundario}"/>
                     <TextBox x:Name="txtUsuario" Height="35" VerticalContentAlignment="Center" Padding="10,0" 
-                     BorderBrush="#DDD" BorderThickness="0,0,0,2" Background="#F9F9F9"/>
+                     BorderBrush="{DynamicResource BrushBordeControl}" BorderThickness="0,0,0,2" 
+                     Background="{DynamicResource BrushInput}"
+                     Foreground="{DynamicResource BrushTextoPrincipal}"/>
 
-                    <TextBlock x:Name="lblPass" Text="Contraseña" FontSize="14" FontWeight="SemiBold" Margin="0,20,0,8" Foreground="#444"/>
+                    <TextBlock x:Name="lblPass" Text="Contraseña" FontSize="14" FontWeight="SemiBold" Margin="0,20,0,8" 
+                       Foreground="{DynamicResource BrushTextoSecundario}"/>
                     <PasswordBox x:Name="txtPassword" Height="35" VerticalContentAlignment="Center" Padding="10,0" 
-                         BorderBrush="#DDD" BorderThickness="0,0,0,2" Background="#F9F9F9"/>
+                         BorderBrush="{DynamicResource BrushBordeControl}" BorderThickness="0,0,0,2" 
+                         Background="{DynamicResource BrushInput}"
+                         Foreground="{DynamicResource BrushTextoPrincipal}"/>
 
                     <Button x:Name="btnIniciarSesion" Content="Iniciar Sesion" 
                     Margin="0,35,0,15" Height="45" Cursor="Hand"
-                    Background="#007ACC" Foreground="White" FontWeight="Bold" FontSize="14"
+                    Background="{DynamicResource BrushAccionResaltado}" Foreground="White" 
+                    FontWeight="Bold" FontSize="14"
                     RenderTransformOrigin="0.5,0.5" IsDefault="True" Click="btnIniciarSesion_Click">
 
                         <Button.RenderTransform>
@@ -196,7 +208,7 @@
 
                     <Button x:Name="btnIrARegistro" Content="Crear una cuenta nueva" 
                     Background="Transparent" BorderBrush="Transparent" 
-                    Foreground="#007ACC" Cursor="Hand" FontSize="12" FontWeight="Medium"
+                    Foreground="{DynamicResource BrushAccionResaltado}" Cursor="Hand" FontSize="12" FontWeight="Medium"
                     Click="btnIrARegistro_Click"/>
                 </StackPanel>
             </Grid>

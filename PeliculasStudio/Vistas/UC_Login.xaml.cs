@@ -2,6 +2,7 @@
 using PeliculasStudio.Modelos;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,16 +27,31 @@ namespace PeliculasStudio.Vistas
         {
             InitializeComponent();
 
- 
-            this.Loaded += (s, e) => {
-                if (App.IsDarkMode)
+
+            this.Loaded += (s, e) =>
+            {
+                try
                 {
-                    btnTema.IsChecked = true;
-                    CambiarInterfazTema(true);
+                
+                    if (App.IsDarkMode)
+                    {
+                        btnTema.IsChecked = true;
+                        CambiarInterfazTema(true);
+                    }
+
+              
+                    if (GridPrincipal?.Resources != null && GridPrincipal.Resources.Contains("AnimacionFondo"))
+                    {
+                        Storyboard anim = (Storyboard)GridPrincipal.Resources["AnimacionFondo"];
+                        anim.Begin();
+                    }
+                }
+                catch (Exception ex)
+                {
+               
+                    System.Diagnostics.Debug.WriteLine("Error en Loaded: " + ex.Message);
                 }
             };
-            Storyboard anim = (Storyboard)this.GridPrincipal.Resources["AnimacionFondo"];
-            anim.Begin();
         }
         /**
         * Metodo Iniciar Sesion Click:
@@ -111,91 +127,67 @@ namespace PeliculasStudio.Vistas
         private void btnTema_Click(object sender, RoutedEventArgs e)
         {
             var boton = sender as System.Windows.Controls.Primitives.ToggleButton;
+            if (boton == null) return;
+
             bool modoOscuro = boton.IsChecked ?? false;
-            Storyboard anim = (Storyboard)this.GridPrincipal.Resources["AnimacionFondo"];
-            anim.Begin();
-            // ACTUALIZAMOS LA VARIABLE GLOBAL
             App.IsDarkMode = modoOscuro;
+
+            // 1. Cambiamos el tema primero
             CambiarInterfazTema(modoOscuro);
+
+            // 2. Intentamos lanzar la animación de forma segura
+            try
+            {
+                // Buscamos el recurso. Si usamos FindResource es más seguro que el casting directo
+                var anim = GridPrincipal.Resources["AnimacionFondo"] as Storyboard;
+
+                if (anim != null)
+                {
+                    // Detenemos cualquier ejecución previa para evitar solapamientos
+                    anim.Stop();
+                    anim.Begin();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Si falla la animación, que al menos el tema cambie
+                System.Diagnostics.Debug.WriteLine("La animación no pudo iniciar: " + ex.Message);
+            }
         }
 
         /**
-        * Metodo Cambiar Interfaz Tema:
-        * Centraliza la lógica de estilos visuales para la pantalla de Login.
-        * Ajusta colores de fondo, etiquetas y cajas de texto de forma simultánea.
-        * Mantiene la animación del degradado actualizando sus colores.
-        * @param modoOscuro: Booleano que determina si se aplica el tema noche (true) o día (false).
-        **/
-     
+          * Metodo CambiarInterfazTema:
+          * Gestiona la apariencia global de la aplicación mediante la conmutación de diccionarios de recursos.
+          * * 1. Desvincula el tema visual anterior del árbol de recursos de la aplicación.
+          * 2. Carga dinámicamente el diccionario XAML correspondiente (Claro u Oscuro).
+          * 3. Notifica al motor de WPF para que actualice automáticamente todos los controles 
+          * vinculados mediante 'DynamicResource'.
+          * * Este enfoque elimina el acoplamiento entre la lógica de C# y los valores hexadecimales de diseño.
+          * * @param modoOscuro: Determina si se carga 'Tema.Oscuro.xaml' (true) o 'Tema.Claro.xaml' (false).
+          **/
+
         private void CambiarInterfazTema(bool modoOscuro)
         {
-            if (GridPrincipal == null || BorderCentral == null) return;
+           
+            Application.Current.Resources.MergedDictionaries.Clear();
 
-            var fondoDegradado = GridPrincipal.Background as RadialGradientBrush;
+         
+            ResourceDictionary nuevoTema = new ResourceDictionary();
 
-            if (modoOscuro)
+           
+            string ruta = modoOscuro ? "Temas/Tema.Oscuro.xaml" : "Temas/Tema.Claro.xaml";
+
+            try
             {
-                // --- MODO OSCURO CLÁSICO (Gris muy oscuro / Negro) ---
-                if (fondoDegradado != null)
-                {
-                    // Centro gris oscuro y bordes negros para que el foco resalte al moverse
-                    fondoDegradado.GradientStops[0].Color = (Color)ColorConverter.ConvertFromString("#2D2D2D");
-                    fondoDegradado.GradientStops[1].Color = (Color)ColorConverter.ConvertFromString("#121212");
-
-                    fondoDegradado.RadiusX = 1.2;
-                    fondoDegradado.RadiusY = 1.2;
-                }
-
-                // Fondo del panel en gris grafito sólido
-                BorderCentral.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E1E1E"));
-
-                // Titulo Blanco con el resplandor original
-                txtTitulo.Foreground = Brushes.White;
-                if (txtTitulo.Effect is DropShadowEffect shadow)
-                {
-                    shadow.Color = (Color)ColorConverter.ConvertFromString("#B0E0E6");
-                    shadow.BlurRadius = 15;
-                    shadow.Opacity = 0.8;
-                }
-
-                // Colores de texto y cajas del modo oscuro original
-                lblUsuario.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#CCCCCC"));
-                lblPass.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#CCCCCC"));
-
-                txtUsuario.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3F3F46"));
-                txtUsuario.Foreground = Brushes.White;
-                txtUsuario.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#555555"));
+                nuevoTema.Source = new Uri(ruta, UriKind.Relative);
+                Application.Current.Resources.MergedDictionaries.Add(nuevoTema);
             }
-            else
+            catch (Exception ex)
             {
-            
-                    // --- MODO CLARO LLAMATIVO (Blanco/Azul) ---
-                    if (fondoDegradado != null)
-                    {
-                        fondoDegradado.GradientStops[0].Color = Colors.White;
-                        fondoDegradado.GradientStops[1].Color = (Color)ColorConverter.ConvertFromString("#C8DCEF"); // Azul claro
-                        fondoDegradado.RadiusX = 1.8; // Foco más abierto
-                        fondoDegradado.RadiusY = 1.8;
-                    }
-
-                    BorderCentral.Background = Brushes.White;
-                    txtTitulo.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#005A9E"));
-
-                    // Ajuste de resplandor para modo claro (más sutil)
-                    if (txtTitulo.Effect is DropShadowEffect shadow)
-                    {
-                        shadow.Color = (Color)ColorConverter.ConvertFromString("#B0E0E6");
-                        shadow.Opacity = 0.4;
-                        shadow.BlurRadius = 8;
-                    }
-
-                    lblUsuario.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#444444"));
-                    lblPass.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#444444"));
-                    txtUsuario.Background = Brushes.White;
-                    txtUsuario.Foreground = Brushes.Black;
-                    txtUsuario.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#007ACC"));
-                
+               
+                Debug.WriteLine("Error cargando tema: " + ex.Message);
             }
+
         }
     }
 }
