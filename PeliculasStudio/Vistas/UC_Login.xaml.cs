@@ -145,15 +145,13 @@ namespace PeliculasStudio.Vistas
                 var anim = GridPrincipal.Resources["AnimacionFondo"] as Storyboard;
 
                 if (anim != null)
-                {
-                    
+                {                 
                     anim.Stop();
                     anim.Begin();
                 }
             }
             catch (Exception ex)
-            {
-           
+            {        
                 System.Diagnostics.Debug.WriteLine("La animación no pudo iniciar: " + ex.Message);
             }
         }
@@ -170,14 +168,9 @@ namespace PeliculasStudio.Vistas
           **/
 
         private void CambiarInterfazTema(bool modoOscuro)
-        {
-           
-            Application.Current.Resources.MergedDictionaries.Clear();
-
-         
-            ResourceDictionary nuevoTema = new ResourceDictionary();
-
-           
+        {         
+            Application.Current.Resources.MergedDictionaries.Clear();        
+            ResourceDictionary nuevoTema = new ResourceDictionary();         
             string ruta = modoOscuro ? "Temas/Tema.Oscuro.xaml" : "Temas/Tema.Claro.xaml";
 
             try
