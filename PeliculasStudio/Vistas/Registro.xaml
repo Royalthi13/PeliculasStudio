@@ -85,8 +85,26 @@
                              TextChanged="LimpiarBorde_TextChanged"/>
 
                     <TextBlock x:Name="lblGmail" Text="Correo Electrónico" FontWeight="SemiBold" Foreground="#666" Margin="0,20,0,8"/>
-                    <TextBox x:Name="txtGmail" Height="45" FontSize="16" VerticalContentAlignment="Center" Padding="10,0"
-                             TextChanged="LimpiarBorde_TextChanged"/>
+                    <TextBox x:Name="txtGmail" 
+                             Height="45" 
+                             FontSize="16" 
+                             VerticalContentAlignment="Center" 
+                             Padding="10,0"
+                             TextChanged="LimpiarBorde_TextChanged">
+                        <TextBox.Style>
+                            <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                                <Style.Triggers>
+                                    <Trigger Property="IsFocused" Value="True">
+                                        <Setter Property="BorderBrush" Value="{Binding BorderBrush, RelativeSource={RelativeSource Self}}" />
+                                        <Setter Property="BorderThickness" Value="{Binding BorderThickness, RelativeSource={RelativeSource Self}}" />
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="BorderBrush" Value="{Binding BorderBrush, RelativeSource={RelativeSource Self}}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
 
                     <TextBlock x:Name="lblPassword" Text="Contraseña" FontWeight="SemiBold" Foreground="#666" Margin="0,20,0,8"/>
                     <PasswordBox x:Name="txtPassword" Height="45" FontSize="16" VerticalContentAlignment="Center" Padding="10,0"

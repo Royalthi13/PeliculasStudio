@@ -8,6 +8,7 @@ Este proyecto es una aplicación de escritorio para gestionar una colección de 
 
 ## 🚀 Características Principales
 
+* **🔐 Seguridad:** Cifrado de contraseñas utilizando algoritmo **SHA-256**.
 * **📺 Reproductor de Vídeo:** Integración de `LibVLCSharp`.
 * **💾 Persistencia Local: Base de datos SQLite con generación automática de esquemas al iniciar la aplicación (sin necesidad de scripts SQL externos).
 * **🔐 Sistema de Login:** Control de acceso de usuarios.
@@ -47,14 +48,20 @@ Sigue estos pasos para ejecutar el proyecto en tu equipo local. ¡No necesitas i
 * **`/BaseDatos`**: Lógica de conexión y creación automática de tablas.
 * **`/Modelos`**: Clases POCO que definen las tablas (Pelicula, Usuario...).
 * **`/Vistas`**: Archivos XAML con la interfaz gráfica (Login, Catálogo, Detalle).
-* **`/Assets`**: Recursos estáticos (Imágenes y Vídeos de los tráilers).
+* **`/Assets`**: Recursos estáticos (Imágenes y Vídeos de los tráilers).*Nota: Los vídeos pesados no se suben al repositorio.*
+* **`/Utilidades`**: Utilidades transversales, como la clase de criptografia (`Cifrado`).
 
-## ⚠️ Notas Importantes
+## ⚠️ Notas de Uso
 
-* **Base de Datos**: El archivo `.db` se genera localmente para evitar conflictos binarios. La aplicación lo crea automáticamente en cada equipo al iniciarse.
-* **Credenciales por defecto**: Para acceder al sistema sin registrarse, se puede utilizar el usuario `admin` y la contraseña `admin`.
-* **Reproducción**: Se recomienda que los vídeos alojados en la carpeta `/Assets` utilizar el formato `.mp4` para garantizar la compatibilidad con  VLC.
+### 🔑 Credenciales por defecto (Admin)
+Al iniciar la app por primera vez, se crea un usuario administrador automáticamente:
+* **Usuario:** `admin`
+* **Contraseña:** `123`
 
+### 📹 Multimedia
+Debido al tamaño de los archivos, solo se quedan 4 videos de  prueba, los  demas vídeos `.mp4` están excluidos del repositorio (`.gitignore`). Para probar la reproducción:
+1. Añade tus propios vídeos `.mp4` en la carpeta `/Assets/Videos`.
+2. Asegúrate de que los nombres coincidan con los datos en `DatosIniciales.cs` o añade nuevas películas desde el panel de Admin.
 ---
 
 ## 👥 Autores

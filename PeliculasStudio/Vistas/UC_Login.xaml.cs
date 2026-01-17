@@ -50,21 +50,24 @@ namespace PeliculasStudio.Vistas
             string nombre = txtUsuario.Text.Trim();
             string pass = txtPassword.Password;
 
-            var usuarioEncontrado = DatabaseServicie.ValidarLogin(nombre, pass);
+            
+            var usuarioEncontrado = DatabaseServicie.Login(nombre, pass);
 
             if (usuarioEncontrado != null)
             {
-               
                 MainWindow ventanaPrincipal = new MainWindow();
 
+           
                 UC_Inicio inicio = new UC_Inicio(usuarioEncontrado.Nombreusuario);
                 ventanaPrincipal.Content = inicio;
                 ventanaPrincipal.Show();
+
+           
                 Window.GetWindow(this).Close();
             }
             else
             {
-                // --- ERROR ---
+         
                 txtUsuario.BorderBrush = Brushes.Red;
                 txtUsuario.BorderThickness = new Thickness(2);
 
@@ -123,11 +126,7 @@ namespace PeliculasStudio.Vistas
         * Mantiene la animación del degradado actualizando sus colores.
         * @param modoOscuro: Booleano que determina si se aplica el tema noche (true) o día (false).
         **/
-        /**
- * Metodo Cambiar Interfaz Tema:
- * Restablece el Modo Oscuro clásico (Negro/Gris) asegurando que 
- * la animación del foco de luz siga funcionando sobre el fondo oscuro.
- **/
+     
         private void CambiarInterfazTema(bool modoOscuro)
         {
             if (GridPrincipal == null || BorderCentral == null) return;

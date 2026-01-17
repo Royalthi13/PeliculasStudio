@@ -19,4 +19,7 @@ Desktop.ini
 *.sqlite
 
 
-!Assets/Videos/*.mp4
+*.mp4
+*.avi
+*.mkv
+*.mov

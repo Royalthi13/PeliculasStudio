@@ -1,8 +1,10 @@
 ﻿using PeliculasStudio.Modelos;
+using PeliculasStudio.Utilidades;
 using SQLite;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Packaging;
 using System.Text.RegularExpressions;
 namespace PeliculasStudio.BaseDatos
 {
@@ -20,22 +22,9 @@ namespace PeliculasStudio.BaseDatos
     public static class DatabaseServicie
     {
  
-        public enum TipoRol
-        {
-            /// <summary>
-            /// Rol estándar: Permite visualizar contenido pero no modificar la base de datos.
-            /// Internamente, SQLite lo guardará como el valor entero 0.
-            /// </summary>
-            Usuario,
+       
 
-            /// <summary>
-            /// Rol con privilegios: Permite añadir, editar y eliminar películas o usuarios.
-            /// Internamente, SQLite lo guardará como el valor entero 1.
-            /// </summary>
-            Admin
-        }
-
-        private static SQLiteConnection db;
+        private static SQLiteConnection? db;
         /**
          * Metodo para Inicializar la aplicacion con la BBDD
          * BBDD Peliculas: Contendra la clase Pelicula (Titulo,Año,Genero,Resumen,RutaVideo,RutaLogo
@@ -62,66 +51,21 @@ namespace PeliculasStudio.BaseDatos
          * **/
         private static void IntegrarDatos()
         {
-            if (db.Table<Usuario>().Count() == 0)
+            if (db!.Table<Usuario>().Count() == 0)
             {
                 db.Insert(new Usuario
                 {
                     Nombreusuario = "admin",
-                    Contrasenia = "123",
-                    Gmail = "admin@peliculasstudio.com",
+                    Gmail="admin@studio.com",
+                    Contrasenia = Cifrado.HashPassword("123"),
+
                     Rol = TipoRol.Admin
                 });
             }
 
             if (db.Table<Pelicula>().Count() == 0)
             {
-                var iniciales = new List<Pelicula>
-                {
-                    new Pelicula {
-                        Titulo = "Blade Runner 2049",
-                        Anio = 2017,
-                        Genero = "Ciencia Ficcion",
-                      Resumen = @"En el año 2049, un nuevo blade runner...
-                                    descubre un secreto oculto que podría
-                                    cambiar el mundo.",
-                        TrailerPath = "Blade Runner 2049.mp4",
-                        PortadaPath = "Blade_Runner.jpg"
-                    },
-                    new Pelicula {
-                        Titulo = "La Odisea",
-                        Anio = 2026,
-                        Genero = "Aventura",
-                        Resumen = @"Una epopeya mitológica que sigue la historia de Odiseo
-                                    y su largo viaje a casa, de 10 años de duración, tras la guerra de Troya.",
-                        TrailerPath = "La Odisea.mp4",
-                        PortadaPath = "Odisea.jpg"
-                    },
-                    new Pelicula {
-                Titulo = "Expediente Warren: El último rito",
-                Anio = 2021,
-                Genero = "Terror",
-                Resumen = @"Los investigadores de lo paranormal Ed y Lorraine Warren
-                                se enfrentan a un último caso aterrador
-                        en el que están implicadas entidades misteriosas a las que deben enfrentarse.",
-                TrailerPath = "Expediente-Warren-El-ultimo-rito.mp4",
-                PortadaPath = "Expediente_Warrem_El_Ultimo_Rito.jpg"
-            },
-                    new Pelicula {
-                Titulo = "El Diario de Noa",
-                Anio = 2004,
-                Genero = "Romance",
-                Resumen = @"En una residencia de ancianos, un hombre (James Garner) lee a una mujer (Gena Rowlands)
-                            una historia de amor escrita en su viejo cuaderno de notas.
-                        Es la historia de Noah Calhoun (Ryan Gosling) y Allie Hamilton (Rachel McAdams)
-                    , dos jóvenes adolescentes de Carolina del Norte que, 
-                    a pesar de vivir en dos ambientes sociales muy diferentes,
-                    se enamoraron profundamente y pasaron juntos un verano inolvidable, antes de ser separados,
-                    primero por sus padres, y más tarde por la guerra.",
-                TrailerPath = "El Diario de Noa.mp4",
-                PortadaPath = "EL_Diario_De_Noa.jpg"
-            },
-                };
-                db.InsertAll(iniciales);
+                db.InsertAll(DatosIniciales.ObtenerListado());
             }
         }
 
@@ -133,34 +77,11 @@ namespace PeliculasStudio.BaseDatos
          * @return: Retorna el objeto SQLiteConnection inicializado.
          **/
 
-        public static SQLiteConnection GetConexion()
+        public static SQLiteConnection? GetConexion()
         {
             return db;
         }
 
-
-
-        /**
-            * Metodo Validar Login:
-            * Verifica las credenciales del usuario consultando la base de datos.
-            * @param nombre: Nickname o nombre de usuario único.
-            * @param password: Clave de acceso proporcionada en el login.
-            * @returns: Devuelve el objeto Usuario si los datos coinciden, o null si el usuario no existe o la contraseña es incorrecta.
-            **/
-        public static Usuario ValidarLogin(string nombre, string password)
-        {
-            try
-            {
-                if (db == null) Inicializar();          
-                return db.Table<Usuario>().FirstOrDefault(u =>
-                    u.Nombreusuario == nombre &&
-                    u.Contrasenia == password);
-            }
-            catch
-            {
-                return null; 
-            }
-        }
 
 
 
@@ -181,15 +102,15 @@ namespace PeliculasStudio.BaseDatos
             {
                 if (db == null) Inicializar();
 
-               
+                // 1. Validar formato de email
                 string patronEmail = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
                 if (!Regex.IsMatch(gmail, patronEmail))
                 {
                     return "ERROR: El formato del correo electrónico no es válido.";
                 }
 
-              
-                var existente = db.Table<Usuario>()
+                // 2. Comprobar si ya existe (Case Insensitive) - INTEGRADO DE MAIN
+                Usuario? existente = db!.Table<Usuario>()
                                   .FirstOrDefault(u => u.Nombreusuario.ToLower() == nombre.ToLower()
                                                     || u.Gmail.ToLower() == gmail.ToLower());
 
@@ -198,16 +119,15 @@ namespace PeliculasStudio.BaseDatos
                     return "ERROR: El nombre de usuario o el correo ya están registrados.";
                 }
 
-
+                // 3. Crear nuevo usuario con el Cifrado de tu compañero
                 var nuevoUsuario = new Usuario
                 {
                     Nombreusuario = nombre,
                     Gmail = gmail,
-                    Contrasenia = password, // Recuerda en el futuro usar Hashing por seguridad
+                    Contrasenia = Cifrado.HashPassword(password), // Cifrado integrado
                     Rol = rol
                 };
 
-              
                 db.Insert(nuevoUsuario);
 
                 return $"USUARIO REGISTRADO CON ÉXITO\n" +
@@ -226,6 +146,33 @@ namespace PeliculasStudio.BaseDatos
         }
 
 
+
+        /**
+         * Metodo Login Usuario:
+         * .
+         * Verifica las credenciales de acceso comparando el usuario y el hash de la contraseña.
+         * @return:Devuelve el objeto usuario si el login es correcto devuelve null si el usuario no existe o la contraseña es incorrecta
+         **/
+
+        public static Usuario? Login(string usuario, string paswd)
+        {
+            if (db == null) Inicializar();
+
+        
+            Usuario? user = db!.Table<Usuario>()
+                               .FirstOrDefault(u => u.Nombreusuario == usuario);
+
+            if (user == null) return null;
+
+            if (user.Contrasenia == Cifrado.HashPassword(paswd))
+            {
+                return user;
+            }
+
+            return null;
+        }
+
+
         /**
          * Metodo Borrar Usuario:
          * Elimina un registro de la base de datos utilizando su ID.
@@ -238,7 +185,7 @@ namespace PeliculasStudio.BaseDatos
             {
                 if (db == null) Inicializar();
                 
-                var usuario = db.Table<Usuario>().FirstOrDefault(u => u.Id == id);
+                var usuario = db!.Table<Usuario>().FirstOrDefault(u => u.Id == id);
 
                 if (usuario == null)
                 {
@@ -281,7 +228,7 @@ namespace PeliculasStudio.BaseDatos
                 }
 
                
-                var existente = db.Table<Pelicula>()
+                var existente = db!.Table<Pelicula>()
                                   .FirstOrDefault(p => p.Titulo.ToLower() == titulo.ToLower() && p.Anio == anio);
 
                 if (existente != null)
@@ -331,7 +278,7 @@ namespace PeliculasStudio.BaseDatos
                 if (db == null) Inicializar();
 
                
-                var pelicula = db.Table<Pelicula>().FirstOrDefault(p => p.Id == idPelicula);
+                var pelicula = db!.Table<Pelicula>().FirstOrDefault(p => p.Id == idPelicula);
 
                 if (pelicula == null)
                 {

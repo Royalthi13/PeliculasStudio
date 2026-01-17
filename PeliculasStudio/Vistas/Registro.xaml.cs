@@ -44,72 +44,81 @@ namespace PeliculasStudio.Vistas
         **/
         private void btnRegistrar_Click(object sender, RoutedEventArgs e)
         {
+         
             string nombre = txtUsuario.Text.Trim();
             string correo = txtGmail.Text.Trim().ToLower();
             string pass = txtPassword.Password;
             string passRepeat = txtRepeatPassword.Password;
+
             SolidColorBrush colorError = Brushes.Red;
             SolidColorBrush colorNormal = App.IsDarkMode ?
                 new SolidColorBrush((Color)ColorConverter.ConvertFromString("#555555")) :
                 new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ABAdB3"));
+
+            txtUsuario.BorderBrush = colorNormal; txtUsuario.BorderThickness = new Thickness(1);
+            txtGmail.BorderBrush = colorNormal; txtGmail.BorderThickness = new Thickness(1);
+            txtPassword.BorderBrush = colorError; txtPassword.BorderThickness = new Thickness(1);
+            txtRepeatPassword.BorderBrush = colorNormal; txtRepeatPassword.BorderThickness = new Thickness(1);
+
+
             bool hayCamposVacios = false;
-            if (string.IsNullOrWhiteSpace(nombre))
+            if (string.IsNullOrWhiteSpace(nombre)) { txtUsuario.BorderBrush = colorError; txtUsuario.BorderThickness = new Thickness(2); hayCamposVacios = true; }
+            if (string.IsNullOrWhiteSpace(correo)) { txtGmail.BorderBrush = colorError; txtGmail.BorderThickness = new Thickness(2); hayCamposVacios = true; }
+            if (string.IsNullOrWhiteSpace(pass)) { txtPassword.BorderBrush = colorError; txtPassword.BorderThickness = new Thickness(2); hayCamposVacios = true; }
+
+            if (nombre.Length < 5)
             {
                 txtUsuario.BorderBrush = colorError;
                 txtUsuario.BorderThickness = new Thickness(2);
-                hayCamposVacios = true;
-            }
-            else
-            {
-                txtUsuario.BorderBrush = colorNormal;
-                txtUsuario.BorderThickness = new Thickness(1);
-            }
-            if (string.IsNullOrWhiteSpace(correo))
-            {
-                txtGmail.BorderBrush = colorError;
-                txtGmail.BorderThickness = new Thickness(2);
-                hayCamposVacios = true;
-            }
-            else
-            {
-                txtGmail.BorderBrush = colorNormal;
-                txtGmail.BorderThickness = new Thickness(1);
-            }
-            if (string.IsNullOrWhiteSpace(pass))
-            {
-                txtPassword.BorderBrush = colorError;
-                txtPassword.BorderThickness = new Thickness(2);
-                hayCamposVacios = true;
-            }
-            else
-            {
-                txtPassword.BorderBrush = colorNormal;
-                txtPassword.BorderThickness = new Thickness(1);
+                MessageBox.Show("El nombre de usuario debe tener al menos 5 caracteres.", "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
             }
             if (hayCamposVacios)
             {
-                MessageBox.Show("Por favor, rellena los campos en rojo.");
+                MessageBox.Show("Por favor, rellena los campos obligatorios.");
                 return;
             }
             if (!ValidarSeguridadPassword(pass))
             {
-                MessageBox.Show("La contraseña no es segura.");
+                txtPassword.BorderBrush = colorError;
+                txtPassword.BorderThickness = new Thickness(2);
+                MessageBox.Show("La contraseña no cumple los requisitos de seguridad.");
                 return;
             }
+
             if (pass != passRepeat)
             {
+                txtRepeatPassword.BorderBrush = colorError;
+                txtRepeatPassword.BorderThickness = new Thickness(2);
                 MessageBox.Show("Las contraseñas no coinciden.");
                 return;
-            }           
+            }
+
+       
             string resultado = DatabaseServicie.CrearUsuario(nombre, correo, pass);
 
             if (resultado.StartsWith("ERROR"))
             {
-                MessageBox.Show(resultado, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+          
+                if (resultado.Contains("correo electrónico no es válido"))
+                {
+                    txtGmail.BorderBrush = colorError;
+                    txtGmail.BorderThickness = new Thickness(2);
+                }
+                else if (resultado.Contains("nombre de usuario") && resultado.Contains("ya están registrados"))
+                {
+             
+                    txtUsuario.BorderBrush = colorError;
+                    txtUsuario.BorderThickness = new Thickness(2);
+                    txtGmail.BorderBrush = colorError;
+                    txtGmail.BorderThickness = new Thickness(2);
+                }
+
+                MessageBox.Show(resultado, "Error de registro", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {
-                MessageBox.Show(resultado, "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(resultado, "¡Bienvenido!", MessageBoxButton.OK, MessageBoxImage.Information);
                 btnVolver_Click(null, null);
             }
         }
