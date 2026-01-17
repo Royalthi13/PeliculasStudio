@@ -43,5 +43,7 @@ namespace PeliculasStudio.Modelos
 
         [NotNull]
         public TipoRol Rol { get; set; }
+        [NotNull]
+        public DateTime FechaRegistro { get; set; } = DateTime.Now;
     }
 }

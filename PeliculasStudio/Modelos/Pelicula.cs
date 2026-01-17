@@ -26,6 +26,9 @@ namespace PeliculasStudio.Modelos
         [NotNull]
         public string PortadaPath { get; set; }
 
+        [NotNull]
+        public int CantVisualizaciones { get; set; } = 0;
+
 
 
     }
