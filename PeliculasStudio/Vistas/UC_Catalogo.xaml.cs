@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PeliculasStudio.Modelos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,11 @@ namespace PeliculasStudio.Vistas
     /// </summary>
     public partial class UC_Catalogo : UserControl
     {
-        public UC_Catalogo()
+        private Usuario _usuarioActual;
+        public UC_Catalogo(Usuario usuario)
         {
             InitializeComponent();
+            _usuarioActual = usuario;
         }
     }
 }

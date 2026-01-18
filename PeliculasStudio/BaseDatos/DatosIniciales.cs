@@ -32,7 +32,7 @@ namespace PeliculasStudio.BaseDatos
                         Resumen = @"Una epopeya mitológica que sigue la historia de Odiseo
                                     y su largo viaje a casa, de 10 años de duración, tras la guerra de Troya.",
                         TrailerPath = "La Odisea.mp4",
-                        PortadaPath = "Odisea.jpg"
+                        PortadaPath = "La Odisea.jpg"
                     },
                     new Pelicula {
                 Titulo = "Expediente Warren: El último rito",

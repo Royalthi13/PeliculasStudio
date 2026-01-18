@@ -5,13 +5,357 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PeliculasStudio.Vistas"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
-             Background="Transparent">
-  
+             d:DesignHeight="700" d:DesignWidth="1000"
+             >
+    <Grid x:Name="GridPrincipal">
+
+        <Grid.Background>
+            <RadialGradientBrush Center="0.5,0.4" RadiusX="1.5" RadiusY="1.5">
+                <GradientStop Color="{DynamicResource ColorFocoCentro}" Offset="0"/>
+                <GradientStop Color="{DynamicResource ColorBasePantalla}" Offset="1"/>
+            </RadialGradientBrush>
+        </Grid.Background>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Margin="20,10" CornerRadius="20" Background="{DynamicResource BrushFormulario}">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="15" Opacity="0.1" ShadowDepth="2"/>
+            </Border.Effect>
+
+            <Grid Margin="15,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" Width="45" Height="45" Click="BtnPerfil_Click" Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Border CornerRadius="25" Background="{DynamicResource BrushInput}" BorderBrush="{DynamicResource BrushAccionResaltado}" BorderThickness="2">
+                                <TextBlock Text="👤" Foreground="{DynamicResource BrushTextoPrincipal}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+
+                    <Button.ContextMenu>
+                        <ContextMenu>
+                            <ContextMenu.Resources>
+                                <Style TargetType="ContextMenu">
+                                    <Setter Property="Background" Value="{DynamicResource BrushFormulario}"/>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource BrushBordeControl}"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Setter Property="HasDropShadow" Value="True"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ContextMenu">
+                                                <Border Background="{TemplateBinding Background}" 
+                                        BorderBrush="{TemplateBinding BorderBrush}" 
+                                        BorderThickness="{TemplateBinding BorderThickness}" 
+                                        CornerRadius="10" Padding="5">
+                                                    <Border.Effect>
+                                                        <DropShadowEffect BlurRadius="10" Opacity="0.2" ShadowDepth="4"/>
+                                                    </Border.Effect>
+                                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+
+                                <Style TargetType="MenuItem">
+                                    <Setter Property="Foreground" Value="{DynamicResource BrushTextoPrincipal}"/>
+                                    <Setter Property="FontSize" Value="14"/>
+                                    <Setter Property="Padding" Value="10,8"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="MenuItem">
+                                                <Border x:Name="border" Background="Transparent" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                                                    <ContentPresenter Content="{TemplateBinding Header}" 
+                                                      ContentSource="Header" 
+                                                      HorizontalAlignment="Left" 
+                                                      VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsHighlighted" Value="True">
+                                                        <Setter TargetName="border" Property="Background" Value="{DynamicResource BrushInput}"/>
+                                                        <Setter Property="Foreground" Value="{DynamicResource BrushAccionResaltado}"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ContextMenu.Resources>
+
+                            <MenuItem Header="👤 Mi Perfil" Click="MenuPerfil_Click"/>
+
+                            <Separator Background="{DynamicResource BrushSeparador}" Margin="5,2"/>
+
+                            <MenuItem Header="🚪 Cerrar Sesión" Click="MenuCerrarSesion_Click">
+                                <MenuItem.Style>
+                                    <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+                                        <Setter Property="Foreground" Value="#FF5555"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsHighlighted" Value="True">
+                                                <Setter Property="Foreground" Value="Red"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </MenuItem.Style>
+                            </MenuItem>
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </Button>
+
+                <Button Grid.Column="1" 
+        Content="🎬 Catálogo" 
+        Margin="20,0,0,0" 
+        Height="40" 
+        Padding="20,0"
+         Foreground="{DynamicResource BrushTextoPrincipal}"
+        Background="Transparent"
+        BorderBrush="Transparent"
+        Click="BtnIrCatalogo_Click" 
+        FontWeight="Bold"
+        Cursor="Hand">
+
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="1.5"
+                    CornerRadius="22">
+
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource BrushInput}"/>
+                                    <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource BrushAccionResaltado}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource BrushTextoPrincipal}"/>
+                                </Trigger>
+
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource BrushSeparador}"/>
+                                    <Setter Property="RenderTransform">
+                                        <Setter.Value>
+                                            <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+
+                    <Button.RenderTransformOrigin>0.5,0.5</Button.RenderTransformOrigin>
+                    <Button.RenderTransform>
+                        <ScaleTransform ScaleX="1" ScaleY="1"/>
+                    </Button.RenderTransform>
+                </Button>
+                <Border Grid.Column="2" Margin="30,10" CornerRadius="15" Background="{DynamicResource BrushInput}">
                     <Grid>
-        <TextBlock x:Name="txtBienvenida" 
-               FontSize="20" 
-               HorizontalAlignment="Center" 
-               VerticalAlignment="Center"/>
+                        <TextBlock Text="🔍 Buscar película..." 
+                   VerticalAlignment="Center" Margin="15,0" 
+                   Foreground="{DynamicResource BrushTextoAyuda}" 
+                   IsHitTestVisible="False">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, ElementName=txtBuscador}" Value="">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <TextBox x:Name="txtBuscador"
+                 Background="Transparent" 
+                 BorderThickness="0" 
+                 VerticalContentAlignment="Center" 
+                 Padding="15,0" 
+                 FontSize="14" 
+                 Foreground="{DynamicResource BrushTextoPrincipal}"/>
+                    </Grid>
+                </Border>
+
+                <ToggleButton x:Name="btnTema" Grid.Column="3" Width="100" Height="45" Cursor="Hand" 
+ VerticalAlignment="Top"
+Margin="0,10,20,0" Click="btnTema_Click">
+                    <ToggleButton.Style>
+                        <Style TargetType="ToggleButton">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="{DynamicResource BrushAccionResaltado}"/>
+                            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border x:Name="border" 
+                  Background="{TemplateBinding Background}" 
+                  BorderBrush="{TemplateBinding BorderBrush}" 
+                  BorderThickness="1.5" 
+                  CornerRadius="22">
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <TextBlock x:Name="txtLabel" Text="TEMA" FontSize="11" FontWeight="ExtraBold" 
+                             VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                                <TextBlock x:Name="txtIcon" Text="☀" FontSize="20" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsPressed" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="{DynamicResource BrushSeparador}"/>
+                                                <Setter Property="RenderTransform">
+                                                    <Setter.Value>
+                                                        <ScaleTransform ScaleX="0.92" ScaleY="0.92"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Trigger>
+
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter TargetName="txtIcon" Property="Text" Value="☾"/>
+                                                <Setter Property="Foreground" Value="{DynamicResource BrushTextoPrincipal}"/>
+                                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource BrushBordeControl}"/>
+                                            </Trigger>
+
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="{DynamicResource BrushInput}"/>
+                                                <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource BrushAccionResaltado}"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ToggleButton.Style>
+                </ToggleButton>
+            </Grid>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" Margin="0,10,0,0" VerticalScrollBarVisibility="Hidden">
+            <StackPanel Margin="20,0">
+
+                <Border Height="400" CornerRadius="20" Margin="0,0,0,40" ClipToBounds="True" Background="Black">
+                    <Grid>
+                        <Image x:Name="imgBannerFondo" Source="{Binding ElementName=imgBanner, Path=Source}" Stretch="UniformToFill" Opacity="0.6">
+                            <Image.Effect>
+                                <BlurEffect Radius="60"/>
+                            </Image.Effect>
+                        </Image>
+
+                        <Rectangle Fill="#99000000"/>
+
+                        <Border>
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                    <GradientStop Color="#FF000000" Offset="0"/>
+                                    <GradientStop Color="#AA000000" Offset="0.4"/>
+                                    <GradientStop Color="Transparent" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+
+                        <Grid Margin="40">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,20,0">
+
+                                <Border Background="#E50914" HorizontalAlignment="Left" CornerRadius="4" Padding="12,6" Margin="0,0,0,15">
+                                    <TextBlock Text="DESTACADO HOY" Foreground="White" FontWeight="Bold" FontSize="12"/>
+                                </Border>
+
+                                <TextBlock x:Name="txtBannerTitulo" Text="TITULO DE LA PELÍCULA" 
+                           FontSize="42" FontWeight="Black" Foreground="White" 
+                           TextWrapping="Wrap" LineHeight="48" Margin="0,0,0,30">
+                                    <TextBlock.Effect>
+                                        <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.8"/>
+                                    </TextBlock.Effect>
+                                </TextBlock>
+
+                               
+                                <Button Content="▶ REPRODUCIR" Width="200" Height="55" HorizontalAlignment="Left"
+                        Background="White" Foreground="Black" FontWeight="ExtraBold" FontSize="16" 
+                        Cursor="Hand" Click="BtnBanner_Click">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="28"/>
+                                        </Style>
+                                    </Button.Resources>
+                                    <Button.Effect>
+                                        <DropShadowEffect BlurRadius="15" Opacity="0.3" Color="White"/>
+                                    </Button.Effect>
+                                </Button>
+                            </StackPanel>
+
+                            <Border Grid.Column="1" CornerRadius="12" Margin="20,0,0,0">
+                                <Border.Effect>
+                                    <DropShadowEffect BlurRadius="20" ShadowDepth="5" Opacity="0.5" Color="Black"/>
+                                </Border.Effect>
+                                <Border CornerRadius="12" ClipToBounds="True">
+                                    <Image x:Name="imgBanner" Stretch="Uniform" MaxHeight="320"/>
+                                </Border>
+                            </Border>
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <TextBlock Text="Películas Recomendadas" FontSize="22" FontWeight="Bold" Foreground="{DynamicResource BrushTextoPrincipal}" Margin="10,0,0,15"/>
+
+                <ItemsControl x:Name="listaDestacados">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="4"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="10" CornerRadius="15" Background="{DynamicResource BrushFormulario}" Cursor="Hand" MouseUp="Card_MouseUp" Height="280">
+                                <Border.Effect>
+                                    <DropShadowEffect BlurRadius="15" Opacity="0.15" ShadowDepth="4" Color="Black"/>
+                                </Border.Effect>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="70"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Border Grid.Row="0" CornerRadius="15,15,0,0" ClipToBounds="True">
+                                        <Image Source="{Binding RutaImagenCompleta}" Stretch="UniformToFill"/>
+                                    </Border>
+
+                                    <Grid Grid.Row="1" Margin="12">
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Titulo}" FontWeight="Bold" FontSize="15" 
+                                                       Foreground="{DynamicResource BrushTextoPrincipal}" TextTrimming="CharacterEllipsis"/>
+                                            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                                <TextBlock Text="{Binding Anio}" FontSize="12" Foreground="{DynamicResource BrushTextoSecundario}"/>
+                                                <TextBlock Text=" • " Foreground="{DynamicResource BrushTextoSecundario}"/>
+                                                <TextBlock Text="{Binding Genero}" FontSize="12" Foreground="{DynamicResource BrushAccionResaltado}"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Rectangle Height="50"/>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </UserControl>
