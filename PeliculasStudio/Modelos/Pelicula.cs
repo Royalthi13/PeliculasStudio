@@ -1,4 +1,5 @@
 ﻿using SQLite;
+using System.IO;
 
 namespace PeliculasStudio.Modelos
 {
@@ -30,6 +31,15 @@ namespace PeliculasStudio.Modelos
         public int CantVisualizaciones { get; set; } = 0;
 
 
-
+        [Ignore] // Le decimos a la base de datos que ignore esto, es solo visual
+        public string RutaImagenCompleta
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(PortadaPath)) return null;
+                // Combina la carpeta donde está el .exe + Assets + Imagenes + NombreArchivo
+                return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Imagenes", PortadaPath);
+            }
+        }
     }
 }

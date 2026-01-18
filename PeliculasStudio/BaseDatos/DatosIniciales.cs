@@ -235,14 +235,7 @@ namespace PeliculasStudio.BaseDatos
                     TrailerPath = "La monja II.mp4",
                     PortadaPath = "La monja II.jpg"
                 },
-                new Pelicula {
-                    Titulo = "La Odisea",
-                    Anio = 2016,
-                    Genero = "Aventura",
-                    Resumen = "Biopic sobre Jacques-Yves Cousteau, el gran aventurero oceánico, su familia y sus descubrimientos.",
-                    TrailerPath = "La Odisea.mp4",
-                    PortadaPath = "La Odisea.jpg"
-                },
+               
                 new Pelicula {
                     Titulo = "La vida es bella",
                     Anio = 1997,

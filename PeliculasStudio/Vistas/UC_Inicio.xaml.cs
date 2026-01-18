@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PeliculasStudio.BaseDatos;
+using PeliculasStudio.Modelos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,10 +22,13 @@ namespace PeliculasStudio.Vistas
     /// </summary>
     public partial class UC_Inicio : UserControl
     {
+      
         public UC_Inicio(string nombreUsuario)
         {
             InitializeComponent();
-            txtBienvenida.Text = "Bienvenido, " + nombreUsuario;
+          
+
         }
+       
     }
 }

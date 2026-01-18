@@ -1,4 +1,5 @@
-﻿using PeliculasStudio.Vistas;
+﻿using PeliculasStudio.Modelos;
+using PeliculasStudio.Vistas;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,17 +18,20 @@ namespace PeliculasStudio
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Usuario _usuarioActual;
         public MainWindow()
         {
             InitializeComponent();
-            ContenedorPrincipal.Content = new UC_Login();
+            Navegar(new UC_Login());
         }
 
         public void Navegar(UserControl nuevaVista)
         {
             ContenedorPrincipal.Content = nuevaVista;
+        
         }
-
        
+
+
     }
 }

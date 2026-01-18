@@ -12,6 +12,7 @@
         Background="{DynamicResource BrushPantalla}"
         >
     <Grid>
+        
         <ContentControl x:Name="ContenedorPrincipal" HorizontalContentAlignment="Stretch" 
                         VerticalContentAlignment="Stretch" />
        

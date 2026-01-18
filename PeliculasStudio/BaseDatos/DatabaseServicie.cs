@@ -67,7 +67,18 @@ namespace PeliculasStudio.BaseDatos
                     FechaRegistro = DateTime.Now
 
                 });
+
+                db.Insert(new Usuario
+                {
+                    Nombreusuario = "usuario",
+                    Gmail = "cliente@studio.com",
+                    Contrasenia = Cifrado.HashPassword("123"),
+                    Rol = TipoRol.Usuario,
+                    FechaRegistro = DateTime.Now
+                });
             }
+
+           
 
             if (db.Table<Pelicula>().Count() == 0)
             {
