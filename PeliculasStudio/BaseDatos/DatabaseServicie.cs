@@ -219,10 +219,11 @@ namespace PeliculasStudio.BaseDatos
          * @param rolUsuario: El rol de quien ejecuta la accion.
          * @return: Mensaje de exito o error de permisos.
          **/
-        public static string AniadirPelicula(TipoRol rolUsuario, string titulo, int anio, string genero, string resumen, string trailer, string portada)
+        public static string AniadirPelicula(TipoRol rolUsuario, string titulo, int anio, GeneroPelicula genero, string resumen, string trailer, string portada)
         {
             try
             {
+           
                 if (rolUsuario != TipoRol.Admin)
                 {
                     return "ACCESO DENEGADO: No tienes permisos para añadir películas.";
@@ -230,6 +231,7 @@ namespace PeliculasStudio.BaseDatos
 
                 if (db == null) Inicializar();
 
+             
                 if (string.IsNullOrWhiteSpace(titulo) || anio < 1888)
                 {
                     return "ERROR: Datos de la película inválidos (Título vacío o año incorrecto).";
@@ -243,14 +245,16 @@ namespace PeliculasStudio.BaseDatos
                     return $"ERROR: La película '{titulo}' ({anio}) ya existe en la base de datos.";
                 }
 
+           
                 var nuevaPelicula = new Pelicula
                 {
                     Titulo = titulo,
                     Anio = anio,
-                    Genero = genero,
+                    Genero = genero, 
                     Resumen = resumen,
                     TrailerPath = trailer,
-                    PortadaPath = portada
+                    PortadaPath = portada,
+                    CantVisualizaciones = 0
                 };
 
                 db.Insert(nuevaPelicula);

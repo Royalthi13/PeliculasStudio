@@ -76,7 +76,7 @@ namespace PeliculasStudio.Vistas
                 else
                 {
                     // Si es USUARIO normal, lo mandamos al inicio normal
-                    main?.Navegar(new UC_PanelAdmin(usuarioEncontrado));
+                    main?.Navegar(new UC_Inicio(usuarioEncontrado));
                 }
             }
             else

@@ -1,0 +1,77 @@
+﻿<Window x:Class="PeliculasStudio.Vistas.AniadirPeliculas_Panel"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PeliculasStudio.Vistas"
+        mc:Ignorable="d"
+        Title="AniadirPeliculas_Panel" Height="450" Width="800">
+    <Grid Background="#1E1E1E">
+        <Grid.Resources>
+            <Style x:Key="PlaceholderTextBox" TargetType="{x:Type Grid}">
+                <Setter Property="Margin" Value="0,5,0,5"/>
+            </Style>
+        </Grid.Resources>
+        <ScrollViewer>
+        <StackPanel Margin="25">
+            <TextBlock Text="NUEVO TÍTULO" Foreground="White" FontSize="22" FontWeight="Bold" Margin="0,0,0,20" HorizontalAlignment="Center"/>
+
+            <TextBlock Text="Título de la obra:" Foreground="#AAAAAA" Margin="0,5"/>
+            <TextBox x:Name="txtTitulo" Height="30" VerticalContentAlignment="Center" Background="#2D2D2D" Foreground="White" BorderBrush="#3F3F46"/>
+
+            <UniformGrid Columns="2" Margin="0,15,0,0">
+                <StackPanel Margin="0,0,10,0">
+                    <TextBlock Text="Año de estreno:" Foreground="#AAAAAA" Margin="0,5"/>
+                    <TextBox x:Name="txtAnio" Height="30" VerticalContentAlignment="Center" Background="#2D2D2D" Foreground="White" BorderBrush="#3F3F46"/>
+                </StackPanel>
+                <StackPanel Margin="10,0,0,0">
+                    <TextBlock Text="Categoría (Género):" Foreground="#AAAAAA" Margin="0,5"/>
+                    <ComboBox x:Name="cbGenero" Height="30" VerticalContentAlignment="Center"/>
+                </StackPanel>
+            </UniformGrid>
+
+            <TextBlock Text="Sinopsis / Resumen:" Foreground="#AAAAAA" Margin="0,15,0,5"/>
+            <TextBox x:Name="txtResumen" Height="100" TextWrapping="Wrap" AcceptsReturn="True" Background="#2D2D2D" Foreground="White" BorderBrush="#3F3F46" VerticalContentAlignment="Top" Padding="5"/>
+
+            <TextBlock Text="Nombre del archivo de imagen (Portada):" Foreground="#AAAAAA" Margin="0,15,0,5"/>
+            <Grid>
+                <TextBox x:Name="txtPortada" Height="30" VerticalContentAlignment="Center" Background="#2D2D2D" Foreground="White" BorderBrush="#3F3F46"/>
+                <TextBlock Text="ejemplo.jpg" IsHitTestVisible="False" Foreground="#666666" VerticalAlignment="Center" Margin="10,0,0,0">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=txtPortada}" Value="">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
+
+            <TextBlock Text="Nombre del archivo de video (Tráiler):" Foreground="#AAAAAA" Margin="0,15,0,5"/>
+            <Grid>
+                <TextBox x:Name="txtTrailer" Height="30" VerticalContentAlignment="Center" Background="#2D2D2D" Foreground="White" BorderBrush="#3F3F46"/>
+                <TextBlock Text="video.mp4" IsHitTestVisible="False" Foreground="#666666" VerticalAlignment="Center" Margin="10,0,0,0">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=txtTrailer}" Value="">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,30,0,0">
+                <Button Content="Añadir al Catálogo" Click="btnGuardar_Click" Width="160" Height="40" Background="#007ACC" Foreground="White" FontWeight="Bold" Cursor="Hand" Margin="0,0,15,0"/>
+                <Button Content="Cancelar" IsCancel="True" Width="100" Height="40" Background="#444444" Foreground="White"/>
+            </StackPanel>
+        </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>

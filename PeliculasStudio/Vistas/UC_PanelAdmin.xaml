@@ -88,24 +88,39 @@
             </TabItem>
 
             <TabItem Header=" CATÁLOGO DE PELÍCULAS " Padding="10,5">
-                <DataGrid x:Name="dgPeliculas" AutoGenerateColumns="False" IsReadOnly="True" 
-                         Background="#333333" RowBackground="White" AlternatingRowBackground="#F0F0F0">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
-                        <DataGridTextColumn Header="Título" Binding="{Binding Titulo}" Width="*"/>
-                        <DataGridTextColumn Header="Vistas" Binding="{Binding CantVisualizaciones}" Width="60"/>
-                        <DataGridTextColumn Header="Trailer" Binding="{Binding TrailerPath}" Width="*"/>
-                        <DataGridTextColumn Header="Portada" Binding="{Binding PortadaPath}" Width="*"/>
+                <DockPanel LastChildFill="True" Background="#333333">
+                    <Button x:Name="btnAbrirAniadir" 
+                Content="+ AÑADIR NUEVA PELÍCULA" 
+                DockPanel.Dock="Top"
+                Height="40" 
+                Margin="10" 
+                Background="#2ecc71" 
+                Foreground="White" 
+                FontWeight="Bold"
+                Click="btnNuevaPelicula_Click"/>
 
-                        <DataGridTemplateColumn Header="Acciones" Width="100">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button Content="Eliminar" Click="btnEliminarPelicula_Click" Background="#e74c3c" Foreground="White"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
+                    <DataGrid x:Name="dgPeliculas" AutoGenerateColumns="False" IsReadOnly="True" 
+                  Background="#333333" RowBackground="White" AlternatingRowBackground="#F0F0F0"
+                  Margin="10,0,10,10">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
+                            <DataGridTextColumn Header="Título" Binding="{Binding Titulo}" Width="*"/>
+                            <DataGridTextColumn Header="Género" Binding="{Binding Genero}" Width="100"/>
+                            <DataGridTextColumn Header="Vistas" Binding="{Binding CantVisualizaciones}" Width="60"/>
+                            <DataGridTextColumn Header="Trailer" Binding="{Binding TrailerPath}" Width="*"/>
+                            <DataGridTextColumn Header="Portada" Binding="{Binding PortadaPath}" Width="*"/>
+
+                            <DataGridTemplateColumn Header="Acciones" Width="100">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Eliminar" Click="btnEliminarPelicula_Click" 
+                                    Background="#e74c3c" Foreground="White" Padding="5,2"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
             </TabItem>
         </TabControl>
     </Grid>

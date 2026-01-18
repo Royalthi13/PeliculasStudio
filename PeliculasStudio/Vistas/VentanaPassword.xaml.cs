@@ -21,12 +21,19 @@ namespace PeliculasStudio.Vistas
     {
         public string Password { get; private set; }
 
-        public VentanaPassword() { InitializeComponent(); }
+        // Este es el constructor que necesitamos
+        public VentanaPassword(string mensaje)
+        {
+            InitializeComponent();
+            
+            txtMensaje.Text = mensaje;
+            txtPassword.Focus();
+        }
 
         private void Aceptar_Click(object sender, RoutedEventArgs e)
         {
             Password = txtPassword.Password;
-            this.DialogResult = true; // Cierra la ventana devolviendo "Aceptar"
+            this.DialogResult = true;
         }
     }
 }

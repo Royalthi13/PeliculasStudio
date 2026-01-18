@@ -3,7 +3,22 @@ using System.IO;
 
 namespace PeliculasStudio.Modelos
 {
-   public  class Pelicula
+    public enum GeneroPelicula
+    {
+        Accion,
+        Aventura,
+        CienciaFiccion,
+        Drama,
+        Terror,
+        Romance,
+        Western,
+        Comedia,
+        Thriller,
+        Fantasía, 
+        Crimen,
+        Animacion
+    }
+    public  class Pelicula
     {
         [PrimaryKey , AutoIncrement]
         public int Id { get; set; }
@@ -15,7 +30,7 @@ namespace PeliculasStudio.Modelos
         public string Resumen { get; set; }
 
         [NotNull]
-        public string Genero { get; set; }
+        public GeneroPelicula Genero { get; set; }
 
         [NotNull]
 

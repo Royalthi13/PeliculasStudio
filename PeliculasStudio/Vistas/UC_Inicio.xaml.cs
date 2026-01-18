@@ -23,7 +23,7 @@ namespace PeliculasStudio.Vistas
     public partial class UC_Inicio : UserControl
     {
       
-        public UC_Inicio(string nombreUsuario)
+        public UC_Inicio(Usuario usuario)
         {
             InitializeComponent();
           
