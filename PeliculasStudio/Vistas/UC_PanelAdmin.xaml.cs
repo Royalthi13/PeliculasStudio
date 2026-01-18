@@ -1,5 +1,6 @@
 ﻿using PeliculasStudio.BaseDatos;
 using PeliculasStudio.Modelos;
+using PeliculasStudio.Utilidades;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +23,11 @@ namespace PeliculasStudio.Vistas
     /// </summary>
     public partial class UC_PanelAdmin : UserControl
     {
-        public UC_PanelAdmin(string nombreAdmin)
+        private Usuario _adminLogueado;
+        public UC_PanelAdmin(Usuario admin)
         {
             InitializeComponent();
+            _adminLogueado = admin;
             CargarTablas();
         }
         private void CargarTablas()
@@ -48,39 +51,8 @@ namespace PeliculasStudio.Vistas
                 dgPeliculas.ItemsSource = conexion.Table<Pelicula>().ToList();
             }
         }
+
        
-        private void btnCambiarRol_Click(object sender, RoutedEventArgs e)
-        {
-            var usuario = (sender as Button)?.DataContext as Usuario;
-
-            if (usuario != null)
-            {
-            
-                if (usuario.Rol == TipoRol.Admin)
-                {
-                  
-                    var numAdmins = DatabaseServicie.GetConexion()?.Table<Usuario>()
-                                    .Count(u => u.Rol == TipoRol.Admin) ?? 0;
-
-               
-                    if (numAdmins <= 1)
-                    {
-                        MessageBox.Show("No se puede cambiar el rango. Debe existir al menos un administrador en el sistema.",
-                                        "Acción denegada", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        return; 
-                    }
-                }
-
-           
-                usuario.Rol = (usuario.Rol == TipoRol.Admin) ? TipoRol.Usuario : TipoRol.Admin;
-
-                DatabaseServicie.GetConexion()?.Update(usuario);
-
- 
-                dgUsuarios.ItemsSource = null;
-                CargarTablas();
-            }
-        }
 
         // MÉTODO PARA ELIMINAR USUARIO
         private void btnEliminarUsuario_Click(object sender, RoutedEventArgs e)
@@ -97,7 +69,56 @@ namespace PeliculasStudio.Vistas
                 }
             }
         }
+        private void btnCambiarRol_Click(object sender, RoutedEventArgs e)
+        {
+            var usuarioAEditar = (sender as Button)?.DataContext as Usuario;
 
+            // Verificamos que existan tanto el usuario a editar como la sesión del admin
+            if (usuarioAEditar != null && _adminLogueado != null)
+            {
+                string nuevoRol = (usuarioAEditar.Rol == TipoRol.Admin) ? "Usuario" : "Administrador";
+
+                // 1. Confirmación de intención
+                if (MessageBox.Show($"¿Deseas cambiar el rol de {usuarioAEditar.Nombreusuario} a {nuevoRol}?",
+                    "Confirmación", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No) return;
+
+                // 2. Validación de seguridad: No dejar el sistema sin administradores
+                if (usuarioAEditar.Rol == TipoRol.Admin)
+                {
+                    var numAdmins = DatabaseServicie.GetConexion()?.Table<Usuario>().Count(u => u.Rol == TipoRol.Admin) ?? 0;
+                    if (numAdmins <= 1)
+                    {
+                        MessageBox.Show("Acción denegada: No se puede eliminar al último administrador del sistema.",
+                            "Error de Seguridad", MessageBoxButton.OK, MessageBoxImage.Stop);
+                        return;
+                    }
+                }
+
+                // 3. Ventana de Password personalizada
+                var ventanaPass = new VentanaPassword();
+                if (ventanaPass.ShowDialog() == true)
+                {
+                    string passIntroducida = ventanaPass.Password;
+
+                    // 4. Verificación SHA256 contra el admin que tiene la sesión abierta
+                    if (Cifrado.VerifyPassword(passIntroducida, _adminLogueado.Contrasenia))
+                    {
+                        usuarioAEditar.Rol = (usuarioAEditar.Rol == TipoRol.Admin) ? TipoRol.Usuario : TipoRol.Admin;
+                        DatabaseServicie.GetConexion()?.Update(usuarioAEditar);
+
+                        // Limpiar y Recargar
+                        dgUsuarios.ItemsSource = null;
+                        CargarTablas();
+
+                        MessageBox.Show($"¡Éxito! {usuarioAEditar.Nombreusuario} ahora es {nuevoRol}.", "Actualizado", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("La contraseña introducida es incorrecta.", "Error de Autenticación", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+        }
         // MÉTODO PARA ELIMINAR PELÍCULA
         private void btnEliminarPelicula_Click(object sender, RoutedEventArgs e)
         {

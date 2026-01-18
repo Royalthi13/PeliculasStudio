@@ -25,5 +25,10 @@ namespace PeliculasStudio.Utilidades
                 return builder.ToString();
             }
         }
+        public static bool VerifyPassword(string pswdEntrada, string pswdHashGuardado)
+        {
+            string hashEntrada = HashPassword(pswdEntrada);
+            return hashEntrada == pswdHashGuardado;
+        }
     }
 }

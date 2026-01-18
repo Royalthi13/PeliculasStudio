@@ -71,12 +71,12 @@ namespace PeliculasStudio.Vistas
                 if (usuarioEncontrado.Rol == TipoRol.Admin)
                 {
                     // Si es ADMIN, lo mandamos a la vista de administración
-                    main?.Navegar(new UC_PanelAdmin(usuarioEncontrado.Nombreusuario));
+                    main?.Navegar(new UC_PanelAdmin(usuarioEncontrado));
                 }
                 else
                 {
                     // Si es USUARIO normal, lo mandamos al inicio normal
-                    main?.Navegar(new UC_Inicio(usuarioEncontrado.Nombreusuario));
+                    main?.Navegar(new UC_PanelAdmin(usuarioEncontrado));
                 }
             }
             else
