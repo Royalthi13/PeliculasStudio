@@ -24,10 +24,16 @@ namespace PeliculasStudio.Vistas
     public partial class UC_PanelAdmin : UserControl
     {
         private Usuario _adminLogueado;
+        private List<GeneroPelicula> _generosSeleccionados = new List<GeneroPelicula>();
+        private bool _ordenDescendente = true; 
+        private bool _cargandoFiltros = true;
+        private string _criterioOrden = "VistasDesc"; 
         public UC_PanelAdmin(Usuario admin)
         {
             InitializeComponent();
+            icGeneros.ItemsSource = Enum.GetValues(typeof(GeneroPelicula));
             _adminLogueado = admin;
+            _cargandoFiltros = false;
             CargarTablas();
         }
         private void CargarTablas()
@@ -262,9 +268,125 @@ namespace PeliculasStudio.Vistas
                 CargarTablas();
             }
         }
+        private void CargarPeliculasFiltradas()
+        {
+            var conexion = DatabaseServicie.GetConexion();
+            if (conexion == null) return;
 
+            var lista = conexion.Table<Pelicula>().ToList();
 
+            // FILTRO DE GÉNEROS
+            if (chkTodos.IsChecked == false && _generosSeleccionados.Count > 0)
+            {
+                lista = lista.Where(p => _generosSeleccionados.Contains(p.Genero)).ToList();
+            }
 
+            // LÓGICA DE ORDEN SEGÚN EL BOTÓN PULSADO
+            switch (_criterioOrden)
+            {
+                case "ID":
+                    lista = lista.OrderBy(p => p.Id).ToList();
+                    break;
+                case "VistasDesc":
+                    lista = lista.OrderByDescending(p => p.CantVisualizaciones).ToList();
+                    break;
+                case "VistasAsc":
+                    lista = lista.OrderBy(p => p.CantVisualizaciones).ToList();
+                    break;
+            }
+
+            dgPeliculas.ItemsSource = lista;
+        }
+
+        // EVENTOS DE LOS BOTONES
+        private void btnMasVistas_Click(object sender, RoutedEventArgs e)
+        {
+            _criterioOrden = "VistasDesc";
+            CargarPeliculasFiltradas();
+        }
+
+        private void btnMenosVistas_Click(object sender, RoutedEventArgs e)
+        {
+            _criterioOrden = "VistasAsc";
+            CargarPeliculasFiltradas();
+        }
+
+        private void btnOrdenID_Click(object sender, RoutedEventArgs e)
+        {
+            _criterioOrden = "ID";
+            CargarPeliculasFiltradas();
+        }
+        private void chkTodos_Click(object sender, RoutedEventArgs e)
+        {
+            // 1. Verificamos si se ha marcado el CheckBox
+            if (chkTodos.IsChecked == true)
+            {
+                // 2. Bloqueamos temporalmente los eventos para evitar bucles infinitos
+                _cargandoFiltros = true;
+
+                // 3. Limpiamos la lista de géneros seleccionados
+                _generosSeleccionados.Clear();
+
+                // 4. Recorremos visualmente los CheckBoxes de los géneros para desmarcarlos
+                foreach (var item in icGeneros.Items)
+                {
+                    // Buscamos el contenedor visual de cada género
+                    var container = icGeneros.ItemContainerGenerator.ContainerFromItem(item) as ContentPresenter;
+                    if (container != null)
+                    {
+                        // Buscamos el CheckBox dentro del DataTemplate
+                        var checkbox = VisualTreeHelper.GetChild(container, 0) as CheckBox;
+                        if (checkbox != null)
+                        {
+                            checkbox.IsChecked = false;
+                        }
+                    }
+                }
+
+                // 5. Desbloqueamos y refrescamos la tabla
+                _cargandoFiltros = false;
+                CargarPeliculasFiltradas();
+            }
+        }
+        /**
+ * Metodo Filtro Genero Changed:
+ * Se dispara tanto al marcar (Checked) como al desmarcar (Unchecked) un genero.
+ **/
+        private void FiltroGenero_Changed(object sender, RoutedEventArgs e)
+        {
+            // 1. Evitamos que se ejecute mientras inicializamos los componentes
+            if (_cargandoFiltros) return;
+
+            var chk = sender as CheckBox;
+            if (chk == null) return;
+
+            // El Content del CheckBox contiene el valor del Enum (ej: Terror)
+            var genero = (GeneroPelicula)chk.Content;
+
+            if (chk.IsChecked == true)
+            {
+                // Si el usuario marca un genero especifico, quitamos "Ver Todas"
+                chkTodos.IsChecked = false;
+
+                // Añadimos el genero a la lista de filtros activos si no esta
+                if (!_generosSeleccionados.Contains(genero))
+                {
+                    _generosSeleccionados.Add(genero);
+                }
+            }
+            else
+            {
+                // Si desmarca el genero, lo quitamos de la lista
+                _generosSeleccionados.Remove(genero);
+            }
+
+         
+            if (_generosSeleccionados.Count == 0)
+            {
+                chkTodos.IsChecked = true;
+            }
+            CargarPeliculasFiltradas();
+        }
 
 
     }

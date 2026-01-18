@@ -88,33 +88,85 @@
             </TabItem>
 
             <TabItem Header=" CATÁLOGO DE PELÍCULAS " Padding="10,5">
-                <DockPanel LastChildFill="True" Background="#333333">
-                    <Button x:Name="btnAbrirAniadir" 
-                Content="+ AÑADIR NUEVA PELÍCULA" 
-                DockPanel.Dock="Top"
-                Height="40" 
-                Margin="10" 
-                Background="#2ecc71" 
-                Foreground="White" 
-                FontWeight="Bold"
-                Click="btnNuevaPelicula_Click"/>
+                <DockPanel LastChildFill="True" Background="#1E1E1E">
+                    <Button x:Name="btnAbrirAniadir" Content="+ AÑADIR NUEVA PELÍCULA" DockPanel.Dock="Top"
+                Height="40" Margin="10,10,10,5" Background="#2ecc71" Foreground="White" 
+                FontWeight="Bold" Click="btnNuevaPelicula_Click" Cursor="Hand"/>
+
+                    <Border DockPanel.Dock="Top" Background="#252525" Margin="10,5" Padding="15" CornerRadius="8" BorderBrush="#333" BorderThickness="1">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                <TextBlock Text="FILTROS POR GÉNERO:" Foreground="#AAAAAA" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,15,0"/>
+                                <CheckBox x:Name="chkTodos" Content="VER TODAS" Foreground="#2ecc71" FontWeight="Bold" 
+                              VerticalAlignment="Center" IsChecked="True" Click="chkTodos_Click" Cursor="Hand"/>
+                            </StackPanel>
+
+                            <ItemsControl x:Name="icGeneros">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Content="{Binding}" Foreground="White" Margin="0,0,15,8" 
+                                      Checked="FiltroGenero_Changed" Unchecked="FiltroGenero_Changed" Cursor="Hand"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <Separator Background="#333" Margin="0,5,0,10"/>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="ORDENAR POR:" Foreground="#AAAAAA" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <Button Content="▲ Más Vistas" Click="btnMasVistas_Click" Margin="0,0,5,0" Padding="10,4" Background="#f39c12" Foreground="Black" FontWeight="Bold"/>
+                                <Button Content="▼ Menos Vistas" Click="btnMenosVistas_Click" Margin="0,0,5,0" Padding="10,4" Background="#e67e22" Foreground="Black" FontWeight="Bold"/>
+
+                                <Button Content="🆔 Por ID" Click="btnOrdenID_Click" Padding="10,4" Background="#3498db" Foreground="White" FontWeight="Bold"/>
+                        </StackPanel>
+                        </StackPanel>
+                    </Border>
 
                     <DataGrid x:Name="dgPeliculas" AutoGenerateColumns="False" IsReadOnly="True" 
-                  Background="#333333" RowBackground="White" AlternatingRowBackground="#F0F0F0"
-                  Margin="10,0,10,10">
+          Background="#1E1E1E" RowBackground="#2D2D2D" Foreground="White" 
+          AlternatingRowBackground="#353535" Margin="10,0,10,10"
+          GridLinesVisibility="None" BorderThickness="0">
+
+                        <DataGrid.Resources>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="#DDDDDD"/>
+                                <Setter Property="Foreground" Value="Black"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="Padding" Value="10,5"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                                <Setter Property="BorderBrush" Value="#333"/>
+                            </Style>
+                        </DataGrid.Resources>
+
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50"/>
                             <DataGridTextColumn Header="Título" Binding="{Binding Titulo}" Width="*"/>
                             <DataGridTextColumn Header="Género" Binding="{Binding Genero}" Width="100"/>
-                            <DataGridTextColumn Header="Vistas" Binding="{Binding CantVisualizaciones}" Width="60"/>
-                            <DataGridTextColumn Header="Trailer" Binding="{Binding TrailerPath}" Width="*"/>
-                            <DataGridTextColumn Header="Portada" Binding="{Binding PortadaPath}" Width="*"/>
+                            <DataGridTextColumn Header="Vistas" Binding="{Binding CantVisualizaciones}" Width="80"/>
 
-                            <DataGridTemplateColumn Header="Acciones" Width="100">
+                            <DataGridTemplateColumn Header="ACCIONES" Width="100">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="Eliminar" Click="btnEliminarPelicula_Click" 
-                                    Background="#e74c3c" Foreground="White" Padding="5,2"/>
+                                        <Button Content="Eliminar" 
+                            Click="btnEliminarPelicula_Click" 
+                            Background="#e74c3c" 
+                            Foreground="White" 
+                            FontWeight="Bold"
+                            Padding="8,2"
+                            BorderThickness="0"
+                            Cursor="Hand">
+                                            <Button.Resources>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="CornerRadius" Value="3"/>
+                                                </Style>
+                                            </Button.Resources>
+                                        </Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
