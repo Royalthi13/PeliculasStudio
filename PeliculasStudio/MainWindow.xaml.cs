@@ -22,7 +22,7 @@ namespace PeliculasStudio
         public MainWindow()
         {
             InitializeComponent();
-            Navegar(new UC_Login());
+            Navegar(new VideoLogo());
         }
 
         public void Navegar(UserControl nuevaVista)

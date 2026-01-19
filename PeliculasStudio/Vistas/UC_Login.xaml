@@ -8,91 +8,59 @@
              d:DesignHeight="450" d:DesignWidth="800"
              HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 
-    <Grid x:Name="GridPrincipal"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <Grid.Resources>
-            <Storyboard x:Key="AnimacionFondo" RepeatBehavior="Forever">
-                <PointAnimation Storyboard.TargetName="FocoLuz" 
-                        Storyboard.TargetProperty="Center"
-                        From="0.2,0.2" To="0.8,0.7" 
-                        Duration="0:0:12" 
-                        AutoReverse="True">
-                    <PointAnimation.EasingFunction>
-                        <QuadraticEase EasingMode="EaseInOut"/>
-                    </PointAnimation.EasingFunction>
-                </PointAnimation>
-            </Storyboard>
-        </Grid.Resources>
+    <Grid x:Name="GridPrincipal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 
         <Grid.Background>
-            <RadialGradientBrush x:Name="FocoLuz" Center="0.5,0.4" RadiusX="1.8" RadiusY="1.8">
-                <GradientStop Color="{DynamicResource ColorFocoCentro}" Offset="0"/>
-                <GradientStop Color="{DynamicResource ColorBasePantalla}" Offset="1"/>
-            </RadialGradientBrush>
+            <ImageBrush ImageSource="/Assets/Imagenes/FondoLogin.png" Stretch="UniformToFill"/>
         </Grid.Background>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
 
-        <!-- Barra superior con botón de tema alineado a la derecha -->
-        <Grid Grid.Row="0" Margin="10" Cursor="">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+        <Rectangle Opacity="0.85">
+            <Rectangle.Fill>
+                <RadialGradientBrush x:Name="FocoLuz" Center="0.5,0.4" RadiusX="1.8" RadiusY="1.8">
+                    <GradientStop Color="{DynamicResource ColorFocoCentro}" Offset="0"/>
+                   
+                </RadialGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
 
-            <!-- Espacio izquierdo (vacío) -->
-            <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center"/>
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
 
-            <!-- Botón de tema -->
-            <Grid Grid.Row="0" Margin="20,10,20,0">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+            <Border x:Name="BorderCentral" Grid.Row="1" 
+        Style="{DynamicResource EstiloBordeAnimado}"
+    
+        VerticalAlignment="Center" HorizontalAlignment="Center" Padding="0"
+        Margin="20" Width="450">
 
+                <Grid>
 
-
-                    <ToggleButton x:Name="btnTema" Width="100" Height="45" Cursor="Hand" 
-              HorizontalAlignment="Right" VerticalAlignment="Top"
-              Margin="0,10,20,0" Click="btnTema_Click">
+                    <ToggleButton x:Name="btnTema" Width="90" Height="35" Cursor="Hand" 
+                                  HorizontalAlignment="Right" VerticalAlignment="Top"
+                                  Margin="0,20,20,0" Click="btnTema_Click" Panel.ZIndex="100">
                         <ToggleButton.Style>
                             <Style TargetType="ToggleButton">
                                 <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="BorderBrush" Value="Transparent"/>
-                                <Setter Property="Foreground" Value="{DynamicResource BrushAccionResaltado}"/>
-                                <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                                <Setter Property="BorderBrush" Value="{DynamicResource BrushBordeControl}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource BrushTextoPrincipal}"/>
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="ToggleButton">
-                                            <Border x:Name="border" 
-                                Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                BorderThickness="1.5" 
-                                CornerRadius="22">
+                                            <Border x:Name="bordeTema" 
+                                                    Background="{TemplateBinding Background}" 
+                                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                                    BorderThickness="1" CornerRadius="17">
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                    <TextBlock x:Name="txtLabel" Text="TEMA" FontSize="11" FontWeight="ExtraBold" 
-                                           VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                                    <TextBlock x:Name="txtIcon" Text="☀" FontSize="20" VerticalAlignment="Center"/>
+                                                    <TextBlock x:Name="txtIcon" Text="☀" FontSize="16" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                                    <TextBlock Text="TEMA" FontSize="11" FontWeight="Bold" VerticalAlignment="Center"/>
                                                 </StackPanel>
                                             </Border>
-
                                             <ControlTemplate.Triggers>
-                                                <Trigger Property="IsPressed" Value="True">
-                                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource BrushSeparador}"/>
-                                                    <Setter Property="RenderTransform">
-                                                        <Setter.Value>
-                                                            <ScaleTransform ScaleX="0.92" ScaleY="0.92"/>
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Trigger>
-
                                                 <Trigger Property="IsChecked" Value="True">
                                                     <Setter TargetName="txtIcon" Property="Text" Value="☾"/>
-                                                    <Setter Property="Foreground" Value="{DynamicResource BrushTextoPrincipal}"/>
-                                                    <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource BrushBordeControl}"/>
                                                 </Trigger>
-
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource BrushInput}"/>
-                                                    <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource BrushAccionResaltado}"/>
+                                                    <Setter TargetName="bordeTema" Property="Background" Value="{DynamicResource BrushInput}"/>
+                                                    <Setter TargetName="bordeTema" Property="BorderBrush" Value="{DynamicResource BrushAccionResaltado}"/>
+                                                    <Setter Property="Foreground" Value="{DynamicResource BrushAccionResaltado}"/>
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
@@ -101,119 +69,48 @@
                             </Style>
                         </ToggleButton.Style>
                     </ToggleButton>
-                </StackPanel>
-            </Grid>
+
+                    <StackPanel Margin="40,50,40,40">
+                        <StackPanel Margin="0,0,0,30">
+                            <TextBlock x:Name="txtTitulo" Text="PELÍCULAS STUDIO" FontSize="30" FontWeight="Black" 
+                                       HorizontalAlignment="Center" Foreground="{DynamicResource BrushAccionResaltado}">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect BlurRadius="10" Color="{DynamicResource ColorCentroDegradado}" ShadowDepth="0" Opacity="0.5"/>
+                                </TextBlock.Effect>
+                            </TextBlock>
+                            <TextBlock Text="Iniciar Sesión" FontSize="16" Foreground="{DynamicResource BrushTextoSecundario}" 
+                                       HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                        </StackPanel>
+                        
+                        <StackPanel>
+                            <TextBlock Text="Usuario" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,8" Foreground="{DynamicResource BrushTextoSecundario}"/>
+                            <TextBox x:Name="txtUsuario" Height="40" VerticalContentAlignment="Center" Padding="10,0" 
+                                     BorderBrush="{DynamicResource BrushBordeControl}" BorderThickness="0,0,0,1" 
+                                     Background="{DynamicResource BrushInput}" Foreground="{DynamicResource BrushTextoPrincipal}"/>
+
+                            <TextBlock Text="Contraseña" FontSize="14" FontWeight="SemiBold" Margin="0,20,0,8" Foreground="{DynamicResource BrushTextoSecundario}"/>
+                            <PasswordBox x:Name="txtPassword" Height="40" VerticalContentAlignment="Center" Padding="10,0" 
+                                         BorderBrush="{DynamicResource BrushBordeControl}" BorderThickness="0,0,0,1" 
+                                         Background="{DynamicResource BrushInput}" Foreground="{DynamicResource BrushTextoPrincipal}"/>
+
+                            <Button x:Name="btnIniciarSesion" Content="ENTRAR" Margin="0,35,0,15" Height="50" Cursor="Hand"
+                                    Background="{DynamicResource BrushAccionResaltado}" Foreground="White" 
+                                    FontWeight="Bold" FontSize="16" Click="btnIniciarSesion_Click">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="25"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+
+                            <Button x:Name="btnIrARegistro" Content="¿No tienes cuenta? Regístrate" 
+                                    Background="Transparent" BorderThickness="0" 
+                                    Foreground="{DynamicResource BrushAccionResaltado}" Cursor="Hand" FontSize="13" 
+                                    Click="btnIrARegistro_Click" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
         </Grid>
-
-        <!-- Contenido principal -->
-        <Border x:Name="BorderCentral" Grid.Row="1" 
-        Style="{DynamicResource EstiloBordeAnimado}"
-        Padding="40" 
-        VerticalAlignment="Center" HorizontalAlignment="Center" 
-        Margin="40" MaxWidth="450">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <StackPanel Margin="0,0,0,30">
-                    <TextBlock x:Name="txtTitulo" 
-           Text="PELÍCULAS STUDIO" 
-           FontSize="28" 
-           FontWeight="ExtraBold" 
-           HorizontalAlignment="Center" 
-           Foreground="{DynamicResource BrushAccionResaltado}">
-
-                        <TextBlock.Effect>
-                            <DropShadowEffect BlurRadius="15" 
-                          Color="{DynamicResource ColorCentroDegradado}" 
-                          ShadowDepth="0" 
-                          Opacity="0.8"/>
-                        </TextBlock.Effect>
-
-                        <TextBlock.LayoutTransform>
-                            <ScaleTransform ScaleX="1.2" />
-                        </TextBlock.LayoutTransform>
-
-                    </TextBlock>
-
-                    <Rectangle Height="2" Width="80" 
-                       Fill="{DynamicResource BrushAccionResaltado}" 
-                       Margin="0,12,0,0" HorizontalAlignment="Center">
-                        <Rectangle.Effect>
-                            <BlurEffect Radius="2"/>
-                        </Rectangle.Effect>
-                    </Rectangle>
-                </StackPanel>
-
-                <StackPanel Grid.Row="1">
-                    <TextBlock x:Name="lblUsuario" Text="Usuario" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,8" 
-                       Foreground="{DynamicResource BrushTextoSecundario}"/>
-                    <TextBox x:Name="txtUsuario" Height="35" VerticalContentAlignment="Center" Padding="10,0" 
-                     BorderBrush="{DynamicResource BrushBordeControl}" BorderThickness="0,0,0,2" 
-                     Background="{DynamicResource BrushInput}"
-                     Foreground="{DynamicResource BrushTextoPrincipal}"/>
-
-                    <TextBlock x:Name="lblPass" Text="Contraseña" FontSize="14" FontWeight="SemiBold" Margin="0,20,0,8" 
-                       Foreground="{DynamicResource BrushTextoSecundario}"/>
-                    <PasswordBox x:Name="txtPassword" Height="35" VerticalContentAlignment="Center" Padding="10,0" 
-                         BorderBrush="{DynamicResource BrushBordeControl}" BorderThickness="0,0,0,2" 
-                         Background="{DynamicResource BrushInput}"
-                         Foreground="{DynamicResource BrushTextoPrincipal}"/>
-
-                    <Button x:Name="btnIniciarSesion" Content="Iniciar Sesion" 
-                    Margin="0,35,0,15" Height="45" Cursor="Hand"
-                    Background="{DynamicResource BrushAccionResaltado}" Foreground="White" 
-                    FontWeight="Bold" FontSize="14"
-                    RenderTransformOrigin="0.5,0.5" IsDefault="True" Click="btnIniciarSesion_Click">
-
-                        <Button.RenderTransform>
-                            <ScaleTransform x:Name="botonScale" ScaleX="1" ScaleY="1" />
-                        </Button.RenderTransform>
-
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border Background="{TemplateBinding Background}" CornerRadius="22" BorderThickness="0">
-                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#005A9E"/>
-                                        <Trigger.EnterActions>
-                                            <BeginStoryboard>
-                                                <Storyboard>
-                                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" To="1.05" Duration="0:0:0.1"/>
-                                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" To="1.05" Duration="0:0:0.1"/>
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </Trigger.EnterActions>
-                                        <Trigger.ExitActions>
-                                            <BeginStoryboard>
-                                                <Storyboard>
-                                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" To="1" Duration="0:0:0.1"/>
-                                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" To="1" Duration="0:0:0.1"/>
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </Trigger.ExitActions>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-
-                    <Button x:Name="btnIrARegistro" Content="Crear una cuenta nueva" 
-                    Background="Transparent" BorderBrush="Transparent" 
-                    Foreground="{DynamicResource BrushAccionResaltado}" Cursor="Hand" FontSize="12" FontWeight="Medium"
-                    Click="btnIrARegistro_Click"/>
-                </StackPanel>
-            </Grid>
-        </Border>
     </Grid>
 </UserControl>
