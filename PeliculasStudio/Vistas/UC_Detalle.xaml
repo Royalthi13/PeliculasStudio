@@ -6,8 +6,174 @@
              xmlns:local="clr-namespace:PeliculasStudio.Vistas"
              xmlns:vlc="clr-namespace:LibVLCSharp.WPF;assembly=LibVLCSharp.WPF"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <vlc:VideoView x:Name="VlcPlayer" />
+             d:DesignHeight="700" d:DesignWidth="1000">
+    <Grid Background="{DynamicResource BrushPantalla}">
+
+        <Grid x:Name="GridInfo" Visibility="Visible">
+
+            <Grid>
+                <Image x:Name="imgFondo" Stretch="UniformToFill" Opacity="0.4">
+                    <Image.Effect>
+                        <BlurEffect Radius="80"/>
+                    </Image.Effect>
+                </Image>
+                <Rectangle Fill="{DynamicResource BrushPantalla}" Opacity="0.8"/>
+            </Grid>
+
+            <Grid Margin="40">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="380"/>
+                </Grid.ColumnDefinitions>
+
+                <ScrollViewer Grid.Column="0" Margin="0,0,40,0" VerticalScrollBarVisibility="Hidden">
+                    <StackPanel VerticalAlignment="Center">
+
+                        <Button HorizontalAlignment="Left" Click="BtnVolver_Click" 
+                                Width="45" Height="45" Margin="0,0,0,30" Cursor="Hand"
+                                Background="#33888888" BorderThickness="0">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="25">
+                                        <TextBlock Text="🡠" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                                   FontSize="24" Foreground="{DynamicResource BrushTextoPrincipal}" FontWeight="Bold" Margin="0,0,2,2"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource BrushAccionResaltado}"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+
+                        <TextBlock x:Name="txtTitulo" FontSize="50" FontWeight="Black" 
+                                   Foreground="{DynamicResource BrushTextoPrincipal}" 
+                                   TextWrapping="Wrap" LineHeight="55">
+                            <TextBlock.Effect>
+                                <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.3" Color="Black"/>
+                            </TextBlock.Effect>
+                        </TextBlock>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,20">
+                            <Border Background="{DynamicResource BrushAccionResaltado}" CornerRadius="6" Padding="12,5" VerticalAlignment="Center">
+                                <TextBlock x:Name="txtAnio" Foreground="White" FontWeight="Bold" FontSize="14"/>
+                            </Border>
+
+                            <TextBlock x:Name="txtGenero" Foreground="{DynamicResource BrushTextoPrincipal}" FontSize="16" Margin="15,0" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                            <TextBlock Text="•" Foreground="{DynamicResource BrushTextoSecundario}" FontSize="16" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="txtVistas" Foreground="{DynamicResource BrushTextoAyuda}" FontSize="14" Margin="15,0" VerticalAlignment="Center" FontStyle="Italic"/>
+                        </StackPanel>
+
+                        <TextBlock Text="SINOPSIS" Foreground="{DynamicResource BrushAccionResaltado}" FontWeight="Bold" Margin="0,25,0,10" FontSize="14"/>
+
+                        <TextBlock x:Name="txtResumen" Foreground="{DynamicResource BrushTextoSecundario}" FontSize="17" 
+                                   TextWrapping="Wrap" LineHeight="26" TextAlignment="Left" MaxWidth="700" HorizontalAlignment="Left"/>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,40">
+                            <Button Content="▶ VER TRAILER" Width="200" Height="55" 
+                                    Background="{DynamicResource BrushAccionResaltado}" Foreground="White" 
+                                    FontSize="15" FontWeight="ExtraBold" Cursor="Hand" Click="BtnReproducir_Click">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="27"/>
+                                    </Style>
+                                </Button.Resources>
+                                <Button.Effect>
+                                    <DropShadowEffect BlurRadius="15" Color="{DynamicResource ColorCentroDegradado}" Opacity="0.4"/>
+                                </Button.Effect>
+                            </Button>
+
+                            <Button x:Name="btnEliminar" Content="🗑 Eliminar" Visibility="Collapsed" 
+                                    Margin="20,0" Padding="25,0" Height="55"
+                                    Background="Transparent" BorderBrush="{DynamicResource BrushMensajeError}" BorderThickness="2" 
+                                    Foreground="{DynamicResource BrushMensajeError}" 
+                                    FontWeight="SemiBold" Cursor="Hand" Click="BtnEliminar_Click">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="27"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <Grid Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+                    <Border CornerRadius="15" Background="{DynamicResource BrushFormulario}" Margin="10" Padding="5">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="25" ShadowDepth="5" Opacity="0.4" Color="Black"/>
+                        </Border.Effect>
+                        <Border CornerRadius="12" ClipToBounds="True">
+                            <Image x:Name="imgPortada" Stretch="Uniform" MaxHeight="500"/>
+                        </Border>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <Grid x:Name="GridPlayer" Visibility="Collapsed" Background="Black">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <vlc:VideoView x:Name="VlcPlayer" Grid.Row="0"/>
+
+            <Border Grid.Row="1" Background="{DynamicResource BrushFormulario}" Padding="30,20">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Slider x:Name="sliderTime" Grid.Row="0" Minimum="0" Maximum="100" Margin="0,0,0,20" 
+                            IsMoveToPointEnabled="True" Cursor="Hand"
+                            PreviewMouseLeftButtonDown="SliderTime_MouseDown" 
+                            PreviewMouseLeftButtonUp="SliderTime_MouseUp"
+                            Foreground="{DynamicResource BrushAccionResaltado}"/>
+
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Content="-10s" Click="BtnRetroceder_Click" Style="{StaticResource BotonNeon}" Width="70" Height="40" FontSize="12"/>
+
+                        <Button x:Name="btnPlayPause" Content="⏸" Click="BtnPlayPause_Click" 
+                                Width="60" Height="60" Margin="30,0" FontSize="28" Padding="0,0,0,4"
+                                Background="{DynamicResource BrushAccionResaltado}" Foreground="White" BorderThickness="0">
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="30"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+
+                        <Button Content="+10s" Click="BtnAvanzar_Click" Style="{StaticResource BotonNeon}" Width="70" Height="40" FontSize="12"/>
+
+                        <Button Content="✕ SALIR" Click="BtnCerrarVideo_Click" 
+                                Margin="60,0,0,0" Background="Transparent" 
+                                Foreground="{DynamicResource BrushTextoSecundario}" 
+                                BorderThickness="0" FontWeight="Bold" Cursor="Hand">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <TextBlock Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" VerticalAlignment="Center"/>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Foreground" Value="{DynamicResource BrushAccionResaltado}"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+
     </Grid>
 </UserControl>
