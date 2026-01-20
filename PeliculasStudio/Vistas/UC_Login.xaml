@@ -95,8 +95,12 @@
 
                             <Button x:Name="btnIniciarSesion" Content="ENTRAR" Margin="0,35,0,15" Height="50" Cursor="Hand"
                                     Background="{DynamicResource BrushAccionResaltado}" Foreground="White" 
+<<<<<<< HEAD
                                     FontWeight="Bold" FontSize="16" Click="btnIniciarSesion_Click"
                                     IsDefault="True">
+=======
+                                    FontWeight="Bold" FontSize="16" Click="btnIniciarSesion_Click">
+>>>>>>> 37ed4e33c671f1ec2bdaa6fb8d6f89bf9979e454
                                 <Button.Resources>
                                     <Style TargetType="Border">
                                         <Setter Property="CornerRadius" Value="25"/>
