@@ -97,7 +97,7 @@ namespace PeliculasStudio.Vistas
                         DatabaseServicie.BorrarUsuario(usuarioAEliminar.Id);
 
                      
-                        dgUsuarios.ItemsSource = null;
+                        dgUsuarios.Items.Refresh(); ;
                         CargarTablas();
 
                         MessageBox.Show($"El usuario '{usuarioAEliminar.Nombreusuario}' ha sido eliminado correctamente.", "Usuario Borrado");
