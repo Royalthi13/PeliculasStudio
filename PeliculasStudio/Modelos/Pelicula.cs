@@ -43,7 +43,7 @@ namespace PeliculasStudio.Modelos
         public string PortadaPath { get; set; }
 
         [NotNull]
-        public int CantVisualizaciones { get; set; } = 0;
+        public int CantVisualizaciones { get; set; }
 
 
         [Ignore] // Le decimos a la base de datos que ignore esto, es solo visual

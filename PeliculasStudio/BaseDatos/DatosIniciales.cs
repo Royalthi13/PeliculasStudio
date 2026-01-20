@@ -23,8 +23,10 @@ namespace PeliculasStudio.BaseDatos
                                     descubre un secreto oculto que podría
                                     cambiar el mundo.",
                         TrailerPath = "Blade Runner 2049.mp4",
-                        PortadaPath = "Blade_Runner.jpg"
+                        PortadaPath = "Blade_Runner.jpg",
+                        CantVisualizaciones=5
                     },
+
                     new Pelicula {
                         Titulo = "La Odisea",
                         Anio = 2026,
@@ -32,7 +34,8 @@ namespace PeliculasStudio.BaseDatos
                         Resumen = @"Una epopeya mitológica que sigue la historia de Odiseo
                                     y su largo viaje a casa, de 10 años de duración, tras la guerra de Troya.",
                         TrailerPath = "La Odisea.mp4",
-                        PortadaPath = "La Odisea.jpg"
+                        PortadaPath = "La Odisea.jpg",
+                        CantVisualizaciones=10
                     },
                     new Pelicula {
                 Titulo = "Expediente Warren: El último rito",
@@ -42,7 +45,8 @@ namespace PeliculasStudio.BaseDatos
                                 se enfrentan a un último caso aterrador
                         en el que están implicadas entidades misteriosas a las que deben enfrentarse.",
                 TrailerPath = "Expediente-Warren-El-ultimo-rito.mp4",
-                PortadaPath = "Expediente_Warrem_El_Ultimo_Rito.jpg"
+                PortadaPath = "Expediente_Warrem_El_Ultimo_Rito.jpg",
+                CantVisualizaciones=18
             },
                     new Pelicula {
                 Titulo = "El Diario de Noa",
@@ -56,7 +60,8 @@ namespace PeliculasStudio.BaseDatos
                     se enamoraron profundamente y pasaron juntos un verano inolvidable, antes de ser separados,
                     primero por sus padres, y más tarde por la guerra.",
                 TrailerPath = "El Diario de Noa.mp4",
-                PortadaPath = "EL_Diario_De_Noa.jpg"
+                PortadaPath = "EL_Diario_De_Noa.jpg",
+                CantVisualizaciones=7
             },
 
                     new Pelicula {
@@ -65,7 +70,8 @@ namespace PeliculasStudio.BaseDatos
                     Genero = GeneroPelicula.Drama,
                     Resumen = "Ben Campbell, un tímido y brillante estudiante del M.I.T., recurre a los naipes y a un grupo de estudiantes liderados por un profesor para ganar una fortuna en Las Vegas.",
                     TrailerPath = "21 Black Jack.mp4",
-                    PortadaPath = "21 Black Jack.jpg"
+                    PortadaPath = "21 Black Jack.jpg",
+                    CantVisualizaciones=7
                 },
                 new Pelicula {
                     Titulo = "American History X",
@@ -73,7 +79,8 @@ namespace PeliculasStudio.BaseDatos
                     Genero = GeneroPelicula.Drama,
                     Resumen = "Derek Vinyard, un joven líder neonazi, va a prisión por asesinato. Al salir, intenta evitar que su hermano pequeño siga el mismo camino de odio y violencia.",
                     TrailerPath = "American History X.mp4",
-                    PortadaPath = "American History X.jpg"
+                    PortadaPath = "American History X.jpg",
+                    CantVisualizaciones=7
                 },
                 new Pelicula {
                     Titulo = "Vengadores: Endgame",
@@ -81,7 +88,8 @@ namespace PeliculasStudio.BaseDatos
                     Genero = GeneroPelicula.Accion,
                     Resumen = "Tras los devastadores eventos de Infinity War, el universo está en ruinas. Con la ayuda de los aliados restantes, los Vengadores se reúnen para deshacer las acciones de Thanos.",
                     TrailerPath = "Avengers_EndGame.mp4",
-                    PortadaPath = "Avengers_EndGame.jpg"
+                    PortadaPath = "Avengers_EndGame.jpg",
+                    CantVisualizaciones=1
                 },
                 new Pelicula {
                     Titulo = "Braveheart",
@@ -89,7 +97,8 @@ namespace PeliculasStudio.BaseDatos
                     Genero = GeneroPelicula.Accion,
                     Resumen = "En el siglo XIV, los escoceses viven oprimidos por los ingleses. William Wallace regresa a su tierra y lidera un levantamiento contra el rey Eduardo I.",
                     TrailerPath = "Braveheart.mp4",
-                    PortadaPath = "Braveheart.jpg"
+                    PortadaPath = "Braveheart.jpg",
+                    CantVisualizaciones=30
                 },
                 new Pelicula {
                     Titulo = "Django Desencadenado",
@@ -97,7 +106,8 @@ namespace PeliculasStudio.BaseDatos
                     Genero = GeneroPelicula.Western,
                     Resumen = "Acompañado por un cazarrecompensas alemán, un esclavo liberado viaja a través de Estados Unidos para rescatar a su esposa de un sádico propietario de plantaciones.",
                     TrailerPath = "Django Desencadenado.mp4",
-                    PortadaPath = "Django Desencadenado.jpg"
+                    PortadaPath = "Django Desencadenado.jpg",
+                    CantVisualizaciones=1
                 },
                 new Pelicula {
                     Titulo = "Dune",
@@ -105,7 +115,9 @@ namespace PeliculasStudio.BaseDatos
                     Genero =  GeneroPelicula.CienciaFiccion,
                     Resumen = "Paul Atreides, un joven brillante nacido con un destino más grande que él mismo, debe viajar al planeta más peligroso del universo para asegurar el futuro de su familia y su pueblo.",
                     TrailerPath = "Dune.mp4",
-                    PortadaPath = "Dune.jpg"
+                    PortadaPath = "Dune.jpg",
+                    CantVisualizaciones=10
+
                 },
                 new Pelicula {
                     Titulo = "Dune: Parte Dos",
@@ -235,7 +247,7 @@ namespace PeliculasStudio.BaseDatos
                     TrailerPath = "La monja II.mp4",
                     PortadaPath = "La monja II.jpg"
                 },
-               
+
                 new Pelicula {
                     Titulo = "La vida es bella",
                     Anio = 1997,
