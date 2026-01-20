@@ -10,22 +10,28 @@ using System.Windows.Media.Imaging;
 
 namespace PeliculasStudio.Vistas
 {
+    public enum OrigenNavegacion
+    {
+        Inicio,
+        Catalogo
+    }
     public partial class UC_Detalle : UserControl, IDisposable
     {
         private readonly LibVLC _libVlc;
         private readonly MediaPlayer _mediaPlayer;
         private readonly Pelicula _pelicula;
         private readonly Usuario _usuarioAnterior;
+        private readonly OrigenNavegacion _origen;
         private bool _isDraggingSlider = false;
 
-        public UC_Detalle(Pelicula pelicula, Usuario usuario)
+        public UC_Detalle(Pelicula pelicula, Usuario usuario, OrigenNavegacion origen)
         {
             InitializeComponent();
 
             _pelicula = pelicula;
             _usuarioAnterior = usuario;
+            _origen = origen;
 
-           
             Core.Initialize();
             _libVlc = new LibVLC();
             _mediaPlayer = new MediaPlayer(_libVlc);
@@ -78,10 +84,15 @@ namespace PeliculasStudio.Vistas
             GridInfo.Visibility = Visibility.Collapsed;
             GridPlayer.Visibility = Visibility.Visible;
 
-            // Play
             using (var media = new Media(_libVlc, new Uri(rutaVideo)))
             {
                 _mediaPlayer.Play(media);
+            }
+            long tiempoGuardado = DatabaseServicie.ObtenerTiempoVisto(_usuarioAnterior.Id, _pelicula.Id);
+            if (tiempoGuardado > 0)
+            {
+              
+                _mediaPlayer.Time = tiempoGuardado / 10000;
             }
             btnPlayPause.Content = "⏸";
         }
@@ -117,7 +128,20 @@ namespace PeliculasStudio.Vistas
 
         private void CerrarVideo()
         {
-            if (_mediaPlayer.IsPlaying) _mediaPlayer.Stop();
+            if (_mediaPlayer.IsPlaying)
+            {
+                _mediaPlayer.Pause(); 
+
+                
+                DatabaseServicie.GuardarProgreso(
+                    _usuarioAnterior.Id,
+                    _pelicula.Id,
+                    _mediaPlayer.Time * 10000, 
+                    _mediaPlayer.Length * 10000
+                );
+
+                _mediaPlayer.Stop();
+            }
             GridPlayer.Visibility = Visibility.Collapsed;
             GridInfo.Visibility = Visibility.Visible;
         }
@@ -158,7 +182,19 @@ namespace PeliculasStudio.Vistas
         {
             Dispose();
             var main = Window.GetWindow(this) as MainWindow;
-            main?.Navegar(new UC_Inicio(_usuarioAnterior));
+            if (main != null)
+            {
+                if (_origen == OrigenNavegacion.Catalogo)
+                {
+                   
+                    main.Navegar(new UC_Catalogo(_usuarioAnterior));
+                }
+                else
+                {
+                    
+                    main.Navegar(new UC_Inicio(_usuarioAnterior));
+                }
+            }
         }
 
         public void Dispose()

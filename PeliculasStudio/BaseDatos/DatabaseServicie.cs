@@ -47,6 +47,7 @@ namespace PeliculasStudio.BaseDatos
             }
             db.CreateTable<Pelicula>();
             db.CreateTable<Usuario>();
+            db.CreateTable<ProgresoVisualizacion>();
 
             IntegrarDatos();
         }
@@ -302,6 +303,63 @@ namespace PeliculasStudio.BaseDatos
             {
                 return "Error al intentar eliminar la película: " + ex.Message;
             }
+        }
+
+        public static void GuardarProgreso(int usuarioId, int peliculaId, long tiempoVisto, long duracionTotal)
+        {
+            if (db == null) Inicializar();
+            var progreso = db!.Table<ProgresoVisualizacion>()
+                             .FirstOrDefault(p => p.UsuarioId == usuarioId && p.PeliculaId == peliculaId);
+
+            if (progreso == null)
+            {
+                progreso = new ProgresoVisualizacion
+                {
+                    UsuarioId = usuarioId,
+                    PeliculaId = peliculaId
+                };
+            }
+
+            progreso.TiempoVistoTicks = tiempoVisto;
+            progreso.DuracionTotalTicks = duracionTotal;
+            progreso.UltimaVisualizacion = DateTime.Now;
+
+            if (progreso.Id == 0) db.Insert(progreso);
+            else db.Update(progreso);
+        }
+
+        public static List<Pelicula> ObtenerPeliculasSeguirViendo(int usuarioId)
+        {
+            if (db == null) Inicializar();
+
+            // Obtenemos los progresos del usuario, ordenados por fecha descendente
+            var progresos = db!.Table<ProgresoVisualizacion>()
+                               .Where(p => p.UsuarioId == usuarioId)
+                               .OrderByDescending(p => p.UltimaVisualizacion)
+                               .ToList();
+
+            var peliculas = new List<Pelicula>();
+            foreach (var p in progresos)
+            {
+               
+                if (p.PorcentajeVisto < 0.95)
+                {
+                    var pelicula = db.Table<Pelicula>().FirstOrDefault(m => m.Id == p.PeliculaId);
+                    if (pelicula != null)
+                    {
+                        peliculas.Add(pelicula);
+                    }
+                }
+            }
+            return peliculas;
+        }
+
+        public static long ObtenerTiempoVisto(int usuarioId, int peliculaId)
+        {
+            if (db == null) Inicializar();
+            var progreso = db!.Table<ProgresoVisualizacion>()
+                             .FirstOrDefault(p => p.UsuarioId == usuarioId && p.PeliculaId == peliculaId);
+            return progreso?.TiempoVistoTicks ?? 0;
         }
     }
 }
