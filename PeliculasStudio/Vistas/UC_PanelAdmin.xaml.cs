@@ -121,6 +121,7 @@ namespace PeliculasStudio.Vistas
          **/
         private void btnCambiarRol_Click(object sender, RoutedEventArgs e)
         {
+            
             var usuarioAEditar = (sender as Button)?.DataContext as Usuario;
 
       
@@ -156,8 +157,8 @@ namespace PeliculasStudio.Vistas
                         usuarioAEditar.Rol = (usuarioAEditar.Rol == TipoRol.Admin) ? TipoRol.Usuario : TipoRol.Admin;
                         DatabaseServicie.GetConexion()?.Update(usuarioAEditar);
 
-                     
-                        dgUsuarios.ItemsSource = null;
+
+                        dgUsuarios.Items.Refresh(); ;
                         CargarTablas();
 
                         MessageBox.Show($"¡Éxito! {usuarioAEditar.Nombreusuario} ahora es {nuevoRol}.", "Actualizado");
@@ -349,9 +350,9 @@ namespace PeliculasStudio.Vistas
             }
         }
         /**
- * Metodo Filtro Genero Changed:
- * Se dispara tanto al marcar (Checked) como al desmarcar (Unchecked) un genero.
- **/
+         * Metodo Filtro Genero Changed:
+         * Se dispara tanto al marcar (Checked) como al desmarcar (Unchecked) un genero.
+         **/
         private void FiltroGenero_Changed(object sender, RoutedEventArgs e)
         {
             // 1. Evitamos que se ejecute mientras inicializamos los componentes

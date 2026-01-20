@@ -142,7 +142,7 @@
                      Background="{DynamicResource BrushInput}" 
                      Foreground="{DynamicResource BrushTextoPrincipal}"
                      BorderBrush="{DynamicResource BrushBordeControl}"
-                     PasswordChanged="txtRepeatPassword_PasswordChanged">
+                     PasswordChanged="txtRepeatPassword_PasswordChanged" Cursor="">
                         <PasswordBox.Style>
                             <Style TargetType="PasswordBox">
                                 <Setter Property="Template">
