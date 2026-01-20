@@ -15,47 +15,60 @@ namespace PeliculasStudio.Vistas
     public partial class UC_Inicio : UserControl
     {
         private readonly Usuario _usuarioActual;
-
-       
-        private static List<Pelicula> _peliculasTendenciaCache;
-        private static Pelicula _peliculaDestacadaCache;
+        private static List<Pelicula> _peliculasRecomendadas;
+        private static List<Pelicula> _peliculasSeguirViendo; 
+        private static Pelicula _peliculaBanner;
 
         public UC_Inicio(Usuario usuario)
         {
             InitializeComponent();
             _usuarioActual = usuario;
-            btnTema.IsChecked = App.IsDarkMode;
 
-            CargarPeliculas();
+        
+            listaSeguirViendoScrollViewer.PreviewMouseWheel += ScrollViewer_PreviewMouseWheel;
+            listaDestacadosScrollViewer.PreviewMouseWheel += ScrollViewer_PreviewMouseWheel;
+
+            CargarDatos();
         }
 
-        private void CargarPeliculas()
+        private void CargarDatos()
         {
-
-            if (_peliculasTendenciaCache != null && _peliculaDestacadaCache != null)
-            {
-
-                listaDestacados.ItemsSource = _peliculasTendenciaCache;
-                CargarBanner(_peliculaDestacadaCache);
-                return;
-
-            }
-
             var db = DatabaseServicie.GetConexion();
             if (db == null) return;
 
-            var todasLasPelis = db.Table<Pelicula>().ToList();
-            if (todasLasPelis.Count == 0) return;
+            var todas = db.Table<Pelicula>().ToList();
+            if (todas.Count == 0) return;
 
-            var pelisRandom = todasLasPelis.OrderBy(x => Guid.NewGuid()).ToList();
+           
+            if (_peliculasRecomendadas == null || _peliculaBanner == null)
+            {
+                var random = new Random();
+                var mezcladas = todas.OrderBy(x => random.Next()).ToList();
+                _peliculaBanner = mezcladas.First();
+          
+                _peliculasRecomendadas = mezcladas.Skip(1).Take(10).ToList();
+            }
+
+            _peliculasSeguirViendo = DatabaseServicie.ObtenerPeliculasSeguirViendo(_usuarioActual.Id);
+
+         
+            CargarBanner(_peliculaBanner);
 
           
-            _peliculaDestacadaCache = pelisRandom.First();
-            _peliculasTendenciaCache = pelisRandom.Skip(1).Take(4).ToList();
+            listaDestacados.ItemsSource = _peliculasRecomendadas;
 
-          
-            listaDestacados.ItemsSource = _peliculasTendenciaCache;
-            CargarBanner(_peliculaDestacadaCache);
+            
+            if (_peliculasSeguirViendo != null && _peliculasSeguirViendo.Count > 0)
+            {
+                txtSeguirViendo.Visibility = Visibility.Visible;
+                listaSeguirViendoScrollViewer.Visibility = Visibility.Visible;
+                listaSeguirViendo.ItemsSource = _peliculasSeguirViendo;
+            }
+            else
+            {
+                txtSeguirViendo.Visibility = Visibility.Collapsed;
+                listaSeguirViendoScrollViewer.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void CargarBanner(Pelicula peli)
@@ -64,15 +77,70 @@ namespace PeliculasStudio.Vistas
             {
                 try
                 {
-                    imgBanner.Source = new BitmapImage(new Uri(peli.RutaImagenCompleta, UriKind.Absolute));
+                    var bitmap = new BitmapImage(new Uri(peli.RutaImagenCompleta));
+                    imgBanner.Source = bitmap;
+                   
                     txtBannerTitulo.Text = peli.Titulo.ToUpper();
                 }
                 catch { }
             }
         }
 
-     
+       
+        private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scv = (ScrollViewer)sender;
+            if (e.Delta > 0)
+            {
+                
+                scv.LineLeft();
+                scv.LineLeft(); 
+                scv.LineLeft();
+            }
+            else
+            {
+               
+                scv.LineRight();
+                scv.LineRight();
+                scv.LineRight();
+            }
+            e.Handled = true; 
+        }
 
+       
+
+        private void NavegarADetalle(Pelicula peli)
+        {
+            var main = Window.GetWindow(this) as MainWindow;
+            main?.Navegar(new UC_Detalle(peli, _usuarioActual, OrigenNavegacion.Inicio));
+        }
+
+        private void Card_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is FrameworkElement element && element.DataContext is Pelicula peli)
+            {
+                NavegarADetalle(peli);
+            }
+        }
+
+        private void BtnBanner_Click(object sender, RoutedEventArgs e)
+        {
+            if (_peliculaBanner != null) NavegarADetalle(_peliculaBanner);
+        }
+
+        private void BtnIrCatalogo_Click(object sender, RoutedEventArgs e)
+        {
+            var main = Window.GetWindow(this) as MainWindow;
+            main?.Navegar(new UC_Catalogo(_usuarioActual));
+        }
+
+        private void btnTema_Click(object sender, RoutedEventArgs e)
+        {
+            App.IsDarkMode = !App.IsDarkMode;
+            GestordeTemas.AplicarTema(App.IsDarkMode);
+        }
+
+      
         private void BtnPerfil_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn && btn.ContextMenu != null)
@@ -82,52 +150,15 @@ namespace PeliculasStudio.Vistas
                 btn.ContextMenu.IsOpen = true;
             }
         }
-
-        private void MenuPerfil_Click(object sender, RoutedEventArgs e)
-        {
-            var main = Application.Current.MainWindow as MainWindow;
-            main?.Navegar(new Perfil(_usuarioActual));
-        }
+        private void MenuPerfil_Click(object sender, RoutedEventArgs e) { /* fdalta ir a perfil */ }
 
         private void MenuCerrarSesion_Click(object sender, RoutedEventArgs e)
         {
-         
-            _peliculasTendenciaCache = null;
-            _peliculaDestacadaCache = null;
-
-            var main = Application.Current.MainWindow as MainWindow;
+            _peliculasRecomendadas = null;
+            _peliculaBanner = null;
+            _peliculasSeguirViendo = null;
+            var main = Window.GetWindow(this) as MainWindow;
             main?.Navegar(new UC_Login());
-        }
-
-        private void BtnIrCatalogo_Click(object sender, RoutedEventArgs e)
-        {
-            var main = Application.Current.MainWindow as MainWindow;
-            main?.Navegar(new UC_Catalogo(_usuarioActual));
-        }
-
-        private void BtnBanner_Click(object sender, RoutedEventArgs e)
-        {
-           
-            if (_peliculaDestacadaCache != null)
-            {
-                var main = Application.Current.MainWindow as MainWindow;
-                main?.Navegar(new UC_Detalle(_peliculaDestacadaCache, _usuarioActual));
-            }
-        }
-
-        private void Card_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            if (sender is Border border && border.DataContext is Pelicula peli)
-            {
-                var main = Application.Current.MainWindow as MainWindow;
-                main?.Navegar(new UC_Detalle(peli, _usuarioActual));
-            }
-        }
-
-        private void btnTema_Click(object sender, RoutedEventArgs e)
-        {
-            App.IsDarkMode = btnTema.IsChecked ?? false;
-            GestordeTemas.AplicarTema(App.IsDarkMode);
         }
 
     }
