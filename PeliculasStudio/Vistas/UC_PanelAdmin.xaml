@@ -174,8 +174,7 @@
                     </DataGrid>
                 </DockPanel>
             </TabItem>
-            <TabItem Header="VISUALIZACION USUARIOS"></TabItem>
-            <TabItem Header="VISUALIZACION PELICULAS"></TabItem>
+         
             
         </TabControl>
     </Grid>

@@ -76,28 +76,38 @@ namespace PeliculasStudio.Vistas
 
             if (usuarioAEliminar != null && _adminLogueado != null)
             {
-             
+                // 1. Evitar que el admin se borre a sí mismo
                 if (usuarioAEliminar.Id == _adminLogueado.Id)
                 {
                     MessageBox.Show("No puedes eliminar tu propia cuenta mientras estás en el panel.", "Acción denegada", MessageBoxButton.OK, MessageBoxImage.Stop);
                     return;
                 }
 
-              
-                string aviso = $"¡PELIGRO! Vas a ELIMINAR permanentemente al usuario '{usuarioAEliminar.Nombreusuario}'.esta acción no se puede deshacer.";
+                // 2. NUEVA VALIDACIÓN: Evitar borrar al último administrador
+                if (usuarioAEliminar.Rol == TipoRol.Admin)
+                {
+                    var numAdmins = DatabaseServicie.GetConexion()?.Table<Usuario>().Count(u => u.Rol == TipoRol.Admin) ?? 0;
 
+                    if (numAdmins <= 1)
+                    {
+                        MessageBox.Show("Acción denegada: No se puede eliminar al único administrador del sistema.",
+                            "Error de Seguridad", MessageBoxButton.OK, MessageBoxImage.Stop);
+                        return;
+                    }
+                }
+
+                // 3. Confirmación con contraseña
+                string aviso = $"¡PELIGRO! Vas a ELIMINAR permanentemente al usuario '{usuarioAEliminar.Nombreusuario}'. Esta acción no se puede deshacer.";
                 var ventanaPass = new VentanaPassword(aviso);
 
                 if (ventanaPass.ShowDialog() == true)
                 {
-                   
                     if (Cifrado.VerifyPassword(ventanaPass.Password, _adminLogueado.Contrasenia))
                     {
-                        
+                        // Borrado físico en la base de datos
                         DatabaseServicie.BorrarUsuario(usuarioAEliminar.Id);
 
-                     
-                        dgUsuarios.Items.Refresh(); ;
+                        // Actualización de la UI en tiempo real
                         CargarTablas();
 
                         MessageBox.Show($"El usuario '{usuarioAEliminar.Nombreusuario}' ha sido eliminado correctamente.", "Usuario Borrado");
