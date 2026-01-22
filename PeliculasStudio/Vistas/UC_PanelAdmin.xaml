@@ -15,7 +15,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20" Cursor="">
 
                         <Border Background="#34495e" CornerRadius="10" Padding="15,10" Margin="0,0,10,0" Width="180">
                             <StackPanel>
@@ -54,6 +54,19 @@
             Background="#95a5a6" 
             Foreground="White"
             Cursor="Hand">
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="8"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+                        <Button x:Name="btnCerrarSesionAdmin" HorizontalAlignment="Right" Content="Cerrar sesión" 
+                                Click="CerrarSesion_Click" 
+                                Margin="500,0,0,0"  Height="40"
+                                Padding="15,5" 
+                                Background="#e74c3c" 
+                                Foreground="White"
+                                Cursor="Hand" >
                             <Button.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="8"/>
