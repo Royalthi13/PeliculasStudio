@@ -399,6 +399,11 @@ namespace PeliculasStudio.Vistas
             CargarPeliculasFiltradas();
         }
 
-
+        private void CerrarSesion_Click(object sender, RoutedEventArgs e)
+        {
+           
+            var main = Window.GetWindow(this) as MainWindow;
+            main?.Navegar(new UC_Login());
+        }
     }
 }
