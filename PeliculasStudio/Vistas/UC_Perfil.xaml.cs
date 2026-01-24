@@ -19,9 +19,7 @@ namespace PeliculasStudio.Vistas
             InitializeComponent();
             _usuarioActual = usuario;
 
-            // Sincronizar botón de tema con el estado actual de la App
-            btnTema.IsChecked = App.IsDarkMode;
-
+            
             CargarDatos();
         }
 
@@ -31,11 +29,7 @@ namespace PeliculasStudio.Vistas
             txtEmail.Text = _usuarioActual.Gmail; 
         }
 
-        private void btnTema_Click(object sender, RoutedEventArgs e)
-        {
-            App.IsDarkMode = btnTema.IsChecked ?? false;
-            GestordeTemas.AplicarTema(App.IsDarkMode);
-        }
+        
 
         
         // CAMBIO DE NOMBRE

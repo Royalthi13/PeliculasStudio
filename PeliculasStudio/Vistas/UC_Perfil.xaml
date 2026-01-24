@@ -39,25 +39,7 @@
                 </Button.Template>
             </Button>
 
-            <ToggleButton x:Name="btnTema" Click="btnTema_Click" 
-                          HorizontalAlignment="Right"
-                          Width="40" Height="40" Cursor="Hand"
-                          Background="{DynamicResource BrushFormulario}"
-                          BorderBrush="{DynamicResource BrushBordeControl}">
-                <ToggleButton.Template>
-                    <ControlTemplate TargetType="ToggleButton">
-                        <Border x:Name="borde" CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="1" BorderBrush="{TemplateBinding BorderBrush}">
-                            <TextBlock x:Name="txtIcono" Text="☀" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" Foreground="{DynamicResource BrushTextoPrincipal}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="txtIcono" Property="Text" Value="🌙"/>
-                                <Setter TargetName="borde" Property="Background" Value="#333333"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </ToggleButton.Template>
-            </ToggleButton>
+            <local:BotonTema HorizontalAlignment="Right" VerticalAlignment="Center"/>
         </Grid>
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
