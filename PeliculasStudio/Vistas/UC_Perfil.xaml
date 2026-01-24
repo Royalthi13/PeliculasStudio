@@ -1,12 +1,221 @@
-﻿<UserControl x:Class="PeliculasStudio.Vistas.Perfil"
+﻿<UserControl x:Class="PeliculasStudio.Vistas.UC_Perfil"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PeliculasStudio.Vistas"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+             d:DesignHeight="800" d:DesignWidth="1000">
+
+    <Grid Background="{DynamicResource BrushPantalla}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="30,30,30,10">
+            <Button x:Name="btnVolver"
+                    Content="🡠 Volver al Inicio" 
+                    Click="BtnVolver_Click"
+                    HorizontalAlignment="Left" 
+                    Height="40" 
+                    Background="Transparent" 
+                    BorderThickness="0"
+                    Foreground="{DynamicResource BrushTextoPrincipal}" 
+                    FontSize="16" 
+                    FontWeight="Bold" 
+                    Cursor="Hand">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="{DynamicResource BrushAccionResaltado}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+            <ToggleButton x:Name="btnTema" Click="btnTema_Click" 
+                          HorizontalAlignment="Right"
+                          Width="40" Height="40" Cursor="Hand"
+                          Background="{DynamicResource BrushFormulario}"
+                          BorderBrush="{DynamicResource BrushBordeControl}">
+                <ToggleButton.Template>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border x:Name="borde" CornerRadius="20" Background="{TemplateBinding Background}" BorderThickness="1" BorderBrush="{TemplateBinding BorderBrush}">
+                            <TextBlock x:Name="txtIcono" Text="☀" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" Foreground="{DynamicResource BrushTextoPrincipal}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="txtIcono" Property="Text" Value="🌙"/>
+                                <Setter TargetName="borde" Property="Background" Value="#333333"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </ToggleButton.Template>
+            </ToggleButton>
+        </Grid>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="20,10,20,50" MaxWidth="550" HorizontalAlignment="Center">
+
+                <TextBlock Text="MI PERFIL" FontSize="28" FontWeight="Black" 
+                           Foreground="{DynamicResource BrushTextoPrincipal}" 
+                           HorizontalAlignment="Center" Margin="0,0,0,30"/>
+
+                <Border Background="{DynamicResource BrushFormulario}" CornerRadius="10" ClipToBounds="True" Margin="0,0,0,20">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="10" Opacity="0.1" ShadowDepth="2"/>
+                    </Border.Effect>
+                    <Expander Header="Cambiar Nombre de Usuario" Padding="15"
+                              FontSize="16" FontWeight="Bold" Foreground="{DynamicResource BrushTextoPrincipal}">
+                        <StackPanel Margin="10">
+                            <TextBlock Text="Nuevo Nombre de Usuario" Foreground="{DynamicResource BrushTextoSecundario}" FontSize="13" Margin="0,0,0,5"/>
+                            <TextBox x:Name="txtUsuario" Height="40" VerticalContentAlignment="Center" Padding="10,0" FontSize="15"
+                                     Background="{DynamicResource BrushInput}" Foreground="{DynamicResource BrushTextoPrincipal}" 
+                                     BorderBrush="{DynamicResource BrushBordeControl}" TextChanged="txtUsuario_TextChanged"/>
+
+                            <TextBlock x:Name="lblMensajeNombre" Text="" FontSize="13" Margin="0,5,0,0" FontWeight="SemiBold"/>
+
+                            <Button Content="Guardar Nombre" Click="BtnGuardarNombre_Click" Margin="0,15,0,0" Height="40"
+                                    Background="{DynamicResource BrushAccionResaltado}" Foreground="White" FontWeight="Bold" Cursor="Hand">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="5"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+                        </StackPanel>
+                    </Expander>
+                </Border>
+
+                <Border Background="{DynamicResource BrushFormulario}" CornerRadius="10" ClipToBounds="True" Margin="0,0,0,20">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="10" Opacity="0.1" ShadowDepth="2"/>
+                    </Border.Effect>
+                    <Expander Header="Cambiar Correo Electrónico" Padding="15"
+                              FontSize="16" FontWeight="Bold" Foreground="{DynamicResource BrushTextoPrincipal}">
+                        <StackPanel Margin="10">
+                            <TextBlock Text="Nuevo Correo Electrónico" Foreground="{DynamicResource BrushTextoSecundario}" FontSize="13" Margin="0,0,0,5"/>
+                            <TextBox x:Name="txtEmail" Height="40" VerticalContentAlignment="Center" Padding="10,0" FontSize="15"
+                                     Background="{DynamicResource BrushInput}" Foreground="{DynamicResource BrushTextoPrincipal}" 
+                                     BorderBrush="{DynamicResource BrushBordeControl}" TextChanged="txtEmail_TextChanged"/>
+
+                            <TextBlock x:Name="lblMensajeEmail" Text="" FontSize="13" Margin="0,5,0,0" FontWeight="SemiBold"/>
+
+                            <Button Content="Guardar Email" Click="BtnGuardarEmail_Click" Margin="0,15,0,0" Height="40"
+                                    Background="{DynamicResource BrushAccionResaltado}" Foreground="White" FontWeight="Bold" Cursor="Hand">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="5"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+                        </StackPanel>
+                    </Expander>
+                </Border>
+
+                <Border Background="{DynamicResource BrushFormulario}" CornerRadius="10" ClipToBounds="True" Margin="0,0,0,20">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="10" Opacity="0.1" ShadowDepth="2"/>
+                    </Border.Effect>
+                    <Expander Header="Cambiar Contraseña" Padding="15"
+                              FontSize="16" FontWeight="Bold" Foreground="{DynamicResource BrushTextoPrincipal}">
+                        <StackPanel Margin="10">
+
+                            <TextBlock Text="Contraseña Actual" Foreground="{DynamicResource BrushTextoSecundario}" FontSize="13" Margin="0,0,0,5"/>
+                            <Grid>
+                                <PasswordBox x:Name="txtPassActual" Height="40" Background="{DynamicResource BrushInput}" 
+                                             Foreground="{DynamicResource BrushTextoPrincipal}" BorderBrush="{DynamicResource BrushBordeControl}"
+                                             Padding="10,0" VerticalContentAlignment="Center" PasswordChanged="txtPassActual_PasswordChanged"/>
+                                <TextBlock x:Name="iconPassActual" Text="✔" Foreground="{DynamicResource BrushMensajeExito}" 
+                                           HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" 
+                                           FontSize="18" FontWeight="Bold" Visibility="Collapsed"/>
+                            </Grid>
+
+                            <TextBlock Text="Nueva Contraseña" Foreground="{DynamicResource BrushTextoSecundario}" FontSize="13" Margin="0,15,0,5"/>
+                            <PasswordBox x:Name="txtPassNueva" Height="40" Background="{DynamicResource BrushInput}" 
+                                         Foreground="{DynamicResource BrushTextoPrincipal}" BorderBrush="{DynamicResource BrushBordeControl}"
+                                         Padding="10,0" VerticalContentAlignment="Center" PasswordChanged="txtPassNueva_PasswordChanged"/>
+
+                            <StackPanel Margin="0,10">
+                                <StackPanel Orientation="Horizontal" Margin="0,2">
+                                    <TextBlock x:Name="iconLongitud" Text="✖" Foreground="{DynamicResource BrushMensajeError}" Margin="0,0,10,0" FontWeight="Bold"/>
+                                    <TextBlock x:Name="lblLongitud" Text="Mínimo 8 caracteres" Foreground="{DynamicResource BrushMensajeError}" FontSize="12"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,2">
+                                    <TextBlock x:Name="iconMayuscula" Text="✖" Foreground="{DynamicResource BrushMensajeError}" Margin="0,0,10,0" FontWeight="Bold"/>
+                                    <TextBlock x:Name="lblMayuscula" Text="Al menos una mayúscula" Foreground="{DynamicResource BrushMensajeError}" FontSize="12"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,2">
+                                    <TextBlock x:Name="iconNumero" Text="✖" Foreground="{DynamicResource BrushMensajeError}" Margin="0,0,10,0" FontWeight="Bold"/>
+                                    <TextBlock x:Name="lblNumero" Text="Incluir un número" Foreground="{DynamicResource BrushMensajeError}" FontSize="12"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,2">
+                                    <TextBlock x:Name="iconEspecial" Text="✖" Foreground="{DynamicResource BrushMensajeError}" Margin="0,0,10,0" FontWeight="Bold"/>
+                                    <TextBlock x:Name="lblEspecial" Text="Carácter especial (@!#$)" Foreground="{DynamicResource BrushMensajeError}" FontSize="12"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <TextBlock Text="Repetir Nueva Contraseña" Foreground="{DynamicResource BrushTextoSecundario}" FontSize="13" Margin="0,5,0,5"/>
+                            <PasswordBox x:Name="txtPassNuevaRepetir" Height="40" Background="{DynamicResource BrushInput}" 
+                                         Foreground="{DynamicResource BrushTextoPrincipal}" BorderBrush="{DynamicResource BrushBordeControl}"
+                                         Padding="10,0" VerticalContentAlignment="Center" PasswordChanged="txtPassNuevaRepetir_PasswordChanged"/>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,5">
+                                <TextBlock x:Name="iconCoincide" Text="✖" Foreground="{DynamicResource BrushMensajeError}" Margin="0,0,10,0" FontWeight="Bold"/>
+                                <TextBlock x:Name="lblCoincide" Text="Las contraseñas no coinciden" Foreground="{DynamicResource BrushMensajeError}" FontSize="12"/>
+                            </StackPanel>
+
+                            <Button Content="Actualizar Contraseña" Click="BtnActualizarPass_Click" Margin="0,15,0,0" Height="40"
+                                    Background="{DynamicResource BrushAccionResaltado}" Foreground="White" FontWeight="Bold" Cursor="Hand">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="5"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+
+                        </StackPanel>
+                    </Expander>
+                </Border>
+
+                <Border BorderBrush="{DynamicResource BrushMensajeError}" BorderThickness="1" CornerRadius="10" Padding="15" Background="{DynamicResource BrushFormulario}">
+                    <StackPanel>
+                        <TextBlock Text="PELIGRO" Foreground="{DynamicResource BrushMensajeError}" FontWeight="Bold" Margin="0,0,0,10"/>
+                        <TextBlock Text="Eliminar tu cuenta borrará permanentemente tus listas y progreso. Esta acción es irreversible." 
+                                   Foreground="{DynamicResource BrushTextoSecundario}" TextWrapping="Wrap" FontSize="13" Margin="0,0,0,15"/>
+
+                        <Button Content="Eliminar mi cuenta" Click="BtnEliminarCuenta_Click" Height="40"
+                                Background="Transparent" BorderBrush="{DynamicResource BrushMensajeError}" BorderThickness="1"
+                                Foreground="{DynamicResource BrushMensajeError}" FontWeight="Bold" Cursor="Hand">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#1AFF0000"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </UserControl>

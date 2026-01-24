@@ -8,6 +8,7 @@
        >
 
     <Grid x:Name="GridPrincipal">
+
         <Grid.Background>
             <RadialGradientBrush Center="0.5,0.4" RadiusX="1.8" RadiusY="1.8">
                 <GradientStop Color="{DynamicResource ColorFocoCentro}" Offset="0"/>
@@ -32,9 +33,10 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,40,0">
+
             <ToggleButton x:Name="btnTema" Width="100" Height="50" Cursor="Hand" 
-                  HorizontalAlignment="Right" VerticalAlignment="Top"
-                  Click="btnTema_Click">
+                          HorizontalAlignment="Right" VerticalAlignment="Top"
+                          Click="btnTema_Click">
                 <ToggleButton.Style>
                     <Style TargetType="ToggleButton">
                         <Setter Property="Background" Value="Transparent"/>

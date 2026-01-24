@@ -162,6 +162,43 @@ namespace PeliculasStudio.BaseDatos
             }
         }
 
+
+        public static string ActualizarUsuario(Usuario usuario)
+        {
+            try
+            {
+                if (db == null) Inicializar();
+                db.Update(usuario);
+                return "ÉXITO";
+            }
+            catch (Exception ex)
+            {
+                return "Error al actualizar: " + ex.Message;
+            }
+        }
+
+        public static bool ExisteUsuario(string nombre, int idUsuarioActual)
+        {
+            if (db == null) Inicializar();
+
+            // Busca si hay ALGUN usuario con ese nombre...
+            // ...PERO que su ID sea distinto al mío (para que no de error si pongo mi propio nombre)
+            var existe = db.Table<Usuario>()
+                        .Any(u => u.Nombreusuario.ToLower() == nombre.ToLower() && u.Id != idUsuarioActual);
+
+            return existe;
+        }
+
+        public static bool ExisteCorreo(string correo, int idUsuarioActual)
+        {
+            if (db == null) Inicializar();
+
+            // Busca si existe ese correo en OTRO usuario distinto al actual
+            var existe = db.Table<Usuario>()
+                .Any(u => u.Gmail.ToLower() == correo.ToLower() && u.Id != idUsuarioActual);
+
+            return existe;
+        }
         /**
          * Metodo Login Usuario:
          * .
