@@ -227,5 +227,12 @@ namespace PeliculasStudio.Vistas
             var main = Window.GetWindow(this) as MainWindow;
             main?.Navegar(new UC_Inicio(_usuarioActual));
         }
+
+        
+        private void BtnInforme_Click(object sender, RoutedEventArgs e)
+        {
+            // Llamada directa al servicio PdfSharp
+            ServicioInformes.GenerarInformeMensualidad(_usuarioActual);
+        }
     }
 }
