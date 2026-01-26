@@ -113,12 +113,13 @@
                     </Button.ContextMenu>
                 </Button>
 
-                        <Button Grid.Column="1" Content="🏠 Inicio" Margin="20,0,0,0" Height="40" Padding="20,0"
+                        <Button Grid.Column="1" Content="🏠 Inicio" Margin="20,0,0,0" Height="40" Width="80" Padding="20,0"
                         Foreground="{DynamicResource BrushTextoPrincipal}" Background="Transparent" BorderBrush="Transparent"
                         FontWeight="Bold" Cursor="Hand" Click="BtnIrInicio_Click">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
-                                    <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="10" BorderThickness="1" BorderBrush="Transparent">
+                                    <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="10" 
+                                            BorderThickness="1" BorderBrush="Transparent">
                                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Border>
                                     <ControlTemplate.Triggers>
@@ -133,7 +134,7 @@
 
                         <Border Grid.Column="2" Margin="30,10" CornerRadius="15" Background="{DynamicResource BrushInput}">
                             <Grid>
-                                <TextBlock Text="🔍 Buscar en catálogo..." VerticalAlignment="Center" Margin="15,0" Foreground="{DynamicResource BrushTextoAyuda}" IsHitTestVisible="False">
+                                <TextBlock Text="🔍 Buscar película..." VerticalAlignment="Center" Margin="15,0" Foreground="{DynamicResource BrushTextoAyuda}" IsHitTestVisible="False">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="Visibility" Value="Collapsed"/>

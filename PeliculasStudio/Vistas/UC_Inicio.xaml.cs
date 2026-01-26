@@ -107,7 +107,7 @@ namespace PeliculasStudio.Vistas
             e.Handled = true; 
         }
 
-       
+        
 
         private void NavegarADetalle(Pelicula peli)
         {
