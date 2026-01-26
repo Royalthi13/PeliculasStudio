@@ -42,59 +42,90 @@
                     </Button.Template>
                     <Button.ContextMenu>
                         <ContextMenu>
+                            <ContextMenu.Resources>
+                                <Style TargetType="ContextMenu">
+                                    <Setter Property="Background" Value="{DynamicResource BrushFormulario}"/>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource BrushBordeControl}"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Setter Property="HasDropShadow" Value="True"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ContextMenu">
+                                                <Border Background="{TemplateBinding Background}" 
+                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                    BorderThickness="{TemplateBinding BorderThickness}" 
+                                    CornerRadius="10" Padding="5">
+                                                    <Border.Effect>
+                                                        <DropShadowEffect BlurRadius="10" Opacity="0.2" ShadowDepth="4"/>
+                                                    </Border.Effect>
+                                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+
+                                <Style TargetType="MenuItem">
+                                    <Setter Property="Foreground" Value="{DynamicResource BrushTextoPrincipal}"/>
+                                    <Setter Property="FontSize" Value="14"/>
+                                    <Setter Property="Padding" Value="10,8"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="MenuItem">
+                                                <Border x:Name="border" Background="Transparent" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                                                    <ContentPresenter Content="{TemplateBinding Header}" ContentSource="Header" 
+                                                  HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsHighlighted" Value="True">
+                                                        <Setter TargetName="border" Property="Background" Value="{DynamicResource BrushInput}"/>
+                                                        <Setter Property="Foreground" Value="{DynamicResource BrushAccionResaltado}"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ContextMenu.Resources>
+
                             <MenuItem Header="👤 Mi Perfil" Click="MenuPerfil_Click"/>
-                            <Separator/>
-                            <MenuItem Header="🚪 Cerrar Sesión" Click="MenuCerrarSesion_Click" Foreground="Red"/>
+
+                            <Separator Background="{DynamicResource BrushSeparador}" Margin="5,2"/>
+
+                            <MenuItem Header="🚪 Cerrar Sesión" Click="MenuCerrarSesion_Click">
+                                <MenuItem.Style>
+                                    <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+                                        <Setter Property="Foreground" Value="#FF5555"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsHighlighted" Value="True">
+                                                <Setter Property="Foreground" Value="Red"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </MenuItem.Style>
+                            </MenuItem>
                         </ContextMenu>
                     </Button.ContextMenu>
                 </Button>
 
-                <Button Grid.Column="1" 
-        Content="🎬 Catálogo" 
-        Margin="20,0,0,0" 
-        Height="40" 
-        Padding="20,0"
-         Foreground="{DynamicResource BrushTextoPrincipal}"
-        Background="Transparent"
-        BorderBrush="Transparent"
-        Click="BtnIrCatalogo_Click" 
-        FontWeight="Bold"
-        Cursor="Hand">
-
+                <Button Grid.Column="1" Content="🎬 Catálogo" Margin="20,0,0,0" Height="40" Width="80" Padding="20,0"
+                        Foreground="{DynamicResource BrushTextoPrincipal}" Background="Transparent" BorderBrush="Transparent"
+                        FontWeight="Bold" Cursor="Hand" Click="BtnIrCatalogo_Click">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
-                            <Border x:Name="border"
-                    Background="{TemplateBinding Background}"
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="1.5"
-                    CornerRadius="16">
-
+                            <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="10" 
+                                    BorderThickness="1" BorderBrush="Transparent">
                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
-
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter TargetName="border" Property="Background" Value="{DynamicResource BrushInput}"/>
                                     <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource BrushAccionResaltado}"/>
-                                    <Setter Property="Foreground" Value="{DynamicResource BrushTextoPrincipal}"/>
-                                </Trigger>
-
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource BrushSeparador}"/>
-                                    <Setter Property="RenderTransform">
-                                        <Setter.Value>
-                                            <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
-                                        </Setter.Value>
-                                    </Setter>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Button.Template>
-
-                    <Button.RenderTransformOrigin>0.5,0.5</Button.RenderTransformOrigin>
-                    <Button.RenderTransform>
-                        <ScaleTransform ScaleX="1" ScaleY="1"/>
-                    </Button.RenderTransform>
                 </Button>
 
                 <Border Grid.Column="2" Margin="30,10" CornerRadius="15" Background="{DynamicResource BrushInput}">
@@ -114,27 +145,11 @@
                         <TextBox x:Name="txtBuscador" Background="Transparent" BorderThickness="0" VerticalContentAlignment="Center" Padding="15,0" FontSize="14" Foreground="{DynamicResource BrushTextoPrincipal}"/>
                     </Grid>
                 </Border>
-                <ToggleButton x:Name="btnTema" Grid.Column="3" Width="100" Height="45" Cursor="Hand" Click="btnTema_Click">
-                    <ToggleButton.Template>
-                        <ControlTemplate TargetType="ToggleButton">
-                            <Border x:Name="border" Background="Transparent" BorderBrush="{DynamicResource BrushAccionResaltado}" BorderThickness="1.5" CornerRadius="22">
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <TextBlock Text="TEMA" FontSize="11" FontWeight="ExtraBold" VerticalAlignment="Center" Margin="0,0,8,0" Foreground="{DynamicResource BrushAccionResaltado}"/>
-                                    <TextBlock x:Name="txtIcon" Text="☀" FontSize="20" VerticalAlignment="Center" Foreground="{DynamicResource BrushAccionResaltado}"/>
-                                </StackPanel>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="txtIcon" Property="Text" Value="☾"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </ToggleButton.Template>
-                </ToggleButton>
+                <local:BotonTema Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center"/>
             </Grid>
         </Border>
 
-        <ScrollViewer Grid.Row="1" Margin="0,10,0,0" VerticalScrollBarVisibility="Hidden">
+        <ScrollViewer Grid.Row="1" Margin="0,10,0,0" VerticalScrollBarVisibility="Auto">
             <StackPanel Margin="20,0">
 
                 <Border Height="400" CornerRadius="20" Margin="0,0,0,30" ClipToBounds="True" Background="Black">
