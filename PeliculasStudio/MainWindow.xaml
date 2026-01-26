@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         WindowState="Maximized" 
         WindowStyle="SingleBorderWindow"
-        Title="MainWindow" Height="600" Width="800"
+        Title="Películas Studio" Height="600" Width="800"
         Background="{DynamicResource BrushPantalla}"
         >
     <Grid>

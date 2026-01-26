@@ -15,7 +15,7 @@
 
         <Grid Grid.Row="0" Margin="30,30,30,10">
             <Button x:Name="btnVolver"
-                    Content="🡠 Volver al Inicio" 
+                    Content="🡠 Volver a Inicio" 
                     Click="BtnVolver_Click"
                     HorizontalAlignment="Left" 
                     Height="40" 

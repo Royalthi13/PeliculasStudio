@@ -134,13 +134,6 @@ namespace PeliculasStudio.Vistas
             main?.Navegar(new UC_Catalogo(_usuarioActual));
         }
 
-        private void btnTema_Click(object sender, RoutedEventArgs e)
-        {
-            App.IsDarkMode = !App.IsDarkMode;
-            GestordeTemas.AplicarTema(App.IsDarkMode);
-        }
-
-      
         private void BtnPerfil_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn && btn.ContextMenu != null)

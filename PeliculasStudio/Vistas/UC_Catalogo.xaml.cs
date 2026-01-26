@@ -29,7 +29,6 @@ namespace PeliculasStudio.Vistas
         {
             InitializeComponent();
             _usuarioActual = usuario;
-            btnTema.IsChecked = App.IsDarkMode;
 
             CargarDatosIniciales();
         }
@@ -109,10 +108,6 @@ namespace PeliculasStudio.Vistas
             main?.Navegar(new UC_Login());
         }
 
-        private void btnTema_Click(object sender, RoutedEventArgs e)
-        {
-            App.IsDarkMode = btnTema.IsChecked ?? false;
-            GestordeTemas.AplicarTema(App.IsDarkMode);
-        }
+        
     }
 }
