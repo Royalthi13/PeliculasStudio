@@ -42,9 +42,69 @@
                     </Button.Template>
                     <Button.ContextMenu>
                         <ContextMenu>
+                            <ContextMenu.Resources>
+                                <Style TargetType="ContextMenu">
+                                    <Setter Property="Background" Value="{DynamicResource BrushFormulario}"/>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource BrushBordeControl}"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Setter Property="HasDropShadow" Value="True"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ContextMenu">
+                                                <Border Background="{TemplateBinding Background}" 
+                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                    BorderThickness="{TemplateBinding BorderThickness}" 
+                                    CornerRadius="10" Padding="5">
+                                                    <Border.Effect>
+                                                        <DropShadowEffect BlurRadius="10" Opacity="0.2" ShadowDepth="4"/>
+                                                    </Border.Effect>
+                                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+
+                                <Style TargetType="MenuItem">
+                                    <Setter Property="Foreground" Value="{DynamicResource BrushTextoPrincipal}"/>
+                                    <Setter Property="FontSize" Value="14"/>
+                                    <Setter Property="Padding" Value="10,8"/>
+                                    <Setter Property="Cursor" Value="Hand"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="MenuItem">
+                                                <Border x:Name="border" Background="Transparent" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                                                    <ContentPresenter Content="{TemplateBinding Header}" ContentSource="Header" 
+                                                  HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsHighlighted" Value="True">
+                                                        <Setter TargetName="border" Property="Background" Value="{DynamicResource BrushInput}"/>
+                                                        <Setter Property="Foreground" Value="{DynamicResource BrushAccionResaltado}"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ContextMenu.Resources>
+
                             <MenuItem Header="👤 Mi Perfil" Click="MenuPerfil_Click"/>
-                            <Separator/>
-                            <MenuItem Header="🚪 Cerrar Sesión" Click="MenuCerrarSesion_Click" Foreground="Red"/>
+
+                            <Separator Background="{DynamicResource BrushSeparador}" Margin="5,2"/>
+
+                            <MenuItem Header="🚪 Cerrar Sesión" Click="MenuCerrarSesion_Click">
+                                <MenuItem.Style>
+                                    <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+                                        <Setter Property="Foreground" Value="#FF5555"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsHighlighted" Value="True">
+                                                <Setter Property="Foreground" Value="Red"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </MenuItem.Style>
+                            </MenuItem>
                         </ContextMenu>
                     </Button.ContextMenu>
                 </Button>

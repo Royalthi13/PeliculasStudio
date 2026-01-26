@@ -98,9 +98,21 @@ namespace PeliculasStudio.Vistas
             }
         }
 
+        private void BtnPerfil_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.ContextMenu != null)
+            {
+                btn.ContextMenu.PlacementTarget = btn;
+                btn.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+                btn.ContextMenu.IsOpen = true;
+            }
+        }
 
-
-        private void MenuPerfil_Click(object sender, RoutedEventArgs e) { /* Ir a perfil */ }
+        private void MenuPerfil_Click(object sender, RoutedEventArgs e)
+        {
+            var main = Window.GetWindow(this) as MainWindow;
+            main?.Navegar(new UC_Perfil(_usuarioActual));
+        }
 
         private void MenuCerrarSesion_Click(object sender, RoutedEventArgs e)
         {

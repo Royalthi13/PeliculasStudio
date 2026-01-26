@@ -121,7 +121,7 @@ namespace PeliculasStudio.Vistas
                 else
                 {
                     MessageBox.Show(resultado, "¡Bienvenido!", MessageBoxButton.OK, MessageBoxImage.Information);
-                    btnVolver_Click(null, null);
+                    BtnVolver_Click(null, null);
                 }
             }
             catch (Exception ex)
@@ -287,7 +287,7 @@ namespace PeliculasStudio.Vistas
         * @param sender: El botón "Volver" que dispara el evento.
         * @param e: Argumentos del evento de click.
         **/
-        private void btnVolver_Click(object sender, RoutedEventArgs e)
+        private void BtnVolver_Click(object sender, RoutedEventArgs e)
         {
 
             var main = Application.Current.MainWindow as MainWindow;
