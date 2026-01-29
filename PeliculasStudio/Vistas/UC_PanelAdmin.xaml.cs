@@ -268,6 +268,16 @@ namespace PeliculasStudio.Vistas
                 }
             }
         }
+        /**
+         * Metodo Nueva Pelicula Click:
+         * Gestiona la apertura del formulario de creación y la actualización de la interfaz tras el registro.
+         * 1. Instanciación: Crea una nueva ventana de AniadirPeliculas_Panel pasando el rol del administrador.
+         * 2. Interacción: Despliega la ventana en modo diálogo (bloqueante) para la entrada de datos.
+         * 3. Validación: Evalúa si el resultado del diálogo fue exitoso (true) tras el guardado.
+         * 4. Sincronización: Invoca a CargarTablas para refrescar el DataGrid con la nueva información.
+         * @param sender: El objeto que dispara el evento (botón Nueva Película).
+         * @param e: Argumentos del evento de interacción del usuario.
+         **/
         private void btnNuevaPelicula_Click(object sender, RoutedEventArgs e)
         {
             
@@ -279,6 +289,15 @@ namespace PeliculasStudio.Vistas
                 CargarTablas();
             }
         }
+        /**
+         * Metodo Cargar Peliculas Filtradas:
+         * Gestiona la obtención, filtrado por géneros y ordenación dinámica del catálogo de películas.
+         * 1. Conexión: Establece comunicación con el servicio de base de datos y valida la disponibilidad.
+         * 2. Recuperación: Obtiene la colección completa de títulos almacenados en la tabla de Películas.
+         * 3. Filtrado: Aplica restricciones por género si la opción "Todos" está desactivada y hay una selección activa.
+         * 4. Ordenación: Clasifica la lista resultante según el criterio actual (ID o visualizaciones ascendentes/descendentes).
+         * 5. Actualización: Asigna la colección final filtrada y ordenada al ItemsSource del DataGrid para su visualización.
+         **/
         private void CargarPeliculasFiltradas()
         {
             var conexion = DatabaseServicie.GetConexion();
@@ -310,23 +329,56 @@ namespace PeliculasStudio.Vistas
         }
 
         // EVENTOS DE LOS BOTONES
+        /**
+         * Metodo Mas Vistas Click:
+         * Configura el orden de visualización para priorizar los títulos con mayor número de reproducciones.
+         * 1. Criterio: Actualiza la variable de control de orden al estado de visualizaciones descendentes.
+         * 2. Refresco: Ejecuta la lógica de filtrado y ordenación para actualizar el DataGrid inmediatamente.
+         * @param sender: El botón de ordenación por popularidad pulsado.
+         * @param e: Argumentos del evento de click.
+         **/
         private void btnMasVistas_Click(object sender, RoutedEventArgs e)
         {
             _criterioOrden = "VistasDesc";
             CargarPeliculasFiltradas();
         }
-
+        /**
+         * Metodo Menos Vistas Click:
+         * Configura el orden de visualización para priorizar los títulos con menor número de reproducciones.
+         * 1. Criterio: Actualiza la variable de control de orden al estado de visualizaciones ascendentes.
+         * 2. Refresco: Ejecuta la lógica de filtrado y ordenación para actualizar el DataGrid inmediatamente.
+         * @param sender: El botón de ordenación por menor popularidad pulsado.
+         * @param e: Argumentos del evento de click.
+         **/
         private void btnMenosVistas_Click(object sender, RoutedEventArgs e)
         {
             _criterioOrden = "VistasAsc";
             CargarPeliculasFiltradas();
         }
-
+        /**
+         * Metodo Orden ID Click:
+         * Configura el orden de visualización para organizar los títulos según su identificador único.
+         * 1. Criterio: Establece la variable de control de orden al estado por defecto basado en el ID.
+         * 2. Refresco: Ejecuta la lógica de filtrado y ordenación para actualizar el DataGrid inmediatamente.
+         * @param sender: El botón de ordenación por ID pulsado.
+         * @param e: Argumentos del evento de click.
+         **/
         private void btnOrdenID_Click(object sender, RoutedEventArgs e)
         {
             _criterioOrden = "ID";
             CargarPeliculasFiltradas();
         }
+        /**
+         * Metodo Checkbox Todos Click:
+         * Gestiona la selección global del catálogo desmarcando los filtros individuales de género.
+         * 1. Validación: Verifica si el estado del control es "Checked" para iniciar la limpieza.
+         * 2. Control de Estado: Activa la bandera _cargandoFiltros para prevenir disparos de eventos en cascada.
+         * 3. Limpieza de Datos: Vacía la colección de géneros seleccionados en la lógica de negocio.
+         * 4. Interfaz Visual: Recorre el ItemsControl de géneros, localiza cada CheckBox mediante el árbol visual y fuerza su desmarcado.
+         * 5. Sincronización: Restablece el control de eventos y refresca el DataGrid con el catálogo completo.
+         * @param sender: El CheckBox "Todos" que dispara el evento.
+         * @param e: Argumentos del evento de interacción.
+         **/
         private void chkTodos_Click(object sender, RoutedEventArgs e)
         {
             // 1. Verificamos si se ha marcado el CheckBox
@@ -398,7 +450,20 @@ namespace PeliculasStudio.Vistas
             }
             CargarPeliculasFiltradas();
         }
-
-
+        /**
+         * Metodo Cerrar Sesion Click:
+         * Finaliza la sesión del usuario actual y redirige la interfaz a la pantalla de autenticación.
+         * 1. Localización: Obtiene una referencia a la ventana principal (MainWindow) que contiene el control actual.
+         * 2. Navegación: Invoca el método de intercambio de vistas para cargar una nueva instancia de UC_Login.
+         * 3. Seguridad: Al navegar fuera del panel de control, se invalidan los accesos a las funciones de administración.
+         * @param sender: El botón o elemento de menú "Cerrar Sesión" que dispara el evento.
+         * @param e: Argumentos del evento de click.
+         **/
+        private void CerrarSesion_Click(object sender, RoutedEventArgs e)
+        {
+           
+            var main = Window.GetWindow(this) as MainWindow;
+            main?.Navegar(new UC_Login());
+        }
     }
 }
