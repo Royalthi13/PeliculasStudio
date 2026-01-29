@@ -28,22 +28,6 @@ namespace PeliculasStudio.Vistas
         {
             InitializeComponent();
 
-
-            this.Loaded += (s, e) =>
-            {
-                try
-                {
-
-                    btnTema.IsChecked = App.IsDarkMode;
-
-                    GestordeTemas.AplicarTema(App.IsDarkMode);
-                }
-                catch (Exception ex)
-                {
-               
-                    System.Diagnostics.Debug.WriteLine("Error en Loaded: " + ex.Message);
-                }
-            };
         }
         /**
         * Metodo Iniciar Sesion Click:
@@ -108,36 +92,8 @@ namespace PeliculasStudio.Vistas
             main?.Navegar(new Registro());
         }
 
-        /**
-        * Metodo Tema Click (Login):
-        * Gestiona el cambio de apariencia de la ventana de inicio de sesión.
-        * Sincroniza el estado del botón con la configuración global de la aplicación.
-        * @param sender: El ToggleButton (interruptor) de cambio de tema.
-        * @param e: Argumentos del evento de click.
-        **/
-        private void btnTema_Click(object sender, RoutedEventArgs e)
-        {
-            App.IsDarkMode = btnTema.IsChecked ?? false;
-
-
-            GestordeTemas.AplicarTema(App.IsDarkMode);
-
-            try
-            {
-                
-                var anim = GridPrincipal.Resources["AnimacionFondo"] as Storyboard;
-
-                if (anim != null)
-                {                 
-                    anim.Stop();
-                    anim.Begin();
-                }
-            }
-            catch (Exception ex)
-            {        
-                System.Diagnostics.Debug.WriteLine("La animación no pudo iniciar: " + ex.Message);
-            }
-        }
+        
+        
 
     }
 }

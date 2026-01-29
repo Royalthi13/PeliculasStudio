@@ -107,7 +107,7 @@ namespace PeliculasStudio.Vistas
             e.Handled = true; 
         }
 
-       
+        
 
         private void NavegarADetalle(Pelicula peli)
         {
@@ -134,13 +134,6 @@ namespace PeliculasStudio.Vistas
             main?.Navegar(new UC_Catalogo(_usuarioActual));
         }
 
-        private void btnTema_Click(object sender, RoutedEventArgs e)
-        {
-            App.IsDarkMode = !App.IsDarkMode;
-            GestordeTemas.AplicarTema(App.IsDarkMode);
-        }
-
-      
         private void BtnPerfil_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn && btn.ContextMenu != null)
@@ -150,7 +143,11 @@ namespace PeliculasStudio.Vistas
                 btn.ContextMenu.IsOpen = true;
             }
         }
-        private void MenuPerfil_Click(object sender, RoutedEventArgs e) { /* fdalta ir a perfil */ }
+        private void MenuPerfil_Click(object sender, RoutedEventArgs e)
+        {
+            var main = Window.GetWindow(this) as MainWindow;
+            main?.Navegar(new UC_Perfil(_usuarioActual));
+        }
 
         private void MenuCerrarSesion_Click(object sender, RoutedEventArgs e)
         {

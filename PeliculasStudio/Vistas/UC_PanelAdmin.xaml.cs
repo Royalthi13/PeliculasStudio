@@ -450,6 +450,7 @@ namespace PeliculasStudio.Vistas
             }
             CargarPeliculasFiltradas();
         }
+
         /**
          * Metodo Cerrar Sesion Click:
          * Finaliza la sesión del usuario actual y redirige la interfaz a la pantalla de autenticación.
@@ -459,6 +460,7 @@ namespace PeliculasStudio.Vistas
          * @param sender: El botón o elemento de menú "Cerrar Sesión" que dispara el evento.
          * @param e: Argumentos del evento de click.
          **/
+
         private void CerrarSesion_Click(object sender, RoutedEventArgs e)
         {
            

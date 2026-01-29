@@ -3,11 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PeliculasStudio.Vistas"
         mc:Ignorable="d"
        Height="800" Width="1200" 
        >
 
     <Grid x:Name="GridPrincipal">
+
         <Grid.Background>
             <RadialGradientBrush Center="0.5,0.4" RadiusX="1.8" RadiusY="1.8">
                 <GradientStop Color="{DynamicResource ColorFocoCentro}" Offset="0"/>
@@ -31,58 +33,33 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,40,0">
-            <ToggleButton x:Name="btnTema" Width="100" Height="50" Cursor="Hand" 
-                  HorizontalAlignment="Right" VerticalAlignment="Top"
-                  Click="btnTema_Click">
-                <ToggleButton.Style>
-                    <Style TargetType="ToggleButton">
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="BorderBrush" Value="Transparent"/>
-                        <Setter Property="Foreground" Value="{DynamicResource BrushAccionResaltado}"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="ToggleButton">
-                                    <Border x:Name="border" 
-                                    Background="{TemplateBinding Background}" 
-                                    BorderBrush="{TemplateBinding BorderBrush}" 
-                                    BorderThickness="1" 
-                                    CornerRadius="25">
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                            <TextBlock x:Name="txtLabel" Text="TEMA" FontSize="12" FontWeight="Bold" 
-                                               VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                            <TextBlock x:Name="txtIcon" Text="☀" FontSize="22" VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Border>
-
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsPressed" Value="True">
-                                            <Setter TargetName="border" Property="Background" Value="{DynamicResource BrushSeparador}"/>
-                                            <Setter Property="RenderTransform">
-                                                <Setter.Value>
-                                                    <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </Trigger>
-
-                                        <Trigger Property="IsChecked" Value="True">
-                                            <Setter TargetName="txtIcon" Property="Text" Value="☾"/>
-                                            <Setter Property="Foreground" Value="{DynamicResource BrushTextoPrincipal}"/>
-                                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource BrushBordeControl}"/>
-                                        </Trigger>
-
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="border" Property="Background" Value="{DynamicResource BrushInput}"/>
-                                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource BrushAccionResaltado}"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ToggleButton.Style>
-            </ToggleButton>
-        </StackPanel>
+        <Grid Grid.Row="0"   VerticalAlignment="Center" Margin="30,0,30,0">
+            <Button x:Name="btnVolver"
+                    Content="🡠 Volver a Inicio" 
+                    Click="BtnVolver_Click"
+                    HorizontalAlignment="Left" 
+                    Height="40" 
+                    Background="Transparent" 
+                    BorderThickness="0"
+                    Foreground="{DynamicResource BrushTextoPrincipal}" 
+                    FontSize="16" 
+                    FontWeight="Bold" 
+                    Cursor="Hand">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="{DynamicResource BrushAccionResaltado}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <local:BotonTema HorizontalAlignment="Right" VerticalAlignment="Center"/>
+        </Grid>
 
         <Grid Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Grid.ColumnDefinitions>
@@ -194,9 +171,6 @@
                         </Button.Style>
                     </Button>
 
-                    <Button x:Name="btnVolver" Content="← Volver al inicio de sesión" Background="Transparent" 
-                BorderBrush="Transparent" Foreground="{DynamicResource BrushAccionResaltado}" 
-                FontSize="14" Cursor="Hand" Click="btnVolver_Click"/>
                 </StackPanel>
             </Border>
 
