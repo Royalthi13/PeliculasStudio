@@ -140,7 +140,7 @@ namespace PeliculasStudio.Vistas
         * @returns: Devuelve true solo si cumple simultáneamente con longitud mínima, 
         * mayúscula, número y carácter especial; de lo contrario, devuelve false.
         **/
-        private bool ValidarSeguridadPassword(string password)
+        public static bool ValidarSeguridadPassword(string password)
         {
             if (string.IsNullOrEmpty(password)) return false;
 

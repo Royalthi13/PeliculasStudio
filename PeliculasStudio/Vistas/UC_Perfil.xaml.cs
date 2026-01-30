@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Microsoft.Win32;
 
 namespace PeliculasStudio.Vistas
 {
@@ -70,7 +71,7 @@ namespace PeliculasStudio.Vistas
 
 
         
-        // CAMBIO DE EMAIL (NUEVO)
+        // CAMBIO DE EMAIL 
         
         private void txtEmail_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -164,6 +165,7 @@ namespace PeliculasStudio.Vistas
 
         private void BtnActualizarPass_Click(object sender, RoutedEventArgs e)
         {
+            string pass = txtPassNueva.Password;
             if (!Cifrado.VerifyPassword(txtPassActual.Password, _usuarioActual.Contrasenia))
             {
                 MessageBox.Show("La contraseña actual es incorrecta.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -176,13 +178,13 @@ namespace PeliculasStudio.Vistas
                 return;
             }
 
-            if (txtPassNueva.Password.Length < 8)
+            if (!Registro.ValidarSeguridadPassword(pass))
             {
                 MessageBox.Show("La nueva contraseña no cumple los requisitos.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            _usuarioActual.Contrasenia = Cifrado.HashPassword(txtPassNueva.Password);
+            _usuarioActual.Contrasenia = Cifrado.HashPassword(pass);
             string resultado = DatabaseServicie.ActualizarUsuario(_usuarioActual);
 
             if (resultado == "ÉXITO")
