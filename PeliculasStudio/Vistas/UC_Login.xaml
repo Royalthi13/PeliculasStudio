@@ -58,17 +58,61 @@
                                          BorderBrush="{DynamicResource BrushBordeControl}" BorderThickness="0,0,0,1" 
                                          Background="{DynamicResource BrushInput}" Foreground="{DynamicResource BrushTextoPrincipal}"/>
 
-                            <Button x:Name="btnIniciarSesion" Content="ENTRAR" Margin="0,35,0,15" Height="50" Cursor="Hand"
-                                    Background="{DynamicResource BrushAccionResaltado}" Foreground="White" 
-                                    FontWeight="Bold" FontSize="16" Click="btnIniciarSesion_Click"
-                                    IsDefault="True">
+                            
+                            <Button x:Name="btnIniciarSesion" Width="300" Height="70" Cursor="Hand"  Click="btnIniciarSesion_Click" 
+                                    HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0">
 
-                                 
-                                <Button.Resources>
-                                    <Style TargetType="Border">
-                                        <Setter Property="CornerRadius" Value="25"/>
-                                    </Style>
-                                </Button.Resources>
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border x:Name="borde" CornerRadius="8" Background="Black"  
+                                                BorderThickness="2" ClipToBounds="True" Cursor="">
+
+                                            <Grid>
+                                                <Grid.Clip> <!-- Esto sirve para que no desaparezcan los radios en el zoom -->
+                                                    <RectangleGeometry Rect="0,0,300,70" RadiusX="8" RadiusY="8"/>
+                                                </Grid.Clip>
+                                                <Image x:Name="imgLogin" Source="/Assets/Imagenes/vengadores.png" Stretch="UniformToFill" 
+                                                       Opacity="0.8" RenderTransformOrigin="0.5,0.5">
+                                                    <Image.RenderTransform>
+                                                        <ScaleTransform x:Name="scale" ScaleX="1" ScaleY="1"/>
+                                                    </Image.RenderTransform>
+                                                </Image>
+
+                                                <TextBlock Text="ENTRAR"  Foreground="White" FontWeight="Black" FontSize="18" 
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False" Cursor="Hand">
+                                                    <TextBlock.Effect>
+                                                        <DropShadowEffect Color="Black" BlurRadius="5" ShadowDepth="2"/>
+                                                    </TextBlock.Effect>
+                                                </TextBlock>
+                                            </Grid>
+                                        </Border>
+
+                                        <ControlTemplate.Resources>
+                                            <Storyboard x:Key="ZoomIn">
+                                                <DoubleAnimation Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleX" To="1.1" Duration="0:0:0.3"/>
+                                                <DoubleAnimation Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleY" To="1.1" Duration="0:0:0.3"/>
+                                                <DoubleAnimation Storyboard.TargetName="imgLogin" Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:0.3"/>
+                                            </Storyboard>
+                                            <Storyboard x:Key="ZoomOut">
+                                                <DoubleAnimation Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleX" To="1.0" Duration="0:0:0.3"/>
+                                                <DoubleAnimation Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleY" To="1.0" Duration="0:0:0.3"/>
+                                                <DoubleAnimation Storyboard.TargetName="imgLogin" Storyboard.TargetProperty="Opacity" To="0.8" Duration="0:0:0.3"/>
+                                            </Storyboard>
+                                        </ControlTemplate.Resources>
+
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Trigger.EnterActions>
+                                                    <BeginStoryboard Storyboard="{StaticResource ZoomIn}"/>
+                                                </Trigger.EnterActions>
+                                                <Trigger.ExitActions>
+                                                    <BeginStoryboard Storyboard="{StaticResource ZoomOut}"/>
+                                                </Trigger.ExitActions>
+                                                
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
                             </Button>
 
                             <Button x:Name="btnIrARegistro" Content="¿No tienes cuenta? Regístrate" 

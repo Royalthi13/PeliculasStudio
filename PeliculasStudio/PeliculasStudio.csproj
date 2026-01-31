@@ -15,10 +15,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Remove="Assets\Imagenes\vengadores.png" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="LibVLCSharp.WPF" Version="3.9.5" />
 		<PackageReference Include="PDFsharp-WPF" Version="6.2.4" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 		<PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.21" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Assets\Imagenes\vengadores.png" />
 	</ItemGroup>
 
 </Project>
