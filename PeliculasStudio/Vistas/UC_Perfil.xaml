@@ -42,8 +42,8 @@
             <local:BotonTema HorizontalAlignment="Right" VerticalAlignment="Center"/>
         </Grid>
 
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <StackPanel Margin="20,10,20,50" MaxWidth="550" HorizontalAlignment="Center">
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible">
+            <StackPanel Margin="20,10,20,50" MaxWidth="500" HorizontalAlignment="Center" Cursor="">
 
                 <TextBlock Text="MI PERFIL" FontSize="28" FontWeight="Black" 
                            Foreground="{DynamicResource BrushTextoPrincipal}" 
@@ -54,7 +54,7 @@
                         <DropShadowEffect BlurRadius="10" Opacity="0.1" ShadowDepth="2"/>
                     </Border.Effect>
                     <Expander Header="Cambiar Nombre de Usuario" Padding="15"
-                              FontSize="16" FontWeight="Bold" Foreground="{DynamicResource BrushTextoPrincipal}">
+                              FontSize="16" FontWeight="Bold" Foreground="{DynamicResource BrushTextoPrincipal}" Cursor="">
                         <StackPanel Margin="10">
                             <TextBlock Text="Nuevo Nombre de Usuario" Foreground="{DynamicResource BrushTextoSecundario}" FontSize="13" Margin="0,0,0,5"/>
                             <TextBox x:Name="txtUsuario" Height="40" VerticalContentAlignment="Center" Padding="10,0" FontSize="15"
@@ -63,14 +63,7 @@
 
                             <TextBlock x:Name="lblMensajeNombre" Text="" FontSize="13" Margin="0,5,0,0" FontWeight="SemiBold"/>
 
-                            <Button Content="Guardar Nombre" Click="BtnGuardarNombre_Click" Margin="0,15,0,0" Height="40"
-                                    Background="{DynamicResource BrushAccionResaltado}" Foreground="White" FontWeight="Bold" Cursor="Hand">
-                                <Button.Resources>
-                                    <Style TargetType="Border">
-                                        <Setter Property="CornerRadius" Value="5"/>
-                                    </Style>
-                                </Button.Resources>
-                            </Button>
+                            <local:BotonVistaPerfil Texto="Actualizar Nombre" Click="BtnGuardarNombre_Click" />
                         </StackPanel>
                     </Expander>
                 </Border>
@@ -89,14 +82,7 @@
 
                             <TextBlock x:Name="lblMensajeEmail" Text="" FontSize="13" Margin="0,5,0,0" FontWeight="SemiBold"/>
 
-                            <Button Content="Guardar Email" Click="BtnGuardarEmail_Click" Margin="0,15,0,0" Height="40"
-                                    Background="{DynamicResource BrushAccionResaltado}" Foreground="White" FontWeight="Bold" Cursor="Hand">
-                                <Button.Resources>
-                                    <Style TargetType="Border">
-                                        <Setter Property="CornerRadius" Value="5"/>
-                                    </Style>
-                                </Button.Resources>
-                            </Button>
+                            <local:BotonVistaPerfil Texto="Actualizar Email" Click="BtnGuardarEmail_Click" />
                         </StackPanel>
                     </Expander>
                 </Border>
@@ -153,33 +139,7 @@
                                 <TextBlock x:Name="lblCoincide" Text="Las contraseñas no coinciden" Foreground="{DynamicResource BrushMensajeError}" FontSize="12"/>
                             </StackPanel>
 
-                            
-                            <Button Content="Actualizar Contraseña" Click="BtnActualizarPass_Click" Margin="0,5,0,0" Height="40"
-                                    Background="Transparent" 
-                                    BorderBrush="{DynamicResource BrushAccionResaltado}" 
-                                    BorderThickness="1"
-                                    Foreground="{DynamicResource BrushAccionResaltado}" 
-                                    FontWeight="Bold" Cursor="Hand">
-                                <Button.Style>
-                                    <Style TargetType="Button">
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="Button">
-                                                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
-                                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                    </Border>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#10007ACC"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                            </Button>
-
+                            <local:BotonVistaPerfil Texto="Actualizar Contraseña" Click="BtnActualizarPass_Click" />
                         </StackPanel>
                     </Expander>
                 </Border>
@@ -190,7 +150,7 @@
                     </Border.Effect>
                     <Expander Header="Informe de Gasto" Padding="15"
                               FontSize="16" FontWeight="Bold" Foreground="{DynamicResource BrushTextoPrincipal}">
-                        <StackPanel Margin="10">
+                        <StackPanel Margin="10" Cursor="">
 
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                                 <TextBlock Text="Calculadora de Suscripción" FontWeight="Bold" Foreground="{DynamicResource BrushTextoSecundario}" Margin="0,0,10,0"/>
@@ -200,31 +160,7 @@
                             <TextBlock Text="Genera un documento PDF con el desglose del coste total de tu cuenta desde la fecha de registro hasta hoy." 
                                        TextWrapping="Wrap" FontSize="13" Foreground="{DynamicResource BrushTextoSecundario}" Margin="0,0,0,15"/>
 
-                            <Button Content="📄 Descargar Informe PDF" Click="BtnInforme_Click" Margin="0,5,0,0" Height="40"
-                                    Background="Transparent" 
-                                    BorderBrush="{DynamicResource BrushAccionResaltado}" 
-                                    BorderThickness="1"
-                                    Foreground="{DynamicResource BrushAccionResaltado}" 
-                                    FontWeight="Bold" Cursor="Hand">
-                                <Button.Style>
-                                    <Style TargetType="Button">
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="Button">
-                                                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
-                                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                    </Border>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#10007ACC"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                            </Button>
+                            <local:BotonVistaPerfil Texto="📄 Descargar Informe PDF" Click="BtnInforme_Click" />
                         </StackPanel>
                     </Expander>
                 </Border>
@@ -235,6 +171,8 @@
                         <TextBlock Text="Eliminar tu cuenta borrará permanentemente tus listas y progreso. Esta acción es irreversible." 
                                    Foreground="{DynamicResource BrushTextoSecundario}" TextWrapping="Wrap" FontSize="13" Margin="0,0,0,15"/>
 
+
+                        
                         <Button Content="Eliminar mi cuenta" Click="BtnEliminarCuenta_Click" Height="40"
                                 Background="Transparent" BorderBrush="{DynamicResource BrushMensajeError}" BorderThickness="1"
                                 Foreground="{DynamicResource BrushMensajeError}" FontWeight="Bold" Cursor="Hand">
