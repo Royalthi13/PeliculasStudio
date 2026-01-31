@@ -112,18 +112,45 @@
                 <Button Grid.Column="1" Content="🎬 Catálogo" Margin="20,0,0,0" Height="40" Width="80" Padding="20,0"
                         Foreground="{DynamicResource BrushTextoPrincipal}" Background="Transparent" BorderBrush="Transparent"
                         FontWeight="Bold" Cursor="Hand" Click="BtnIrCatalogo_Click">
+
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="10" 
                                     BorderThickness="1" BorderBrush="Transparent">
+                                <Border.RenderTransform>
+                                    <ScaleTransform x:Name="scale" ScaleX="1" ScaleY="1"/>
+                                </Border.RenderTransform>
                                 <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
+                            <ControlTemplate.Resources>
+                                <Storyboard x:Key="ZoomIn">
+                                    <DoubleAnimation Storyboard.TargetName="scale" 
+                                                     Storyboard.TargetProperty="ScaleX" To="1.15" Duration="0:0:0.2"/>
+                                    <DoubleAnimation Storyboard.TargetName="scale" 
+                                                     Storyboard.TargetProperty="ScaleY" To="1.15" Duration="0:0:0.2"/>
+                                </Storyboard>
+                                <Storyboard x:Key="ZoomOut">
+                                    <DoubleAnimation Storyboard.TargetName="scale" 
+                                                     Storyboard.TargetProperty="ScaleX" To="1.0" Duration="0:0:0.2"/>
+                                    <DoubleAnimation Storyboard.TargetName="scale" 
+                                                     Storyboard.TargetProperty="ScaleY" To="1.0" Duration="0:0:0.2"/>
+                                </Storyboard>
+                            </ControlTemplate.Resources>
+
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource BrushInput}"/>
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard Storyboard="{StaticResource ZoomIn}"/>
+                                    </Trigger.EnterActions>
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard Storyboard="{StaticResource ZoomOut}"/>
+                                    </Trigger.ExitActions>
+
                                     <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource BrushAccionResaltado}"/>
+                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource BrushInput}"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
+                            
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
