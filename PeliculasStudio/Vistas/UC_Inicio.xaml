@@ -188,23 +188,7 @@
                     </Button.Template>
                 </Button>
 
-                <Border Grid.Column="2" Margin="30,10" CornerRadius="15" Background="{DynamicResource BrushInput}">
-                    <Grid>
-                        <TextBlock Text="🔍 Buscar película..." VerticalAlignment="Center" Margin="15,0" Foreground="{DynamicResource BrushTextoAyuda}" IsHitTestVisible="False">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Text, ElementName=txtBuscador}" Value="">
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                        <TextBox x:Name="txtBuscador" Background="Transparent" BorderThickness="0" VerticalContentAlignment="Center" Padding="15,0" FontSize="14" Foreground="{DynamicResource BrushTextoPrincipal}"/>
-                    </Grid>
-                </Border>
+                
                 <local:BotonTema Grid.Column="3" HorizontalAlignment="Right" VerticalAlignment="Center"/>
             </Grid>
         </Border>

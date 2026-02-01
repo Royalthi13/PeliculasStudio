@@ -6,6 +6,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UseWPF>true</UseWPF>
+		<ApplicationIcon>Assets\Imagenes\icon_PeliculasStudio.ico</ApplicationIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
