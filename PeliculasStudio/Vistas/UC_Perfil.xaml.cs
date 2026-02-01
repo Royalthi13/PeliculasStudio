@@ -169,6 +169,7 @@ namespace PeliculasStudio.Vistas
                 MessageBox.Show("La contraseña actual es incorrecta.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+   
 
             if (txtPassNueva.Password != txtPassNuevaRepetir.Password)
             {
